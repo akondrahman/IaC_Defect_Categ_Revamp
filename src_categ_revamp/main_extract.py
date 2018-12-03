@@ -12,6 +12,8 @@ import  subprocess
 import time 
 import  datetime 
 import cPickle as pickle 
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 def getEligibleProjects(fileNameParam):
   repo_list = []
@@ -145,11 +147,11 @@ def dumpDataAsStr(dic_p, fil_p):
 
 
 if __name__=='__main__':
-    orgName='wikimedia-downloads'
-    out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_PUPP_COMM.PKL'
+    # orgName='wikimedia-downloads'
+    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_PUPP_COMM.PKL'
 
-    # orgName='openstack-downloads'
-    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_COMM.PKL'
+    orgName='openstack-downloads'
+    out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_COMM.PKL'
 
     fileName     = "/Users/akond/PUPP_REPOS/" + orgName + '/'+'eligible_repos.csv'
     elgibleRepos = getEligibleProjects(fileName)
