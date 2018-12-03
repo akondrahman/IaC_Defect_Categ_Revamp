@@ -69,11 +69,17 @@ def getPuppCommitFullData(repo_path_param, repo_branch_param, pupp_commits_mappi
     msg_commit =  commit_.message 
 
     msg_commit = msg_commit.replace('\n', ' ')
-    msg_commit = msg_commit.replace(',', ';')    
+    msg_commit = msg_commit.replace(',',  ';')    
+    msg_commit = msg_commit.replace('\t', ' ')
+    msg_commit = msg_commit.replace('&',  ';')  
+    msg_commit = msg_commit.replace('#',  ' ')
+    msg_commit = msg_commit.replace('=',  ' ')      
+
 
     timestamp_commit = commit_.committed_datetime
+    str_time_commit  = timestamp_commit.strftime('%Y-%m-%dT%H-%M-%S')
 
-    tup_ = (repo_path_param, trac_exec_count, file_, timestamp_commit, msg_commit, repo_branch_param )
+    tup_ = (repo_path_param, trac_exec_count, file_, str_time_commit, msg_commit, repo_branch_param )
     pupp_bug_list.append(tup_)
 
     trac_exec_count += 1
@@ -92,9 +98,10 @@ def constructDataset(orgParamName, repo_name_param, branchParam):
   # print rel_path_pp_files
 
   pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
-  print pupp_commits_in_repo
+  # print pupp_commits_in_repo
 
-  getPuppCommitFullData(repo_path, repo_branch, pupp_commits_in_repo)
+  pupp_full_commit_data = getPuppCommitFullData(repo_path, repo_branch, pupp_commits_in_repo)
+  print pupp_full_commit_data
  
 
 
