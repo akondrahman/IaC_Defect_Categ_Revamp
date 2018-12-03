@@ -60,6 +60,26 @@ def getPuppRelatedCommits(repo_dir_absolute_path, ppListinRepo, branchName='mast
 
 
 
+def getPuppCommitFullData(repo_path_param, repo_branch_param, pupp_commits_mapping):
+  trac_exec_count = 0 
+  pupp_bug_list = []
+  for tuple_ in pupp_commits_mapping:
+    file_ = tuple_[0]
+    commit_ = tuple_[1]
+    msg_commit =  commit_.message 
+
+    msg_commit = msg_commit.replace('\n', ' ')
+    msg_commit = msg_commit.replace(',', ';')    
+
+    timestamp_commit = commit_.committed_datetime
+
+    tup_ = (repo_path_param, trac_exec_count, file_, timestamp_commit, msg_commit, repo_branch_param )
+    pupp_bug_list.append(tup_)
+
+    trac_exec_count += 1
+
+  return pupp_bug_list
+
 def constructDataset(orgParamName, repo_name_param, branchParam):
 
   repo_path   = "/Users/akond/PUPP_REPOS/" + orgParamName + "/" + repo_name_param
@@ -74,9 +94,7 @@ def constructDataset(orgParamName, repo_name_param, branchParam):
   pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
   print pupp_commits_in_repo
 
-  # all_pupp_msgs = bug_git_util.getPuppMessages(yes_bug_mapping, no_bug_mapping)
-  # unique_pupp_msg = np.unique(all_pupp_msgs)
-  # all_pupp_msgs, pupp_to_msgs_dict = bug_git_util.getPuppMessages(yes_bug_mapping, no_bug_mapping)
+  getPuppCommitFullData(repo_path, repo_branch, pupp_commits_in_repo)
  
 
 
