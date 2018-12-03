@@ -118,23 +118,39 @@ def constructDataset(orgParamName, repo_name_param, branchParam):
   
   return pupp_full_commit_data 
 
- 
+def dumpDataAsStr(dic_p): 
+    for proj, proj_data in dic_p.iteritems():
+            repo_path, count, commit_hash, file_, date_time, text_comm, diff_, repo_branch_param = proj_data
+            print '='*25 + ':'*3 + str(count)   + ':'*3 + repo_path  + ':'*3 + commit_hash + ':'*3 +  + 'START!' + '='*25
+            print file_ 
+            print '*'*10
+            print repo_branch_param
+            print '*'*10
+            print text_comm
+            print '*'*10
+            print diff_
+            print '*'*10
+            print 'DECISION===>:'
+            print '*'*10
+            print '='*25 + ':'*3 + str(count) + ':'*3 + date_time + ':'*3 + 'END!!!' + '='*25          
 
 
 if __name__=='__main__':
-    orgName='wikimedia-downloads'
-    out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_PUPP_COMM.PKL'
+    # orgName='wikimedia-downloads'
+    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_PUPP_COMM.PKL'
 
-    # orgName='openstack-downloads'
-    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_COMM.PKL'
+    orgName='openstack-downloads'
+    out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_COMM.PKL'
 
     fileName     = "/Users/akond/PUPP_REPOS/" + orgName + '/'+'eligible_repos.csv'
     elgibleRepos = getEligibleProjects(fileName)
     dic = {}
     for proj_ in elgibleRepos:
-        print "="*75
+        print proj_
         proj_data = constructDataset(orgName, proj_, 'master')
         dic[proj_] = proj_data
         print "="*75  
       
     pickle.dump( dic, open( out_fil_nam , 'wb')) 
+
+    dumpDataAsStr(dic)
