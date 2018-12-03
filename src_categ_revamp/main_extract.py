@@ -11,6 +11,7 @@ from git import Repo
 import  subprocess
 import time 
 import  datetime 
+import cPickle as pickle 
 
 def getEligibleProjects(fileNameParam):
   repo_list = []
@@ -99,7 +100,7 @@ def getPuppCommitFullData(repo_path_param, repo_branch_param, pupp_commits_mappi
   return pupp_bug_list
 
 def constructDataset(orgParamName, repo_name_param, branchParam):
-
+  
   repo_path   = "/Users/akond/PUPP_REPOS/" + orgParamName + "/" + repo_name_param
   repo_branch = branchParam
 
@@ -113,20 +114,27 @@ def constructDataset(orgParamName, repo_name_param, branchParam):
   # print pupp_commits_in_repo
 
   pupp_full_commit_data = getPuppCommitFullData(repo_path, repo_branch, pupp_commits_in_repo)
-  print pupp_full_commit_data
+  # print pupp_full_commit_data
+  
+  return pupp_full_commit_data 
+
  
 
 
 if __name__=='__main__':
     orgName='wikimedia-downloads'
-    #orgName='openstack-downloads'
+    out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_PUPP_COMM.PKL'
 
+    # orgName='openstack-downloads'
+    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_COMM.PKL'
 
-    fileName="/Users/akond/PUPP_REPOS/"+orgName+'/'+'eligible_repos.csv'
+    fileName     = "/Users/akond/PUPP_REPOS/" + orgName + '/'+'eligible_repos.csv'
     elgibleRepos = getEligibleProjects(fileName)
-
+    dic = {}
     for proj_ in elgibleRepos:
         print "="*75
-        print "Processing ", proj_
-        constructDataset(orgName, proj_, 'master')
+        proj_data = constructDataset(orgName, proj_, 'master')
+        dic[proj_] = proj_data
         print "="*75  
+      
+    pickle.dump( dic, open( out_fil_nam , 'wb')) 
