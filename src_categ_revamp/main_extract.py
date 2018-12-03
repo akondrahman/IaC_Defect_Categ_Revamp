@@ -118,22 +118,30 @@ def constructDataset(orgParamName, repo_name_param, branchParam):
   
   return pupp_full_commit_data 
 
-def dumpDataAsStr(dic_p): 
+def dumpContentIntoFile(strP, fileP):
+  fileToWrite = open( fileP, 'w')
+  fileToWrite.write(strP )
+  fileToWrite.close()
+  return str(os.stat(fileP).st_size)
+
+def dumpDataAsStr(dic_p, fil_p): 
+    csv_str = ''
     for proj, proj_data in dic_p.iteritems():
         for data_tuple in proj_data:
             repo_path, count, commit_hash, file_, date_time, text_comm, diff_, repo_branch_param = data_tuple 
-            print '='*25 + ':'*3 + str(count)   + ':'*3 + repo_path  + ':'*3 + commit_hash + ':'*3 +  + 'START!' + '='*25
+            print '='*25 + ':'*3 + str(count)   + ':'*3 + repo_path  + ':'*3 + commit_hash + ':'*3 + 'START!' + '='*25
             print file_ 
-            print '*'*10
-            print repo_branch_param
-            print '*'*10
-            print text_comm
             print '*'*10
             print diff_
             print '*'*10
+            print text_comm
+            print '*'*10
             print 'DECISION===>:'
             print '*'*10
-            print '='*25 + ':'*3 + str(count) + ':'*3 + date_time + ':'*3 + 'END!!!' + '='*25          
+            print '='*25 + ':'*3 + str(count) + ':'*3 + date_time + ':'*3 + 'END!!!' + '='*25    
+            csv_str = csv_str + repo_path + ',' + str(count) + ',' + commit_hash + ',' + file_ + ',' + date_time + ',' + text_comm + '\n'      
+    csv_str = 'REPO,COUNT,COMMIT,FILE,TIME,MESSAGE' + '\n' + csv_str
+    dumpContentIntoFile(csv_str, fil_p)
 
 
 if __name__=='__main__':
@@ -152,4 +160,4 @@ if __name__=='__main__':
       
     pickle.dump( dic, open( out_fil_nam , 'wb')) 
 
-    dumpDataAsStr(dic)
+    dumpDataAsStr(dic, out_fil_nam + '.csv')
