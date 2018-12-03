@@ -58,7 +58,16 @@ def getPuppRelatedCommits(repo_dir_absolute_path, ppListinRepo, branchName='mast
 
   return mappedPuppetList
 
+def getDiffStr(repo_path_p, commit_hash_p, file_p):
+   
+   cdCommand   = "cd " + repo_path_p + " ; "
+   theFile     = os.path.relpath(file_p, repo_path_p)
+   
+   diffCommand = " git diff  " + commit_hash_p + " " + theFile + "  "
+   command2Run = cdCommand + diffCommand
+   diff_output = subprocess.check_output(['bash','-c', command2Run])
 
+   return diff_output
 
 def getPuppCommitFullData(repo_path_param, repo_branch_param, pupp_commits_mapping):
   trac_exec_count = 0 
@@ -75,11 +84,14 @@ def getPuppCommitFullData(repo_path_param, repo_branch_param, pupp_commits_mappi
     msg_commit = msg_commit.replace('#',  ' ')
     msg_commit = msg_commit.replace('=',  ' ')      
 
+    commit_hash = commit_.hexsha
 
     timestamp_commit = commit_.committed_datetime
     str_time_commit  = timestamp_commit.strftime('%Y-%m-%dT%H-%M-%S')
 
-    tup_ = (repo_path_param, trac_exec_count, file_, str_time_commit, msg_commit, repo_branch_param )
+    diff_content_str = getDiffStr(repo_path_param, commit_hash, file_)
+
+    tup_ = (repo_path_param, trac_exec_count, commit_hash, file_, str_time_commit, msg_commit, diff_content_str, repo_branch_param )
     pupp_bug_list.append(tup_)
 
     trac_exec_count += 1
