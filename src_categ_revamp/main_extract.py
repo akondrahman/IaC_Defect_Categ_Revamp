@@ -33,6 +33,15 @@ def getPuppetFilesOfRepo(repo_dir_absolute_path):
                pp_.append(full_p_file)
     return pp_
 
+def getChefFilesOfRepo(repo_dir_absolute_path):
+    rb_  = [] 
+    for root_, dirs, files_ in os.walk(repo_dir_absolute_path):
+       for file_ in files_:
+           full_p_file = os.path.join(root_, file_)
+           if((os.path.exists(full_p_file)) and ('EXTRA_AST' not in full_p_file) ):
+             if (('cookbooks' in full_p_file) and (full_p_file.endswith('.rb'))):
+               rb_.append(full_p_file)
+    return rb_
 
 def getRelPathOfFiles(all_pp_param, repo_dir_absolute_path):
   common_path = repo_dir_absolute_path
@@ -61,6 +70,28 @@ def getPuppRelatedCommits(repo_dir_absolute_path, ppListinRepo, branchName='mast
 
   return mappedPuppetList
 
+def getChefRelatedCommits(repo_dir_absolute_path, chefListinRepo, branchName='master'):
+  mappedChefList=[]
+  track_exec_cnt = 0
+  repo_  = Repo(repo_dir_absolute_path)
+  all_commits = list(repo_.iter_commits(branchName))
+  for each_commit in all_commits:
+    track_exec_cnt = track_exec_cnt + 1
+
+    cmd_of_interrest1 = "cd  " + repo_dir_absolute_path + " ; "
+    cmd_of_interrest2 = "git show --name-status " + str(each_commit)  +  "  | awk '/.rb/ {print $2}'"
+    cmd_of_interrest = cmd_of_interrest1 + cmd_of_interrest2
+    commit_of_interest  = subprocess.check_output(['bash','-c', cmd_of_interrest])
+
+    for chefFile in chefListinRepo:
+      if chefFile in commit_of_interest:
+
+       file_with_path = os.path.join(repo_dir_absolute_path, chefFile)
+       mapped_tuple = (file_with_path, each_commit)
+       mappedChefList.append(mapped_tuple)
+
+  return mappedChefList
+
 def getDiffStr(repo_path_p, commit_hash_p, file_p):
    
    cdCommand   = "cd " + repo_path_p + " ; "
@@ -72,7 +103,7 @@ def getDiffStr(repo_path_p, commit_hash_p, file_p):
 
    return diff_output
 
-def getPuppCommitFullData(repo_path_param, repo_branch_param, pupp_commits_mapping):
+def getCommitFullData(repo_path_param, repo_branch_param, pupp_commits_mapping):
   trac_exec_count = 0 
   pupp_bug_list = []
   for tuple_ in pupp_commits_mapping:
@@ -101,7 +132,7 @@ def getPuppCommitFullData(repo_path_param, repo_branch_param, pupp_commits_mappi
 
   return pupp_bug_list
 
-def constructDataset(orgParamName, repo_name_param, branchParam):
+def constructDatasetForPuppet(orgParamName, repo_name_param, branchParam):
   
   repo_path   = "/Users/akond/PUPP_REPOS/" + orgParamName + "/" + repo_name_param
   repo_branch = branchParam
@@ -115,10 +146,26 @@ def constructDataset(orgParamName, repo_name_param, branchParam):
   pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
   # print pupp_commits_in_repo
 
-  pupp_full_commit_data = getPuppCommitFullData(repo_path, repo_branch, pupp_commits_in_repo)
+  pupp_full_commit_data = getCommitFullData(repo_path, repo_branch, pupp_commits_in_repo)
   # print pupp_full_commit_data
   
   return pupp_full_commit_data 
+
+def constructDatasetForChef(orgParamName, repo_name_param, branchParam):
+  
+  repo_path   = "/Users/akond/SECU_REPOS/" + orgParamName + "/" + repo_name_param
+  repo_branch = branchParam
+
+  all_chef_files_in_repo = getChefFilesOfRepo(repo_path)
+  
+  rel_path_chef_files = getRelPathOfFiles(all_chef_files_in_repo, repo_path)
+
+  chef_commits_in_repo = getChefRelatedCommits(repo_path, rel_path_chef_files, repo_branch)
+
+  chef_full_commit_data = getCommitFullData(repo_path, repo_branch, chef_commits_in_repo)
+  
+  return chef_full_commit_data 
+
 
 def dumpContentIntoFile(strP, fileP):
   fileToWrite = open( fileP, 'w')
@@ -147,19 +194,39 @@ def dumpDataAsStr(dic_p, fil_p):
 
 
 if __name__=='__main__':
+    '''
+    Puppet dataset contruction 
+    '''
     # orgName='wikimedia-downloads'
     # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_PUPP_COMM.PKL'
 
-    orgName='openstack-downloads'
-    out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_COMM.PKL'
+    # orgName='openstack-downloads'
+    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_COMM.PKL'
 
-    fileName     = "/Users/akond/PUPP_REPOS/" + orgName + '/'+'eligible_repos.csv'
+    # fileName     = "/Users/akond/PUPP_REPOS/" + orgName + '/'+'eligible_repos.csv'
+    # elgibleRepos = getEligibleProjects(fileName)
+    # dic = {}
+    # for proj_ in elgibleRepos:
+    #     proj_data = constructDatasetForPuppet(orgName, proj_, 'master')
+    #     dic[proj_] = proj_data
+
+    '''
+    Chef  dataset contruction 
+    '''
+
+    orgName='ostk-chef'
+    out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_CHEF_COMM.PKL'
+
+    fileName     = "/Users/akond/SECU_REPOS/" + orgName + '/'+'eligible_repos.csv'
     elgibleRepos = getEligibleProjects(fileName)
+    
+    
     dic = {}
     for proj_ in elgibleRepos:
-        proj_data = constructDataset(orgName, proj_, 'master')
+        proj_data = constructDatasetForChef(orgName, proj_, 'master')
         dic[proj_] = proj_data
-      
+
+
     pickle.dump( dic, open( out_fil_nam , 'wb')) 
 
     dumpDataAsStr(dic, out_fil_nam + '.csv')
