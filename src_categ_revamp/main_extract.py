@@ -219,8 +219,7 @@ if __name__=='__main__':
 
     fileName     = "/Users/akond/SECU_REPOS/" + orgName + '/'+'eligible_repos.csv'
     elgibleRepos = getEligibleProjects(fileName)
-    
-    
+        
     dic = {}
     for proj_ in elgibleRepos:
         proj_data = constructDatasetForChef(orgName, proj_, 'master')
@@ -228,5 +227,4 @@ if __name__=='__main__':
 
 
     pickle.dump( dic, open( out_fil_nam , 'wb')) 
-
     dumpDataAsStr(dic, out_fil_nam + '.csv')
