@@ -51,12 +51,28 @@ Mar 17, 2019
 '''
 import pandas as pd 
 from nltk.tokenize import sent_tokenize
+import re 
+import spacy 
+spacy_engine = spacy.load('en_core_web_sm')
+import future 
+
+def removeFat(mess):
+    #the_regex = re.compile(r'^[a-f0-9]{40}(:.+)?$', re.IGNORECASE)
+    out_mes   = re.sub(r'^[a-f0-9]{40}(:.+)?$', '', mess)
+    print out_mes
 
 def detectBuggyCommitMessages(msg_lis):
+    print msg_lis
     for msg_ in msg_lis:
         msg_ = msg_.lower()
-        if(('error' in msg_) or ('bug' in msg_ ) or ('fix' in msg_) or ('issue' in msg_) or ('mistake' in msg_) or ('incorrect' in msg_) or ('fault' in msg_) or ('defect' in msg_) or ('flaw' in msg_)):
+        if(('error' in msg_) or ('bug' in msg_ ) or ('fix' in msg_) or ('issue' in msg_) or ('mistake' in msg_) or ('incorrect' in msg_) or ('fault' in msg_) or ('defect' in msg_) or ('flaw' in msg_)) and ('default' not in msg_):
             print msg_
+            unicode_msg  = unicode(msg_, 'utf-8')
+            spacy_doc = spacy_engine(unicode_msg)
+            for token in spacy_doc:
+                if (token.dep_ == 'ROOT'):
+                   print(token.text, token.dep_, token.head.text, token.head.pos_, [x_ for x_ in token.children])  
+            print '-'*100
 
 def processMessage(indi_comm_mess):
     if ('*' in indi_comm_mess):
