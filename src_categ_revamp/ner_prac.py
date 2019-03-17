@@ -52,12 +52,19 @@ Mar 17, 2019
 import pandas as pd 
 from nltk.tokenize import sent_tokenize
 
+def detectBuggyCommitMessages(msg_lis):
+    for msg_ in msg_lis:
+        msg_ = msg_.lower()
+        if(('error' in msg_) or ('bug' in msg_ ) or ('fix' in msg_) or ('issue' in msg_) or ('mistake' in msg_) or ('incorrect' in msg_) or ('fault' in msg_) or ('defect' in msg_) or ('flaw' in msg_)):
+            print msg_
+
 def processMessage(indi_comm_mess):
     if ('*' in indi_comm_mess):
        splitted_messages = indi_comm_mess.split('*')
     else:
        splitted_messages = sent_tokenize(indi_comm_mess)
-    print splitted_messages 
+    # print splitted_messages 
+    detectBuggyCommitMessages(splitted_messages)
     
 
 
