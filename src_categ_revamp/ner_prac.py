@@ -58,16 +58,20 @@ import future
 import numpy as np 
 
 def removeFat(mess):
-    #the_regex = re.compile(r'^[a-f0-9]{40}(:.+)?$', re.IGNORECASE)
-    out_mes   = re.sub(r'^[a-f0-9]{40}(:.+)?$', '', mess)
-    print out_mes
+    # out_mes   = re.sub(r'^[a-f0-9]{40}(:.+)?$', '', mess) ## not working 
+    out_mes   = re.sub(r'[a-f0-9]{40}(:.+)?$', '', mess) ##  working 
+    splitted_str = out_mes.split(' ')
+    splitted_str = [x_ for x_ in splitted_str if len(x_) > 1 ]
+    final_str = ' '.join(splitted_str)
+    return final_str 
 
 
 def detectBuggyCommitMessages(msg_lis):
     # print msg_lis
     for msg_ in msg_lis:
         msg_ = msg_.lower()
-        if(('error' in msg_) or ('bug' in msg_ ) or ('fix' in msg_) or ('issue' in msg_) or ('mistake' in msg_) or ('incorrect' in msg_) or ('fault' in msg_) or ('defect' in msg_) or ('flaw' in msg_)) and ('default' not in msg_):
+        if(('error' in msg_) or ('bug' in msg_ ) or ('fix' in msg_) or ('issue' in msg_) or ('mistake' in msg_) or ('incorrect' in msg_) or ('fault' in msg_) or ('defect' in msg_) or ('flaw' in msg_)) and ('default' not in msg_) and ('closes-bug' not in msg_):
+            msg_ = removeFat(msg_)
             unicode_msg  = unicode(msg_, 'utf-8')
             spacy_doc = spacy_engine(unicode_msg)
             for token in spacy_doc:
