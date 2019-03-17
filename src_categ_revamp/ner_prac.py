@@ -43,3 +43,31 @@ Named entity recognition
 # for token in doc:
 #     print(token.text, token.dep_, token.head.text, token.head.pos_,
 #           [child for child in token.children])
+
+'''
+Dependency parsing setup for ACID 
+Akond Rahman 
+Mar 17, 2019 
+'''
+import pandas as pd 
+from nltk.tokenize import sent_tokenize
+
+def processMessage(indi_comm_mess):
+    if ('*' in indi_comm_mess):
+       splitted_messages = indi_comm_mess.split('*')
+    else:
+       splitted_messages = sent_tokenize(indi_comm_mess)
+    print splitted_messages 
+    
+
+
+def processMessages(comm_list):
+    for comm_mess in comm_list:
+        processMessage(comm_mess)
+
+if __name__=='__main__':
+    comm_mess_file='/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_COMM_ONLY_DEFE.csv'
+    comm_mess_df  = pd.read_csv(comm_mess_file)
+    comm_mess_ls  = comm_mess_df['MESSAGE'].tolist()
+    # print comm_mess_df.head()
+    processMessages(comm_mess_ls)
