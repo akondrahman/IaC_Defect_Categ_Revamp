@@ -77,28 +77,30 @@ def doDepAnalysis(msg_par):
     unicode_msg  = unicode(msg_par, 'utf-8')
     spacy_doc = spacy_engine(unicode_msg)
     for token in spacy_doc:
-        if (token.dep_ == 'ROOT'):
-            print msg_
+        #if (token.dep_ == 'ROOT'):
+            print msg_par
             print(token.text, token.dep_, token.head.text, token.head.pos_, [x_ for x_ in token.children])  
             print '-'*100    
 
 def doNERAnalysis(msg_par):
+    print msg_par
     results = stanford_ner_tagger.tag(msg_par.split())
     for result in results:
         tag_value = result[0]
         tag_type = result[1]
-        if tag_type != 'O':
+        if tag_type == 'O':
             print 'Type: {}, Value: {}'.format ( tag_type, tag_value )
             print '-'*50
 
 def detectBuggyCommitMessages(msg_lis):
     # print msg_lis
+    # https://towardsdatascience.com/named-entity-recognition-with-nltk-and-spacy-8c4a7d88e7da
     for msg_ in msg_lis:
         msg_ = msg_.lower()
         if(('error' in msg_) or ('bug' in msg_ ) or ('fix' in msg_) or ('issue' in msg_) or ('mistake' in msg_) or ('incorrect' in msg_) or ('fault' in msg_) or ('defect' in msg_) or ('flaw' in msg_)) and ('default' not in msg_) and ('closes-bug' not in msg_):
             msg_ = removeHash(msg_)
-            # doDepAnalysis(msg_)
-            doNERAnalysis(msg_)
+            doDepAnalysis(msg_)
+            # doNERAnalysis(msg_)
 
 def processMessage(indi_comm_mess):
     if ('*' in indi_comm_mess):
