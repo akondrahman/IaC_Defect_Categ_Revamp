@@ -13,6 +13,8 @@ import time
 import  datetime 
 import cPickle as pickle 
 import constants
+import classifier
+
 reload(sys)
 sys.setdefaultencoding(constants.ENCODING) 
 
@@ -96,7 +98,15 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
     diff_content_str = getDiffStr(repo_path_param, commit_hash, file_)
 
     tup_ = (repo_path_param, trac_exec_count, commit_hash, file_, str_time_commit, msg_commit, diff_content_str, repo_branch_param )
-    print tup_[0], tup_[1], tup_[2], tup_[3], tup_[4], tup_[5]
+    # print tup_[0], tup_[1], tup_[2], tup_[3], tup_[4], tup_[5]
+
+    bug_status = classifier.detectBuggyCommit(msg_commit)
+    bug_categ  = ''
+
+    if bug_status:
+       bug_categ = classifier.detectCateg(msg_commit, diff_content_str) 
+    else:
+       bug_categ = constants.NO_DEFECT_CATEG
 
     if commit_hash not in all_commit_file_dict:
         all_commit_file_dict[commit_hash] = [file_]
