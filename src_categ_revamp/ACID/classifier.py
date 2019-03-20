@@ -19,4 +19,9 @@ def detectCateg(msg_, diff_):
     if (len(diff_) > 0):
         if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)): 
             defect_categ = constants.CONFIG_DEFECT_CATEG
-        
+        elif(any(x_ in msg_ for x_ in constants.dep_defect_kw_list)): 
+            defect_categ = constants.DEP_DEFECT_CATEG        
+        elif(any(x_ in msg_ for x_ in constants.doc_defect_kw_list )): 
+            defect_categ = constants.DOC_DEFECT_CATEG
+        elif(any(x_ in msg_ for x_ in constants.idem_defect_kw_list )): 
+            defect_categ = constants.IDEM_DEFECT_CATEG             
