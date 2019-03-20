@@ -68,7 +68,7 @@ def getDiffStr(repo_path_p, commit_hash_p, file_p):
    cdCommand   = constants.CHANGE_DIR_CMD + repo_path_p + " ; "
    theFile     = os.path.relpath(file_p, repo_path_p)
    
-   diffCommand = constants.GIT_DIFF_CMD + commit_hash_p + " " + theFile + "  "
+   diffCommand = constants.GIT_DIFF_CMD + commit_hash_p + constants.WHITE_SPACE + theFile + constants.WHITE_SPACE
    command2Run = cdCommand + diffCommand
    diff_output = subprocess.check_output([constants.BASH_CMD, constants.BASH_FLAG, command2Run])
 
@@ -83,12 +83,12 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
     commit_ = tuple_[1]
     msg_commit =  commit_.message 
 
-    msg_commit = msg_commit.replace('\n', ' ')
+    msg_commit = msg_commit.replace('\n', constants.WHITE_SPACE)
     msg_commit = msg_commit.replace(',',  ';')    
-    msg_commit = msg_commit.replace('\t', ' ')
+    msg_commit = msg_commit.replace('\t', constants.WHITE_SPACE)
     msg_commit = msg_commit.replace('&',  ';')  
-    msg_commit = msg_commit.replace('#',  ' ')
-    msg_commit = msg_commit.replace('=',  ' ')      
+    msg_commit = msg_commit.replace('#',  constants.WHITE_SPACE)
+    msg_commit = msg_commit.replace('=',  constants.WHITE_SPACE)      
 
     commit_hash = commit_.hexsha
 
