@@ -43,22 +43,22 @@ SERVICE_DEFECT_CATEG   = 'SERVICE_DEFECT'
 SYNTAX_DEFECT_CATEG    = 'SYNTAX_DEFECT'
 
 prem_bug_kw_list      = ['error', 'bug', 'fix', 'issue', 'mistake', 'incorrect', 'fault', 'defect', 'flaw' ]
-config_defect_kw_list = ['connection', 'string', 'parameter', 'hash', 'value', 'config', 'field', 'option', 'version', 'URL', 'setting', 'ip', 'repo', 'link', 'time', 'server', 'command', 'setting', 'hiera', 'data', 'sql', 'permissions', 'mode', 'dir', 'protocol', 'missing', 'reference', 'path', 'location', 'driver', 'port', 'protocol', 'gateway', 'tcp', 'udp', 'fact']
-dep_defect_kw_list    = ['dependency', 'relation', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'package', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test']
-doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice'] 
+config_defect_kw_list = ['connection', 'string', 'paramet', 'hash', 'value', 'config', 'field', 'option', 'version', 'url', 'setting', 'ip', 'repo', 'link', 'time', 'server', 'command', 'setting', 'hiera', 'data', 'sql', 'permiss', 'mode', 'dir', 'protocol', 'missing', 'reference', 'path', 'location', 'driver', 'port', 'protocol', 'gateway', 'tcp', 'udp', 'fact', 'id']
+dep_defect_kw_list    = ['requir', 'dep', 'dependency', 'relation', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'package', 'packag', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test', 'includ']
+doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice', 'header'] 
 idem_defect_kw_list   = ['idempoten']
 logic_defect_kw_list  = ['logic', 'way', 'conditional', 'boolean']
 secu_defect_kw_list   = ['vulnerability', 'ssl', 'firewall', 'secret', 'authenticate', 'tls', 'ca_file', 'password', 'security']
 
 build_defect_kw_list  = ['build']
-db_defect_kw_list     = ['db', 'database']
+db_defect_kw_list     = ['db', 'database', 'databas']
 insta_defect_kw_list  = ['install']
 logging_defect_kw_list= ['log']
-network_defect_kw_list= ['provision', 'network', 'l23', 'balancer', 'domain', 'route', 'proxy', 'dhcp']
+network_defect_kw_list= ['provis', 'provision', 'network', 'l23', 'balancer', 'domain', 'route', 'proxy', 'dhcp']
 race_defect_kw_list   = ['race']
 service_defect_kw_list= ['service', 'caching', 'backend', 'job', 'start', 'gate', 'stage', 'env', 'requirement', 'restore', 'server']
 
-syntax_defect_kw_list = ['class', 'lint', 'warning', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compilation', 'variable', 'spelling', 'declaration', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicate', 'deprecate', 'parameter', 'outdate']
+syntax_defect_kw_list = ['class', 'lint', 'warning', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compilation', 'variable', 'spelling', 'declaration', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicate', 'deprecate', 'parameter', 'outdate', 'variabl']
 
 DFLT_KW  = 'default'
 CLOSE_KW = 'closes-bug'
