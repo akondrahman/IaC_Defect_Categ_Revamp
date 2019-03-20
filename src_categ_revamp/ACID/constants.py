@@ -43,7 +43,7 @@ SERVICE_DEFECT_CATEG   = 'SERVICE_DEFECT'
 SYNTAX_DEFECT_CATEG    = 'SYNTAX_DEFECT'
 
 prem_bug_kw_list      = ['error', 'bug', 'fix', 'issue', 'mistake', 'incorrect', 'fault', 'defect', 'flaw' ]
-config_defect_kw_list = ['connection', 'string', 'parameter', 'hash', 'value', 'configure', 'field', 'option', 'version', 'URL', 'setting', 'ip', 'repo', 'link', 'time', 'server', 'command', 'setting', 'hiera', 'data', 'sql', 'permissions', 'mode', 'dir', 'protocol', 'missing', 'reference', 'path', 'location', 'driver', 'port', 'protocol', 'gateway', 'tcp', 'udp', 'fact']
+config_defect_kw_list = ['connection', 'string', 'parameter', 'hash', 'value', 'config', 'field', 'option', 'version', 'URL', 'setting', 'ip', 'repo', 'link', 'time', 'server', 'command', 'setting', 'hiera', 'data', 'sql', 'permissions', 'mode', 'dir', 'protocol', 'missing', 'reference', 'path', 'location', 'driver', 'port', 'protocol', 'gateway', 'tcp', 'udp', 'fact']
 dep_defect_kw_list    = ['dependency', 'relation', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'package', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test']
 doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice'] 
 idem_defect_kw_list   = ['idempoten']

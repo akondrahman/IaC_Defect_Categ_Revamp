@@ -130,7 +130,7 @@ def runMiner(orgParamName, repo_name_param, branchParam):
   pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
 
   commit_file_dict = analyzeCommit(repo_path, repo_branch, pupp_commits_in_repo)
-  # print 'Commit count:', len(commit_file_dict) 
+  print 'Commit count:', len(commit_file_dict) 
   
 
 def dumpContentIntoFile(strP, fileP):

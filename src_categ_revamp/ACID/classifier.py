@@ -12,6 +12,8 @@ import spacy
 spacy_engine = spacy.load(constants.SPACY_ENG_DICT)
 import future 
 import numpy as np 
+from nltk.stem.porter import *
+stemmerObj = PorterStemmer()
 
 def checkForNum(str_par):
     return any(char_.isdigit() for char_ in str_par)
@@ -19,12 +21,15 @@ def checkForNum(str_par):
 def doDepAnalysis(msg_par):
     msg_to_analyze = []
     splitted_msg = msg_par.split(constants.WHITE_SPACE)
-    filtered_msg = [x_ for x_ in splitted_msg if checkForNum(x_) == False ] 
+    splitted_msg = [stemmerObj.stem(x_) for x_ in splitted_msg] ##porter stemming 
+    splitted_msg = [x_ for x_ in splitted_msg if len(x_) > 1 ]  ## remove special characterers 
+    filtered_msg = [x_ for x_ in splitted_msg if checkForNum(x_) == False ] ## remove alphanumeric characters 
     unicode_msg_ = constants.WHITE_SPACE.join(filtered_msg)
     try:
         unicode_msg  = unicode(unicode_msg_, constants.UTF_ENCODING)
     except: 
         unicode_msg = unicode_msg_
+    # print unicode_msg 
     spacy_doc = spacy_engine(unicode_msg)
     for token in spacy_doc:
         if (token.dep_ == constants.ROOT_TOKEN): 
@@ -44,9 +49,12 @@ def detectBuggyCommit(msg_):
 def detectCateg(msg_, diff_): 
     defect_categ = ''
     if (len(diff_) > 0):
+        msg_            = msg_.lower()
         msg_            = doDepAnalysis(msg_) ## depnding on results, this extra step of dependnecy parsing may change 
+        print msg_ 
         diff_parse_dict = diff_parser.parseTheDiff(diff_) 
         print 'Lines is the diff:', len(diff_parse_dict) 
+        
         if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)): 
             defect_categ = constants.CONFIG_DEFECT_CATEG
         elif(any(x_ in msg_ for x_ in constants.dep_defect_kw_list)): 
