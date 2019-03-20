@@ -4,6 +4,7 @@ Akond Rahman
 Classify commit messages
 '''
 import constants 
+import diff_parser
 
 def detectBuggyCommit(msg_):
     flag2ret  = False 
@@ -15,6 +16,7 @@ def detectBuggyCommit(msg_):
 def detectCateg(msg_, diff_): 
     defect_categ = ''
     if (len(diff_) > 0):
+        diff_parser.parseTheDiff(diff_) 
         if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)): 
             defect_categ = constants.CONFIG_DEFECT_CATEG
         elif(any(x_ in msg_ for x_ in constants.dep_defect_kw_list)): 

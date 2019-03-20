@@ -107,6 +107,7 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
        bug_categ = constants.NO_DEFECT_CATEG
 
     print commit_hash, bug_categ, repo_path_param, str_time_commit
+    print '-'*100
     if commit_hash not in all_commit_file_dict:
         all_commit_file_dict[commit_hash] = [file_]
     else:
