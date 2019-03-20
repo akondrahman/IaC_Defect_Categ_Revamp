@@ -18,13 +18,13 @@ def checkForNum(str_par):
 
 def doDepAnalysis(msg_par):
     msg_to_analyze = []
-    unicode_msg = ''
-    try:
-       unicode_msg  = unicode(msg_par, constants.UTF_ENCODING)
-    except: 
-        unicode_msg = msg_par
-    splitted_msg = unicode_msg.split(constants.WHITE_SPACE)
+    splitted_msg = msg_par.split(constants.WHITE_SPACE)
     filtered_msg = [x_ for x_ in splitted_msg if checkForNum(x_) == False ] 
+    unicode_msg_ = constants.WHITE_SPACE.join(filtered_msg)
+    try:
+        unicode_msg  = unicode(unicode_msg_, constants.UTF_ENCODING)
+    except: 
+        unicode_msg = unicode_msg_
     spacy_doc = spacy_engine(unicode_msg)
     for token in spacy_doc:
         if (token.dep_ == constants.ROOT_TOKEN): 
