@@ -37,6 +37,7 @@ LOGGING_DEFECT_CATEG   = 'LOG_DEFECT'
 NETWORK_DEFECT_CATEG   = 'NET_DEFECT'
 RACE_DEFECT_CATEG      = 'RACE_DEFECT'
 SERVICE_DEFECT_CATEG   = 'SERVICE_DEFECT'
+SYNTAX_DEFECT_CATEG    = 'SYNTAX_DEFECT'
 
 prem_bug_kw_list      = ['error', 'bug', 'fix', 'issue', 'mistake', 'incorrect', 'fault', 'defect', 'flaw' ]
 config_defect_kw_list = ['connection', 'string', 'parameter', 'hash', 'value', 'configure', 'field', 'option', 'version', 'URL', 'setting', 'ip', 'repo', 'link', 'time', 'server', 'command', 'setting', 'hiera', 'data', 'sql', 'permissions', 'mode', 'dir', 'protocol', 'missing', 'reference', 'path', 'location', 'driver', 'port', 'protocol', 'gateway', 'tcp', 'udp', 'fact']
@@ -53,6 +54,8 @@ logging_defect_kw_list= ['log']
 network_defect_kw_list= ['provision', 'network', 'l23', 'balancer', 'domain', 'route', 'proxy', 'dhcp']
 race_defect_kw_list   = ['race']
 service_defect_kw_list= ['service', 'caching', 'backend', 'job', 'start', 'gate', 'stage', 'env', 'requirement', 'restore', 'server']
+
+syntax_defect_kw_list = ['class', 'lint', 'warning', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compilation', 'variable', 'spelling', 'declaration', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicate', 'deprecate', 'parameter', 'outdate']
 
 DFLT_KW  = 'default'
 CLOSE_KW = 'closes-bug'

@@ -101,13 +101,12 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
     # print tup_[0], tup_[1], tup_[2], tup_[3], tup_[4], tup_[5]
 
     bug_status = classifier.detectBuggyCommit(msg_commit)
-    bug_categ  = ''
-
     if bug_status:
        bug_categ = classifier.detectCateg(msg_commit, diff_content_str) 
     else:
        bug_categ = constants.NO_DEFECT_CATEG
 
+    print commit_hash, bug_categ, repo_path_param, str_time_commit
     if commit_hash not in all_commit_file_dict:
         all_commit_file_dict[commit_hash] = [file_]
     else:
@@ -130,7 +129,7 @@ def runMiner(orgParamName, repo_name_param, branchParam):
   pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
 
   commit_file_dict = analyzeCommit(repo_path, repo_branch, pupp_commits_in_repo)
-  print 'Commit count:', len(commit_file_dict) 
+  # print 'Commit count:', len(commit_file_dict) 
   
 
 def dumpContentIntoFile(strP, fileP):

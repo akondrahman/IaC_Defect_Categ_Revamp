@@ -7,11 +7,9 @@ import constants
 
 def detectBuggyCommit(msg_):
     flag2ret  = False 
-
-    for msg_ in msg_lis:
-        msg_ = msg_.lower()
-        if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and ( constants.CLOSE_KW not in msg_):    
-          flag2ret = True 
+    msg_ = msg_.lower()
+    if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and ( constants.CLOSE_KW not in msg_):    
+        flag2ret = True 
     return flag2ret
 
 def detectCateg(msg_, diff_): 
@@ -43,3 +41,10 @@ def detectCateg(msg_, diff_):
             defect_categ = constants.RACE_DEFECT_CATEG 
         elif(any(x_ in msg_ for x_ in constants.service_defect_kw_list )): 
             defect_categ = constants.SERVICE_DEFECT_CATEG   
+        elif(any(x_ in msg_ for x_ in constants.syntax_defect_kw_list )): 
+            defect_categ = constants.SYNTAX_DEFECT_CATEG 
+        else: 
+            defect_categ = constants.NO_DEFECT_CATEG
+    else:
+        defect_categ = constants.NO_DEFECT_CATEG        
+    return defect_categ
