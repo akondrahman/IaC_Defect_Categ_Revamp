@@ -12,12 +12,13 @@ import  subprocess
 import time 
 import  datetime 
 import cPickle as pickle 
+import constants
 reload(sys)
-sys.setdefaultencoding('utf8')
+sys.setdefaultencoding(constants.ENCODING) 
 
 def getEligibleProjects(fileNameParam):
   repo_list = []
-  with open(fileNameParam, 'rU') as f:
+  with open(fileNameParam, constants.FILE_READ_MODE) as f:
     reader = csv.reader(f)
     for row in reader:
       repo_list.append(row[0])
@@ -28,8 +29,8 @@ def getPuppetFilesOfRepo(repo_dir_absolute_path):
     for root_, dirs, files_ in os.walk(repo_dir_absolute_path):
        for file_ in files_:
            full_p_file = os.path.join(root_, file_)
-           if((os.path.exists(full_p_file)) and ('EXTRA_AST' not in full_p_file) ):
-             if (full_p_file.endswith('.pp')):
+           if((os.path.exists(full_p_file)) and (constants.AST_PATH not in full_p_file) ):
+             if (full_p_file.endswith(constants.PP_EXTENSION)):
                pp_.append(full_p_file)
     return pp_
 
@@ -38,7 +39,7 @@ def getRelPathOfFiles(all_pp_param, repo_dir_absolute_path):
   files_relative_paths = [os.path.relpath(path, common_path) for path in all_pp_param]
   return files_relative_paths 
 
-def getPuppRelatedCommits(repo_dir_absolute_path, ppListinRepo, branchName='master'):
+def getPuppRelatedCommits(repo_dir_absolute_path, ppListinRepo, branchName=constants.MASTER_BRANCH):
   mappedPuppetList=[]
   track_exec_cnt = 0
   repo_  = Repo(repo_dir_absolute_path)
@@ -46,10 +47,10 @@ def getPuppRelatedCommits(repo_dir_absolute_path, ppListinRepo, branchName='mast
   for each_commit in all_commits:
     track_exec_cnt = track_exec_cnt + 1
 
-    cmd_of_interrest1 = "cd  " + repo_dir_absolute_path + " ; "
-    cmd_of_interrest2 = "git show --name-status " + str(each_commit)  +  "  | awk '/.pp/ {print $2}'"
+    cmd_of_interrest1 = constants.CHANGE_DIR_CMD + repo_dir_absolute_path + " ; "
+    cmd_of_interrest2 = constants.GIT_COMM_CMD_1 + str(each_commit)  +  constants.GIT_COMM_CMD_2
     cmd_of_interrest = cmd_of_interrest1 + cmd_of_interrest2
-    commit_of_interest  = subprocess.check_output(['bash','-c', cmd_of_interrest])
+    commit_of_interest  = subprocess.check_output([constants.BASH_CMD, constants.BASH_FLAG, cmd_of_interrest])
 
     for ppFile in ppListinRepo:
       if ppFile in commit_of_interest:
@@ -62,12 +63,12 @@ def getPuppRelatedCommits(repo_dir_absolute_path, ppListinRepo, branchName='mast
 
 def getDiffStr(repo_path_p, commit_hash_p, file_p):
    
-   cdCommand   = "cd " + repo_path_p + " ; "
+   cdCommand   = constants.CHANGE_DIR_CMD + repo_path_p + " ; "
    theFile     = os.path.relpath(file_p, repo_path_p)
    
-   diffCommand = " git diff  " + commit_hash_p + " " + theFile + "  "
+   diffCommand = constants.GIT_DIFF_CMD + commit_hash_p + " " + theFile + "  "
    command2Run = cdCommand + diffCommand
-   diff_output = subprocess.check_output(['bash','-c', command2Run])
+   diff_output = subprocess.check_output([constants.BASH_CMD, constants.BASH_FLAG, command2Run])
 
    return diff_output
 
@@ -89,12 +90,12 @@ def getAllPuppCommitsForPuppet(repo_path_param, repo_branch_param, pupp_commits_
     commit_hash = commit_.hexsha
 
     timestamp_commit = commit_.committed_datetime
-    str_time_commit  = timestamp_commit.strftime('%Y-%m-%dT%H-%M-%S')
+    str_time_commit  = timestamp_commit.strftime(constants.DATE_TIME_FORMAT)
 
     diff_content_str = getDiffStr(repo_path_param, commit_hash, file_)
 
     tup_ = (repo_path_param, trac_exec_count, commit_hash, file_, str_time_commit, msg_commit, diff_content_str, repo_branch_param )
-    print tup_[0], tup_[1], tup_[2]
+    # print tup_[0], tup_[1], tup_[2]
     pupp_bug_list.append(tup_)
 
     trac_exec_count += 1
@@ -103,7 +104,7 @@ def getAllPuppCommitsForPuppet(repo_path_param, repo_branch_param, pupp_commits_
 
 def runMiner(orgParamName, repo_name_param, branchParam):
   
-  repo_path   = "/Users/akond/PUPP_REPOS/" + orgParamName + "/" + repo_name_param
+  repo_path   = constants.ROOT_PUPP_DIR + orgParamName + "/" + repo_name_param
   repo_branch = branchParam
 
   all_pp_files_in_repo = getPuppetFilesOfRepo(repo_path)
@@ -116,7 +117,7 @@ def runMiner(orgParamName, repo_name_param, branchParam):
   
 
 def dumpContentIntoFile(strP, fileP):
-  fileToWrite = open( fileP, 'w')
+  fileToWrite = open( fileP, constants.FILE_WRITE_MODE)
   fileToWrite.write(strP )
   fileToWrite.close()
   return str(os.stat(fileP).st_size)
