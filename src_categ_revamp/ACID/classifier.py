@@ -6,6 +6,29 @@ Classify commit messages
 import constants 
 import diff_parser
 
+from nltk.tokenize import sent_tokenize
+import re 
+import spacy 
+spacy_engine = spacy.load(constants.SPACY_ENG_DICT)
+import future 
+import numpy as np 
+
+def doDepAnalysis(msg_par):
+    msg_to_analyze = []
+    unicode_msg = ''
+    try:
+       unicode_msg  = unicode(msg_par, 'utf-8')
+    except: 
+        unicode_msg = msg_par
+    spacy_doc = spacy_engine(unicode_msg)
+    for token in spacy_doc:
+        if (token.dep_ == 'ROOT'):
+            for x_ in token.children:
+                msg_to_analyze.append(x_.text)
+    return ' '.join(msg_to_analyze) 
+
+
+
 def detectBuggyCommit(msg_):
     flag2ret  = False 
     msg_ = msg_.lower()
@@ -16,7 +39,9 @@ def detectBuggyCommit(msg_):
 def detectCateg(msg_, diff_): 
     defect_categ = ''
     if (len(diff_) > 0):
-        diff_parser.parseTheDiff(diff_) 
+        msg_            = doDepAnalysis(msg_) ## depnding on results, this extra step of dependnecy parsing may change 
+        diff_parse_dict = diff_parser.parseTheDiff(diff_) 
+        print 'Diffs:', len(diff_parse_dict) 
         if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)): 
             defect_categ = constants.CONFIG_DEFECT_CATEG
         elif(any(x_ in msg_ for x_ in constants.dep_defect_kw_list)): 

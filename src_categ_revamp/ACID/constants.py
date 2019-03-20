@@ -22,6 +22,7 @@ BASH_FLAG = '-c'
 GIT_DIFF_CMD = " git diff  "
 DATE_TIME_FORMAT = "%Y-%m-%dT%H-%M-%S"
 FILE_WRITE_MODE = 'w'
+SPACY_ENG_DICT  = 'en_core_web_sm'
 
 NO_DEFECT_CATEG = 'NO_DEFECT'
 CONFIG_DEFECT_CATEG = 'CONFIG_DEFECT'
