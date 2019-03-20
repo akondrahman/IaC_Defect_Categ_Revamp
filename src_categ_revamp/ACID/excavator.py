@@ -99,7 +99,7 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
     print tup_[0], tup_[1], tup_[2], tup_[3], tup_[4], tup_[5]
 
     if commit_hash not in all_commit_file_dict:
-        all_commit_file_dict[commit_hash] = file_
+        all_commit_file_dict[commit_hash] = [file_]
     else:
         all_commit_file_dict[commit_hash]  = all_commit_file_dict[commit_hash] + [file_] 
     
