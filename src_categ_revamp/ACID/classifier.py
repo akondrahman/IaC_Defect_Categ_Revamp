@@ -58,7 +58,7 @@ def detectCateg(msg_, diff_):
         
         if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)) and (diff_parser.checkDiffForConfigDefects(diff_)): 
             defect_categ = constants.CONFIG_DEFECT_CATEG
-        elif(any(x_ in msg_ for x_ in constants.dep_defect_kw_list)): 
+        elif(any(x_ in msg_ for x_ in constants.dep_defect_kw_list)) and (diff_parser.checkDiffForDepDefects(diff_)): 
             defect_categ = constants.DEP_DEFECT_CATEG        
         elif(any(x_ in msg_ for x_ in constants.doc_defect_kw_list )): 
             defect_categ = constants.DOC_DEFECT_CATEG

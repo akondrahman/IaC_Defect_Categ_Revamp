@@ -33,9 +33,10 @@ def parseTheDiff(diff_text):
 
 def filterTextList(txt_lis):
     return_list = []
-    return_list = [x_.lower() for x_ in txt_lis if x_.startswith( constants.HASH_SYMBOL ) == False ]
+    return_list = [x_.lower() for x_ in txt_lis if  constants.HASH_SYMBOL not in x_ ]
     return_list = [x_.replace(constants.TAB, '') for x_ in return_list ]    
-    return_list = [x_.replace(constants.NEWLINE, '') for x_ in return_list ]    
+    return_list = [x_.replace(constants.NEWLINE, '') for x_ in return_list ] 
+    return_list = [x_ for x_ in return_list if len(x_) > 1 ]        
     return return_list
 
 def getAddDelLines(diff_mess):
@@ -69,12 +70,24 @@ def checkDiffForConfigDefects(diff_text):
 
 def checkDiffForDepDefects(diff_text):
     added_text , deleted_text = [], []
-    final_flag = False 
+    final_flag, final_flag_1, final_flag_2 = False , False, False 
     added_text, deleted_text = getAddDelLines(diff_text)
     added_text   = filterTextList(added_text)
     deleted_text = filterTextList(deleted_text)
-    if( any(x_ in added_text for x_ in constants.dep_defect_kw_list) ) or ( any(x_ in deleted_text for x_ in constants.dep_defect_kw_list) ):
-            final_flag = True 
+    added_text   = [x_ for x_ in added_text if constants.VAR_SIGN not in x_ ]
+    added_text   = [x_ for x_ in added_text if constants.ATTR_SIGN not in x_ ]
+
+    deleted_text   = [x_ for x_ in deleted_text if constants.VAR_SIGN not in x_ ]
+    deleted_text   = [x_ for x_ in deleted_text if constants.ATTR_SIGN not in x_ ]
+    print added_text, deleted_text
+    for x_ in added_text:
+        if ((constants.dep_defect_kw_list[0] in x_) or (constants.dep_defect_kw_list[1] in x_) or (constants.dep_defect_kw_list[2] in x_)):
+           final_flag_1 = True 
+    for x_ in deleted_text:
+        if ((constants.dep_defect_kw_list[0] in x_) or (constants.dep_defect_kw_list[1] in x_) or (constants.dep_defect_kw_list[2] in x_)):
+           final_flag_2 = True            
+    if (final_flag_1 and final_flag_2):
+        final_flag = True 
     return final_flag
 
     
