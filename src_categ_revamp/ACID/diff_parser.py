@@ -105,7 +105,8 @@ def checkDiffForDocDefects(diff_text):
             if (change_tuple[1] != None ) and ( content.startswith(constants.HASH_SYMBOL)  ):
                 line_numbers_deleted.append( content ) 
         lines_changed = list(set(line_numbers_added).intersection(line_numbers_deleted)) 
-        print lines_changed
+        # print lines_changed
+    lines_changed = [x_ for x_ in lines_changed if len(x_) > 1 ]
     if len(lines_changed) > 0:
         final_flag = True
     return final_flag
