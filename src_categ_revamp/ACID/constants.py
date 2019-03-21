@@ -72,3 +72,4 @@ ATTR_SIGN = '=>'
 diff_depen_code_elems = ['~>' , '::', 'include']
 diff_logic_code_elems = ['if' , 'unless', 'els', 'case']
 diff_secu_code_elems  = ['tls', 'cert', 'cred', 'ssl', 'password', 'pass', 'pwd'] 
+diff_service_code_elems = ['service', 'exec'] 

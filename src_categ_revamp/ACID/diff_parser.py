@@ -80,14 +80,12 @@ def checkDiffForDepDefects(diff_text):
     deleted_text   = [x_ for x_ in deleted_text if constants.VAR_SIGN not in x_ ]
     deleted_text   = [x_ for x_ in deleted_text if constants.ATTR_SIGN not in x_ ]
     # print added_text, deleted_text
-    for x_ in added_text:
-        if ((constants.dep_defect_kw_list[0] in x_) or (constants.dep_defect_kw_list[1] in x_) or (constants.dep_defect_kw_list[2] in x_)):
-           final_flag_1 = True 
-    for x_ in deleted_text:
-        if ((constants.dep_defect_kw_list[0] in x_) or (constants.dep_defect_kw_list[1] in x_) or (constants.dep_defect_kw_list[2] in x_)):
-           final_flag_2 = True            
-    if (final_flag_1 and final_flag_2):
-        final_flag = True 
+    added_text   = [z_ for z_ in added_text if any(x_ in z_ for x_ in constants.diff_depen_code_elems ) ]
+    deleted_text = [z_ for z_ in deleted_text if any(x_ in z_ for x_ in constants.diff_depen_code_elems ) ] 
+
+    if (len(added_text) > 0 ) and (len(deleted_text) > 0 ) :
+       final_flag = True 
+
     return final_flag
 
 def checkDiffForDocDefects(diff_text):
@@ -124,17 +122,15 @@ def checkDiffForLogicDefects(diff_text):
     deleted_text   = [x_ for x_ in deleted_text if constants.VAR_SIGN not in x_ ]
     deleted_text   = [x_ for x_ in deleted_text if constants.ATTR_SIGN not in x_ ]
     # print added_text, deleted_text
-    for x_ in added_text:
-        if ((constants.diff_logic_code_elems[0] in x_) or (constants.diff_logic_code_elems[1] in x_) or (constants.diff_logic_code_elems[2] in x_) or (constants.diff_logic_code_elems[3] in x_)):
-           final_flag_1 = True 
-    for x_ in deleted_text:
-        if ((constants.diff_logic_code_elems[0] in x_) or (constants.diff_logic_code_elems[1] in x_) or (constants.diff_logic_code_elems[2] in x_) or (constants.diff_logic_code_elems[3] in x_)):
-           final_flag_2 = True            
-    if (final_flag_1 or final_flag_2):
-        final_flag = True 
+    added_text   = [z_ for z_ in added_text if any(x_ in z_ for x_ in constants.diff_logic_code_elems ) ]
+    deleted_text = [z_ for z_ in deleted_text if any(x_ in z_ for x_ in constants.diff_logic_code_elems ) ] 
+
+    if (len(added_text) > 0 ) or (len(deleted_text) > 0 ) :
+       final_flag = True 
     return final_flag
         
 def checkDiffForSecurityDefects(diff_text):
+    final_flag = False     
     added_text , deleted_text = [], []
 
     added_text, deleted_text = getAddDelLines(diff_text)
@@ -146,13 +142,37 @@ def checkDiffForSecurityDefects(diff_text):
     deleted_text = [x_ for x_ in deleted_text if constants.VAR_SIGN  in x_ ]
     deleted_text = [x_ for x_ in deleted_text if constants.ATTR_SIGN  in x_ ]
 
+    added_text   = [x_.split(constants.VAR_SIGN)[0].replace(constants.WHITE_SPACE, '') for x_ in added_text]
+    added_text   = [x_.split(constants.ATTR_SIGN )[0].replace(constants.WHITE_SPACE, '') for x_ in added_text] 
+
+    deleted_text   = [x_.split(constants.VAR_SIGN)[0].replace(constants.WHITE_SPACE, '') for x_ in deleted_text]
+    deleted_text   = [x_.split(constants.ATTR_SIGN )[0].replace(constants.WHITE_SPACE, '') for x_ in deleted_text]    
+
     added_text   = [z_ for z_ in added_text if any(x_ in z_ for x_ in constants.diff_secu_code_elems ) ]
     deleted_text = [z_ for z_ in deleted_text if any(x_ in z_ for x_ in constants.diff_secu_code_elems ) ]    
-    print added_text, deleted_text
+    # print added_text, deleted_text
     common       = list(set(added_text).intersection(deleted_text)) 
     
     if len(common) > 0:
         final_flag = True
     return final_flag
             
+def checkDiffForServiceDefects(diff_text):
+    final_flag = False 
+    added_text , deleted_text = [], []
 
+    added_text, deleted_text = getAddDelLines(diff_text)
+    added_text   = filterTextList(added_text)
+    deleted_text = filterTextList(deleted_text)
+    added_text   = [x_ for x_ in added_text if constants.VAR_SIGN  not in x_ ]
+    added_text   = [x_.lower() for x_ in added_text if constants.ATTR_SIGN not in x_ ]
+
+    deleted_text = [x_ for x_ in deleted_text if constants.VAR_SIGN not in x_ ]
+    deleted_text = [x_.lower() for x_ in deleted_text if constants.ATTR_SIGN not in x_ ]
+
+    added_text   = [z_ for z_ in added_text if any(x_ in z_ for x_ in constants.diff_service_code_elems) ]
+    deleted_text = [z_ for z_ in deleted_text if any(x_ in z_ for x_ in constants.diff_service_code_elems) ] 
+
+    if (len(added_text) > 0 ) and (len(deleted_text) > 0 ) :
+       final_flag = True 
+    return final_flag
