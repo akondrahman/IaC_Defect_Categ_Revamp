@@ -50,7 +50,7 @@ config_defect_kw_list = ['connection', 'string', 'paramet', 'hash', 'value', 'co
 dep_defect_kw_list    = ['requir', 'dep', 'dependency', 'relation', 'order', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'package', 'packag', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test', 'includ']
 doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice', 'header'] 
 idem_defect_kw_list   = ['idempoten']
-logic_defect_kw_list  = ['logic', 'way', 'conditional', 'boolean']
+logic_defect_kw_list  = ['logic', 'conditional', 'condition', 'boolean']
 secu_defect_kw_list   = ['vulnerability', 'ssl', 'firewall', 'secret', 'authenticate', 'tls', 'ca_file', 'password', 'security']
 
 build_defect_kw_list  = ['build']
@@ -70,3 +70,4 @@ diff_config_code_elems = ['hiera' , 'hash', 'parameter', 'user']
 VAR_SIGN = '='
 ATTR_SIGN = '=>'
 diff_depen_code_elems = ['~>' , '::', 'include']
+diff_logic_code_elems = ['if' , 'unless', 'els', 'case']

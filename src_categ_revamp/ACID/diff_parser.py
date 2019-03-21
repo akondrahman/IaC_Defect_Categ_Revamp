@@ -112,7 +112,27 @@ def checkDiffForDocDefects(diff_text):
     return final_flag
 
     
+def checkDiffForLogicDefects(diff_text):
+    added_text , deleted_text = [], []
+    final_flag, final_flag_1, final_flag_2 = False , False, False 
+    added_text, deleted_text = getAddDelLines(diff_text)
+    added_text   = filterTextList(added_text)
+    deleted_text = filterTextList(deleted_text)
+    added_text   = [x_ for x_ in added_text if constants.VAR_SIGN not in x_ ]
+    added_text   = [x_ for x_ in added_text if constants.ATTR_SIGN not in x_ ]
 
+    deleted_text   = [x_ for x_ in deleted_text if constants.VAR_SIGN not in x_ ]
+    deleted_text   = [x_ for x_ in deleted_text if constants.ATTR_SIGN not in x_ ]
+    # print added_text, deleted_text
+    for x_ in added_text:
+        if ((constants.diff_logic_code_elems[0] in x_) or (constants.diff_logic_code_elems[1] in x_) or (constants.diff_logic_code_elems[2] in x_) or (constants.diff_logic_code_elems[3] in x_)):
+           final_flag_1 = True 
+    for x_ in deleted_text:
+        if ((constants.diff_logic_code_elems[0] in x_) or (constants.diff_logic_code_elems[1] in x_) or (constants.diff_logic_code_elems[2] in x_) or (constants.diff_logic_code_elems[3] in x_)):
+           final_flag_2 = True            
+    if (final_flag_1 or final_flag_2):
+        final_flag = True 
+    return final_flag
         
 
             
