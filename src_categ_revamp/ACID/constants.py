@@ -47,7 +47,7 @@ SYNTAX_DEFECT_CATEG    = 'SYNTAX_DEFECT'
 
 prem_bug_kw_list      = ['error', 'bug', 'fix', 'issue', 'mistake', 'incorrect', 'fault', 'defect', 'flaw' ]
 config_defect_kw_list = ['connection', 'string', 'paramet', 'hash', 'value', 'config', 'field', 'option', 'version', 'url', 'setting', 'ip', 'repo', 'link', 'time', 'server', 'command', 'setting', 'hiera', 'data', 'sql', 'permiss', 'mode', 'dir', 'protocol', 'missing', 'reference', 'path', 'location', 'driver', 'port', 'protocol', 'gateway', 'tcp', 'udp', 'fact', 'id']
-dep_defect_kw_list    = ['requir', 'dep', 'dependency', 'relation', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'package', 'packag', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test', 'includ']
+dep_defect_kw_list    = ['requir', 'dep', 'dependency', 'relation', 'order', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'package', 'packag', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test', 'includ']
 doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice', 'header'] 
 idem_defect_kw_list   = ['idempoten']
 logic_defect_kw_list  = ['logic', 'way', 'conditional', 'boolean']
@@ -69,3 +69,4 @@ CLOSE_KW = 'closes-bug'
 diff_config_code_elems = ['hiera' , 'hash', 'parameter', 'user']
 VAR_SIGN = '='
 ATTR_SIGN = '=>'
+diff_depen_code_elems = ['~>' , '::', 'include']
