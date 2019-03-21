@@ -66,15 +66,15 @@ def detectCateg(msg_, diff_):
             defect_categ = constants.IDEM_DEFECT_CATEG            
         elif(any(x_ in msg_ for x_ in constants.logic_defect_kw_list )) and (diff_parser.checkDiffForLogicDefects(diff_)) : 
             defect_categ = constants.LOGIC_DEFECT_CATEG                    
-        elif(any(x_ in msg_ for x_ in constants.secu_defect_kw_list )) and (diff_parser.checkDiffForSecurityDefects (diff_)) : 
+        elif(any(x_ in msg_ for x_ in constants.secu_defect_kw_list )) and (diff_parser.checkDiffForSecurityDefects(diff_)) : 
             defect_categ = constants.SECU_DEFECT_CATEG                                      
-        elif(any(x_ in msg_ for x_ in constants.logging_defect_kw_list )): 
+        elif(any(x_ in msg_ for x_ in constants.logging_defect_kw_list )) and (diff_parser.checkDiffForServiceDefects(diff_)) : 
             defect_categ = constants.LOGGING_DEFECT_CATEG   
-        elif(any(x_ in msg_ for x_ in constants.network_defect_kw_list )): 
+        elif(any(x_ in msg_ for x_ in constants.network_defect_kw_list )) and (diff_parser.checkDiffForServiceDefects(diff_)): 
             defect_categ = constants.NETWORK_DEFECT_CATEG                             
-        elif(any(x_ in msg_ for x_ in constants.service_defect_kw_list )): 
+        elif(any(x_ in msg_ for x_ in constants.service_defect_kw_list )) and (diff_parser.checkDiffForServiceDefects(diff_)): 
             defect_categ = constants.SERVICE_DEFECT_CATEG   
-        elif(any(x_ in msg_ for x_ in constants.syntax_defect_kw_list )): 
+        elif(any(x_ in msg_ for x_ in constants.syntax_defect_kw_list )) and (diff_parser.checkDiffForSyntaxDefects(diff_)): 
             defect_categ = constants.SYNTAX_DEFECT_CATEG 
         else: 
             defect_categ = constants.NO_DEFECT_CATEG
