@@ -79,7 +79,7 @@ def checkDiffForDepDefects(diff_text):
 
     deleted_text   = [x_ for x_ in deleted_text if constants.VAR_SIGN not in x_ ]
     deleted_text   = [x_ for x_ in deleted_text if constants.ATTR_SIGN not in x_ ]
-    print added_text, deleted_text
+    # print added_text, deleted_text
     for x_ in added_text:
         if ((constants.dep_defect_kw_list[0] in x_) or (constants.dep_defect_kw_list[1] in x_) or (constants.dep_defect_kw_list[2] in x_)):
            final_flag_1 = True 
@@ -88,6 +88,26 @@ def checkDiffForDepDefects(diff_text):
            final_flag_2 = True            
     if (final_flag_1 and final_flag_2):
         final_flag = True 
+    return final_flag
+
+def checkDiffForDocDefects(diff_text):
+    lines_changed = []
+    final_flag = False 
+    for diff_ in whatthepatch.parse_patch(diff_text):
+        all_changes_line_by_line = diff_[1] 
+        line_numbers_added, line_numbers_deleted = [], [] 
+
+        for change_tuple in all_changes_line_by_line:
+            content = change_tuple[2] 
+            content = content.replace(constants.WHITE_SPACE, '')
+            if (change_tuple[0] != None ) and ( content.startswith(constants.HASH_SYMBOL) ):
+                line_numbers_added.append( content )
+            if (change_tuple[1] != None ) and ( content.startswith(constants.HASH_SYMBOL)  ):
+                line_numbers_deleted.append( content ) 
+        lines_changed = list(set(line_numbers_added).intersection(line_numbers_deleted)) 
+        print lines_changed
+    if len(lines_changed) > 0:
+        final_flag = True
     return final_flag
 
     
