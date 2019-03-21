@@ -52,7 +52,7 @@ def detectCateg(msg_, diff_):
     if (len(diff_) > 0):
         msg_            = msg_.lower()
         msg_            = doDepAnalysis(msg_) ## depnding on results, this extra step of dependnecy parsing may change 
-        print msg_ 
+        # print msg_ 
         # diff_parse_dict = diff_parser.parseTheDiff(diff_) 
         # print 'Lines is the diff:', len(diff_parse_dict) 
         

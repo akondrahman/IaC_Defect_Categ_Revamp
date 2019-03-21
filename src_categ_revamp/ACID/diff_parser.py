@@ -134,6 +134,25 @@ def checkDiffForLogicDefects(diff_text):
         final_flag = True 
     return final_flag
         
+def checkDiffForSecurityDefects(diff_text):
+    added_text , deleted_text = [], []
 
+    added_text, deleted_text = getAddDelLines(diff_text)
+    added_text   = filterTextList(added_text)
+    deleted_text = filterTextList(deleted_text)
+    added_text   = [x_ for x_ in added_text if constants.VAR_SIGN  in x_ ]
+    added_text   = [x_ for x_ in added_text if constants.ATTR_SIGN  in x_ ]
+
+    deleted_text = [x_ for x_ in deleted_text if constants.VAR_SIGN  in x_ ]
+    deleted_text = [x_ for x_ in deleted_text if constants.ATTR_SIGN  in x_ ]
+
+    added_text   = [z_ for z_ in added_text if any(x_ in z_ for x_ in constants.diff_secu_code_elems ) ]
+    deleted_text = [z_ for z_ in deleted_text if any(x_ in z_ for x_ in constants.diff_secu_code_elems ) ]    
+    print added_text, deleted_text
+    common       = list(set(added_text).intersection(deleted_text)) 
+    
+    if len(common) > 0:
+        final_flag = True
+    return final_flag
             
 
