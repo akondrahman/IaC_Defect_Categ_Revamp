@@ -61,7 +61,7 @@ logging_defect_kw_list= ['log']
 network_defect_kw_list= ['provis', 'provision', 'network', 'l23', 'balancer', 'domain', 'route', 'proxy', 'dhcp']
 service_defect_kw_list= ['install', 'race', 'build', 'service', 'caching', 'backend', 'job', 'start', 'gate', 'stage', 'env', 'requirement', 'restore', 'server']
 
-syntax_defect_kw_list = ['class', 'lint', 'warning', 'warn', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compilation', 'variable', 'spelling', 'declaration', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicate', 'deprecate', 'parameter', 'outdate', 'variabl']
+syntax_defect_kw_list = ['compil', 'class', 'lint', 'warning', 'warn', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compilation', 'variable', 'spelling', 'declaration', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicate', 'deprecate', 'parameter', 'outdate', 'variabl']
 
 DFLT_KW  = 'default'
 CLOSE_KW = 'closes-bug'
@@ -73,3 +73,4 @@ diff_depen_code_elems = ['~>' , '::', 'include']
 diff_logic_code_elems = ['if' , 'unless', 'els', 'case']
 diff_secu_code_elems  = ['tls', 'cert', 'cred', 'ssl', 'password', 'pass', 'pwd'] 
 diff_service_code_elems = ['service', 'exec'] 
+diff_syntax_code_elems = ['class']
