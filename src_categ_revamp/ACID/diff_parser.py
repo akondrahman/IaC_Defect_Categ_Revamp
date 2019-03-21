@@ -209,3 +209,19 @@ def checkDiffForSyntaxDefects(diff_text):
     elif (len(added_text)) and (len(deleted_text)): 
        final_flag = True 
     return final_flag
+
+
+
+def checkDiffForIdempotenceDefects(diff_text):
+    final_flag = False 
+    added_text , deleted_text = [], []
+
+    added_text, deleted_text = getAddDelLines(diff_text)
+    added_text   = filterTextList(added_text)
+    deleted_text = filterTextList(deleted_text)
+
+    added_text = [x_ for x_ in added_text if constants.diff_idem_code_elem in x_ ] 
+    if (len(added_text) == 1) or (len(deleted_text) > constants.diff_idem_removal_cnt):
+       final_flag = True 
+
+    return final_flag 

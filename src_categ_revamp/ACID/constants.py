@@ -74,3 +74,5 @@ diff_logic_code_elems = ['if' , 'unless', 'els', 'case']
 diff_secu_code_elems  = ['tls', 'cert', 'cred', 'ssl', 'password', 'pass', 'pwd'] 
 diff_service_code_elems = ['service', 'exec'] 
 diff_syntax_code_elems = ['class']
+diff_idem_code_elem    = 'class' 
+diff_idem_removal_cnt  = 10 
