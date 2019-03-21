@@ -103,11 +103,11 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
     bug_status = classifier.detectBuggyCommit(msg_commit)
     if bug_status:
        bug_categ = classifier.detectCateg(msg_commit, diff_content_str) 
+       print commit_hash, bug_categ, repo_path_param, str_time_commit
+       print '-'*100       
     else:
        bug_categ = constants.NO_DEFECT_CATEG
 
-    print commit_hash, bug_categ, repo_path_param, str_time_commit
-    print '-'*100
     if commit_hash not in all_commit_file_dict:
         all_commit_file_dict[commit_hash] = [file_]
     else:

@@ -58,7 +58,11 @@ network_defect_kw_list= ['provis', 'provision', 'network', 'l23', 'balancer', 'd
 race_defect_kw_list   = ['race']
 service_defect_kw_list= ['service', 'caching', 'backend', 'job', 'start', 'gate', 'stage', 'env', 'requirement', 'restore', 'server']
 
-syntax_defect_kw_list = ['class', 'lint', 'warning', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compilation', 'variable', 'spelling', 'declaration', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicate', 'deprecate', 'parameter', 'outdate', 'variabl']
+syntax_defect_kw_list = ['class', 'lint', 'warning', 'warn', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compilation', 'variable', 'spelling', 'declaration', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicate', 'deprecate', 'parameter', 'outdate', 'variabl']
 
 DFLT_KW  = 'default'
 CLOSE_KW = 'closes-bug'
+
+diff_config_code_elems = ['hiera' , 'hash', 'parameter', 'user']
+VAR_SIGN = '='
+ATTR_SIGN = '=>'

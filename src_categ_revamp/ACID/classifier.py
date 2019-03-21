@@ -23,6 +23,7 @@ def doDepAnalysis(msg_par):
     splitted_msg = msg_par.split(constants.WHITE_SPACE)
     splitted_msg = [stemmerObj.stem(x_) for x_ in splitted_msg] ##porter stemming 
     splitted_msg = [x_ for x_ in splitted_msg if len(x_) > 1 ]  ## remove special characterers 
+    splitted_msg = [x_ for x_ in splitted_msg if x_.isalnum() ]  ## remove special characterers 
     filtered_msg = [x_ for x_ in splitted_msg if checkForNum(x_) == False ] ## remove alphanumeric characters 
     unicode_msg_ = constants.WHITE_SPACE.join(filtered_msg)
     try:
