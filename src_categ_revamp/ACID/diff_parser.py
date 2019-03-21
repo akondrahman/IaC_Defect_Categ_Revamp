@@ -31,6 +31,13 @@ def parseTheDiff(diff_text):
         #print parse_out_dict
     return parse_out_dict
 
+def filterTextList(txt_lis):
+    return_list = []
+    return_list = [x_.lower() for x_ in txt_lis ]
+    return_list = [x_.replace(constants.TAB, '') for x_ in return_list ]    
+    return_list = [x_.replace(constants.NEWLINE, '') for x_ in return_list ]    
+    return return_list
+
 def checkDiffForConfigDefects(diff_text):
     added_text , deleted_text = [], []
     final_flag = False 
@@ -41,14 +48,16 @@ def checkDiffForConfigDefects(diff_text):
                 added_text.append(change_tuple[2])
             if (change_tuple[1] != None ):
                 deleted_text.append(change_tuple[2])
-        added_text   = [x_.lower() for x_ in added_text]
-        deleted_text = [x_.lower() for x_ in deleted_text]
+        added_text   = filterTextList(added_text)
+        deleted_text = filterTextList(deleted_text)
         if( any(x_ in added_text for x_ in constants.config_defect_kw_list) ) and ( any(x_ in deleted_text for x_ in constants.config_defect_kw_list) ):
             final_flag = True 
         elif ( any(constants.VAR_SIGN in x_ for x_ in added_text) ) and ( any(constants.VAR_SIGN in x_ for x_ in deleted_text) ):
             var_add_lis = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[0] for x_ in added_text if constants.VAR_SIGN in x_ ]
             var_del_lis = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[0] for x_ in deleted_text if constants.VAR_SIGN in x_ ] 
             var_common  = list(set(var_add_lis).intersection(var_del_lis)) 
+            # print var_add_lis, var_del_lis
+            print var_common
             if len(var_common) > 0:
                 final_flag = True
     return final_flag

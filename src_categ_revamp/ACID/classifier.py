@@ -53,10 +53,10 @@ def detectCateg(msg_, diff_):
         msg_            = msg_.lower()
         msg_            = doDepAnalysis(msg_) ## depnding on results, this extra step of dependnecy parsing may change 
         print msg_ 
-        diff_parse_dict = diff_parser.parseTheDiff(diff_) 
-        print 'Lines is the diff:', len(diff_parse_dict) 
+        # diff_parse_dict = diff_parser.parseTheDiff(diff_) 
+        # print 'Lines is the diff:', len(diff_parse_dict) 
         
-        if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)): 
+        if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)) and (diff_parser.checkDiffForConfigDefects(diff_)): 
             defect_categ = constants.CONFIG_DEFECT_CATEG
         elif(any(x_ in msg_ for x_ in constants.dep_defect_kw_list)): 
             defect_categ = constants.DEP_DEFECT_CATEG        
