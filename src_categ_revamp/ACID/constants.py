@@ -53,13 +53,13 @@ idem_defect_kw_list   = ['idempoten']
 logic_defect_kw_list  = ['logic', 'conditional', 'condition', 'boolean']
 secu_defect_kw_list   = ['vulnerability', 'ssl', 'firewall', 'secret', 'authenticate', 'tls', 'ca_file', 'password', 'security']
 
-build_defect_kw_list  = ['build']
-db_defect_kw_list     = ['db', 'database', 'databas']
-insta_defect_kw_list  = ['install']
+# build_defect_kw_list  = ['build']
+# db_defect_kw_list     = ['db', 'database', 'databas']
+# insta_defect_kw_list  = ['install']
+# race_defect_kw_list   = ['race']
 logging_defect_kw_list= ['log']
 network_defect_kw_list= ['provis', 'provision', 'network', 'l23', 'balancer', 'domain', 'route', 'proxy', 'dhcp']
-race_defect_kw_list   = ['race']
-service_defect_kw_list= ['service', 'caching', 'backend', 'job', 'start', 'gate', 'stage', 'env', 'requirement', 'restore', 'server']
+service_defect_kw_list= ['install', 'race', 'build', 'service', 'caching', 'backend', 'job', 'start', 'gate', 'stage', 'env', 'requirement', 'restore', 'server']
 
 syntax_defect_kw_list = ['class', 'lint', 'warning', 'warn', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compilation', 'variable', 'spelling', 'declaration', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicate', 'deprecate', 'parameter', 'outdate', 'variabl']
 
