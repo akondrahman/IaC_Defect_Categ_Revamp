@@ -14,6 +14,7 @@ DATE_TIME_FORMAT = "%Y-%m-%dT%H-%M-%S"
 WHITE_SPACE  = ' '
 TAB = '\t'
 NEWLINE = '\n'
+HASH_SYMBOL = '#'
 
 CHANGE_DIR_CMD = 'cd '
 GIT_COMM_CMD_1 = "git show --name-status "
