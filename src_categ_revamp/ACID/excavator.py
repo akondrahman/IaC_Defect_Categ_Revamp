@@ -74,6 +74,23 @@ def getDiffStr(repo_path_p, commit_hash_p, file_p):
 
    return diff_output
 
+def makeDepParsingMessage(m_, i_): 
+    upper, lower  = 0, 0
+    lower = i_ - constants.STR_LIST_BOUNDS
+    upper = i_ + constants.STR_LIST_BOUNDS 
+    if upper > len(m_):
+      upper = - 1 
+    if lower < 0:
+      lower = 0
+    return constants.WHITE_SPACE.join(m_[i_ - constants.STR_LIST_BOUNDS : i_ + constants.STR_LIST_BOUNDS])
+
+def processMessage(indi_comm_mess):
+    if ('*' in indi_comm_mess):
+       splitted_messages = indi_comm_mess.split('*')
+    else:
+       splitted_messages = sent_tokenize(indi_comm_mess)
+    return splitted_messages 
+
 def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
   trac_exec_count = 0 
   pupp_bug_list = []
@@ -100,11 +117,15 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
     tup_ = (repo_path_param, trac_exec_count, commit_hash, file_, str_time_commit, msg_commit, diff_content_str, repo_branch_param )
     # print tup_[0], tup_[1], tup_[2], tup_[3], tup_[4], tup_[5]
 
-    bug_status = classifier.detectBuggyCommit(msg_commit)
+    bug_status, index_status = classifier.detectBuggyCommit(msg_commit)
     if bug_status:
-       bug_categ = classifier.detectCateg(msg_commit, diff_content_str) 
-       print commit_hash, bug_categ, repo_path_param, str_time_commit
-       print '-'*100       
+       splitted_msg = msg_commit.split(constants.WHITE_SPACE) # list of strings 
+      #  msg_for_dep_parsing = makeDepParsingMessage(splitted_msg, index_status) 
+      #  bug_categ = classifier.detectCateg(msg_for_dep_parsing, diff_content_str) #  trigrams are used , very reestricitive 
+      for tokenized_msg in splitted_msg:
+          bug_categ = classifier.detectCateg(tokenized_msg, diff_content_str) 
+          print commit_hash, bug_categ, repo_path_param, str_time_commit
+          print '-'*100       
     else:
        bug_categ = constants.NO_DEFECT_CATEG
 

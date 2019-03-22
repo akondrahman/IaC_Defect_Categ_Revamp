@@ -42,10 +42,13 @@ def doDepAnalysis(msg_par):
 
 def detectBuggyCommit(msg_):
     flag2ret  = False 
+    index2ret = 0
     msg_ = msg_.lower()
     if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and ( constants.CLOSE_KW not in msg_):    
+        str2see = [y_ for y_ in constants.prem_bug_kw_list][0]
+        index2ret = msg_.find( str2see  ) 
         flag2ret = True 
-    return flag2ret
+    return flag2ret, index2ret
 
 def detectCateg(msg_, diff_): 
     defect_categ = ''
