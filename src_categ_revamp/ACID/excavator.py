@@ -12,6 +12,7 @@ import  subprocess
 import time 
 import  datetime 
 import cPickle as pickle 
+from nltk.tokenize import sent_tokenize
 import constants
 import classifier
 
@@ -85,6 +86,7 @@ def makeDepParsingMessage(m_, i_):
     return constants.WHITE_SPACE.join(m_[i_ - constants.STR_LIST_BOUNDS : i_ + constants.STR_LIST_BOUNDS])
 
 def processMessage(indi_comm_mess):
+    splitted_messages = []
     if ('*' in indi_comm_mess):
        splitted_messages = indi_comm_mess.split('*')
     else:
@@ -119,11 +121,10 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
 
     bug_status, index_status = classifier.detectBuggyCommit(msg_commit)
     if bug_status:
-       splitted_msg = msg_commit.split(constants.WHITE_SPACE) # list of strings 
-      #  msg_for_dep_parsing = makeDepParsingMessage(splitted_msg, index_status) 
-      #  bug_categ = classifier.detectCateg(msg_for_dep_parsing, diff_content_str) #  trigrams are used , very reestricitive 
-      for tokenized_msg in splitted_msg:
+      processed_message = processMessage(msg_commit)
+      for tokenized_msg in processed_message:
           bug_categ = classifier.detectCateg(tokenized_msg, diff_content_str) 
+          print tokenized_msg
           print commit_hash, bug_categ, repo_path_param, str_time_commit
           print '-'*100       
     else:
@@ -132,8 +133,7 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
     if commit_hash not in all_commit_file_dict:
         all_commit_file_dict[commit_hash] = [file_]
     else:
-        all_commit_file_dict[commit_hash]  = all_commit_file_dict[commit_hash] + [file_] 
-    
+        all_commit_file_dict[commit_hash]  = all_commit_file_dict[commit_hash] + [file_]    
 
     trac_exec_count += 1
 

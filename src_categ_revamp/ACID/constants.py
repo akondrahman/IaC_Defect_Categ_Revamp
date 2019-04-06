@@ -52,7 +52,7 @@ dep_defect_kw_list    = ['requir', 'dep', 'dependency', 'relation', 'order', 'sy
 doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice', 'header'] 
 idem_defect_kw_list   = ['idempoten']
 logic_defect_kw_list  = ['logic', 'conditional', 'condition', 'boolean']
-secu_defect_kw_list   = ['vulnerability', 'ssl', 'firewall', 'secret', 'authenticate', 'tls', 'ca_file', 'password', 'security']
+secu_defect_kw_list   = ['vulnerability', 'ssl', 'firewall', 'secret', 'authenticate', 'tls', 'ca_file', 'password', 'security', 'cve']
 
 # build_defect_kw_list  = ['build']
 # db_defect_kw_list     = ['db', 'database', 'databas']
@@ -64,8 +64,18 @@ service_defect_kw_list= ['install', 'race', 'build', 'service', 'caching', 'back
 
 syntax_defect_kw_list = ['compil', 'class', 'lint', 'warning', 'warn', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compilation', 'variable', 'spelling', 'declaration', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicate', 'deprecate', 'parameter', 'outdate', 'variabl']
 
-DFLT_KW  = 'default'
-CLOSE_KW = 'closes-bug'
+EXTRA_SYNTAX_KW       = ['definition', 'role', 'whitespace', 'parameter', 'lint', 'style', 'typo', 'variable', 'indent', 'test', 'pattern'] 
+EXTRA_CONFIG_KW       = ['url', 'version', 'config', 'sql', 'tcp', 'hiera', 'repo', 'vlan', 'connection']  
+EXTRA_DEPENDENCY_KW   = ['dep', 'ensure', 'require'] 
+EXTRA_SERVICE_KW      = ['test', 'setup', 'site', 'restart', 'deploy', 'start', 'driver']  
+EXTRA_DOCU_KW         = ['readme', 'doc', 'comment', 'license'] 
+EXTRA_FIX_KEYWORD     = 'fix'   
+
+
+DFLT_KW   = 'default'
+CLOSE_KW  = 'closes-bug'
+MERGE_KW  = 'merge' 
+REVERT_KW = 'revert'
 
 diff_config_code_elems = ['hiera' , 'hash', 'parameter', 'user']
 VAR_SIGN = '='
