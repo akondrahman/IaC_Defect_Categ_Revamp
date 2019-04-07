@@ -120,7 +120,7 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
     # print tup_[0], tup_[1], tup_[2], tup_[3], tup_[4], tup_[5]
 
     bug_status, index_status = classifier.detectBuggyCommit(msg_commit)
-    if bug_status:
+    if (bug_status) and (classifier.detectRevertedCommit(msg_commit) == False ):
       processed_message = processMessage(msg_commit)
       for tokenized_msg in processed_message:
           bug_categ = classifier.detectCateg(tokenized_msg, diff_content_str) 

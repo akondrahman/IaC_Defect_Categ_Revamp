@@ -21,10 +21,10 @@ def checkForNum(str_par):
 def filterCommitMessage(msg_par):
     temp_msg_    = msg_par.lower()
     splitted_msg = temp_msg_.split(constants.WHITE_SPACE)
-    splitted_msg = [stemmerObj.stem(x_) for x_ in splitted_msg] ##porter stemming 
-    splitted_msg = [x_ for x_ in splitted_msg if len(x_) > 1 ]  ## remove special characterers 
-    splitted_msg = [x_ for x_ in splitted_msg if x_.isalnum() ]  ## remove special characterers 
-    filtered_msg = [x_ for x_ in splitted_msg if checkForNum(x_) == False ] ## remove alphanumeric characters     
+    splitted_msg = [stemmerObj.stem(x_) for x_ in splitted_msg] ##porter stemming , x_ is a string 
+    splitted_msg = [x_ for x_ in splitted_msg if len(x_) > 1 ]  ## remove special characterers , x_ is a string 
+    # splitted_msg = [x_ for x_ in splitted_msg if x_.isalnum() ]  ## remove special characterers , x_ is a string 
+    filtered_msg = [x_ for x_ in splitted_msg if checkForNum(x_) == False ] ## remove alphanumeric characters , x_ is a string     
 
     return filtered_msg 
 
@@ -48,16 +48,25 @@ def detectBuggyCommit(msg_):
     flag2ret  = False 
     index2ret = 0
     msg_ = msg_.lower()
-    if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and ( constants.CLOSE_KW not in msg_) and (constants.MERGE_KW not in msg_) and (constants.REVERT_KW not in msg_):    
+    if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and ( constants.CLOSE_KW not in msg_) and (constants.MERGE_KW not in msg_) :    
         str2see = [y_ for y_ in constants.prem_bug_kw_list][0]
         index2ret = msg_.find( str2see  ) 
         flag2ret = True 
     return flag2ret, index2ret
 
+def detectRevertedCommit(msg_):
+    flag2ret  = False 
+    msg_ = msg_.lower()
+    revert_matches = re.findall(constants.REVERT_REGEX, msg_)
+    if(len(revert_matches) > 0):
+        flag2ret = True 
+    return flag2ret
+
 def detectCateg(msg_, diff_): 
     defect_categ = ''
     if (len(diff_) > 0):
         temp_msg_list = filterCommitMessage(msg_) # for extra false negative rules 
+        print temp_msg_list        
         # temp_msg_     = constants.WHITE_SPACE.join(temp_msg_list) # for extra false negative rules 
 
         msg_       = doDepAnalysis(msg_) ## depnding on results, this extra step of dependnecy parsing may change 
