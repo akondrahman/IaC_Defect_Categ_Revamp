@@ -96,7 +96,9 @@ def processMessage(indi_comm_mess):
 def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
   trac_exec_count = 0 
   pupp_bug_list = []
-  all_commit_file_dict = {}
+  all_commit_file_dict  = {}
+  all_defect_categ_list = []
+  hash_tracker = []
   for tuple_ in pupp_commits_mapping:
     file_ = tuple_[0]
     commit_ = tuple_[1]
@@ -118,26 +120,29 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
 
     tup_ = (repo_path_param, trac_exec_count, commit_hash, file_, str_time_commit, msg_commit, diff_content_str, repo_branch_param )
     # print tup_[0], tup_[1], tup_[2], tup_[3], tup_[4], tup_[5]
-
-    bug_status, index_status = classifier.detectBuggyCommit(msg_commit)
-    if (bug_status) and (classifier.detectRevertedCommit(msg_commit) ):
-      processed_message = processMessage(msg_commit)
-      for tokenized_msg in processed_message:
-          bug_categ = classifier.detectCateg(tokenized_msg, diff_content_str) 
-          print tokenized_msg
-          print commit_hash, bug_categ, repo_path_param, str_time_commit
-          print '-'*100       
-    else:
-       bug_categ = constants.NO_DEFECT_CATEG
-
+    #### categorization zone 
+    if (commit_hash not in hash_tracker):
+      bug_status, index_status = classifier.detectBuggyCommit(msg_commit)
+      if (bug_status) or (classifier.detectRevertedCommit(msg_commit) ):
+        processed_message = processMessage(msg_commit)
+        for tokenized_msg in processed_message:
+            bug_categ = classifier.detectCateg(tokenized_msg, diff_content_str) 
+            # print tokenized_msg
+            # print commit_hash, bug_categ, repo_path_param, str_time_commit
+            # print '-'*100   
+      else:
+        bug_categ = constants.NO_DEFECT_CATEG
+      
+      tup_ = (commit_hash, bug_categ, repo_path_param, str_time_commit) 
+      all_defect_categ_list.append(tup_)     
+      hash_tracker.append(commit_hash) 
+    #### file to hash mapping zone 
     if commit_hash not in all_commit_file_dict:
         all_commit_file_dict[commit_hash] = [file_]
     else:
         all_commit_file_dict[commit_hash]  = all_commit_file_dict[commit_hash] + [file_]    
 
-    trac_exec_count += 1
-
-  return all_commit_file_dict
+  return all_commit_file_dict, all_defect_categ_list 
 
 def runMiner(orgParamName, repo_name_param, branchParam):
   
@@ -150,8 +155,10 @@ def runMiner(orgParamName, repo_name_param, branchParam):
 
   pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
 
-  commit_file_dict = analyzeCommit(repo_path, repo_branch, pupp_commits_in_repo)
+  commit_file_dict, categ_defect_list = analyzeCommit(repo_path, repo_branch, pupp_commits_in_repo)
   # print 'Commit count:', len(commit_file_dict) 
+  return commit_file_dict, categ_defect_list
+
   
 
 def dumpContentIntoFile(strP, fileP):
