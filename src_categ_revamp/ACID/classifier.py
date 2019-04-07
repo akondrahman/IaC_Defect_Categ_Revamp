@@ -66,7 +66,7 @@ def detectCateg(msg_, diff_):
     defect_categ = ''
     if (len(diff_) > 0):
         temp_msg_list = filterCommitMessage(msg_) # for extra false negative rules 
-        print temp_msg_list        
+        # print temp_msg_list        
         # temp_msg_     = constants.WHITE_SPACE.join(temp_msg_list) # for extra false negative rules 
 
         msg_       = doDepAnalysis(msg_) ## depnding on results, this extra step of dependnecy parsing may change 

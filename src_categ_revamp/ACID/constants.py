@@ -66,7 +66,7 @@ syntax_defect_kw_list = ['compil', 'class', 'lint', 'warning', 'warn', 'clean', 
 
 EXTRA_SYNTAX_KW       = ['definition', 'role', 'whitespace', 'parameter', 'lint', 'style', 'typo', 'variable', 'indent', 'test', 'pattern'] 
 EXTRA_CONFIG_KW       = ['url', 'version', 'config', 'sql', 'tcp', 'hiera', 'repo', 'vlan', 'connection']  
-EXTRA_DEPENDENCY_KW   = ['dep', 'ensure', 'require', 'modul'] 
+EXTRA_DEPENDENCY_KW   = ['dep', 'ensur', 'requir', 'modul'] 
 EXTRA_SERVICE_KW      = ['test', 'setup', 'site', 'restart', 'deploy', 'start', 'driver']  
 EXTRA_DOCU_KW         = ['readme', 'doc', 'comment', 'license'] 
 EXTRA_FIX_KEYWORD     = 'fix'   
