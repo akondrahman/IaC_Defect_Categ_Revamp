@@ -50,6 +50,37 @@ def getPuppRelatedCommits(repo_dir_absolute_path, ppListinRepo, branchName='mast
 
   return mappedPuppetList
 
+def getDiffStr(repo_path_p, commit_hash_p, file_p):
+   
+   cdCommand   = "cd " + repo_path_p + " ; "
+   theFile     = os.path.relpath(file_p, repo_path_p)
+   
+   diffCommand = " git diff  " + commit_hash_p + " " + theFile + " "
+   command2Run = cdCommand + diffCommand
+   diff_output = subprocess.check_output(['bash', '-c', command2Run])
+
+   return diff_output
+
+def mineCommitsOfTheRepo(repo_path_param, repo_branch_param, pupp_commits_mapping):
+    trac_exec_count = 0 
+    pupp_bug_list = []
+    all_commit_file_dict  = {}
+    all_defect_categ_list = []
+    hash_tracker = []
+    for tuple_ in pupp_commits_mapping:
+    file_ = tuple_[0]
+    commit_ = tuple_[1]
+    msg_commit =  commit_.message 
+    commit_hash = commit_.hexsha
+
+    timestamp_commit = commit_.committed_datetime
+    str_time_commit  = timestamp_commit.strftime('%Y-%m-%dT%H-%M-%S')
+
+    diff_content_str = getDiffStr(repo_path_param, commit_hash, file_)
+
+    tup_ = (repo_path_param, trac_exec_count, commit_hash, file_, str_time_commit, msg_commit, diff_content_str, repo_branch_param )
+    print tup_[0], tup_[1], tup_[2], tup_[3], tup_[4], tup_[5]    
+
 def runMiner(orgParamName, repo_name_param, branchParam):
   
   repo_path   = '/Users/akond/PUPP_REPOS/' + orgParamName + "/" + repo_name_param
@@ -61,4 +92,4 @@ def runMiner(orgParamName, repo_name_param, branchParam):
 
   pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
 
-  print len(pupp_commits_in_repo) 
+  mineCommitsOfTheRepo(repo_path, repo_branch, pupp_commits_in_repo)
