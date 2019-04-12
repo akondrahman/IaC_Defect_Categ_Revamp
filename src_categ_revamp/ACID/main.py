@@ -9,6 +9,10 @@ import pandas as pd
 import cPickle as pickle
 
 
+'''
+This script goes to each repo and mines commits and commit messages and then get the defect category 
+'''
+
 if __name__=='__main__':
 
     # orgName='wikimedia-downloads'
