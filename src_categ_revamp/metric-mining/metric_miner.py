@@ -3,6 +3,15 @@ Get metrics for repos
 Akond Rahman 
 April 12, 2019 
 '''
+import csv 
+import numpy as np
+import sys
+from git import Repo
+import  subprocess
+import time 
+import  datetime 
+import os 
+import cPickle as pickle 
 
 def getPuppetFilesOfRepo(repo_dir_absolute_path):
     pp_, non_pp = [], []
@@ -43,7 +52,7 @@ def getPuppRelatedCommits(repo_dir_absolute_path, ppListinRepo, branchName='mast
 
 def runMiner(orgParamName, repo_name_param, branchParam):
   
-  repo_path   = constants.ROOT_PUPP_DIR + orgParamName + "/" + repo_name_param
+  repo_path   = '/Users/akond/PUPP_REPOS/' + orgParamName + "/" + repo_name_param
   repo_branch = branchParam
 
   all_pp_files_in_repo = getPuppetFilesOfRepo(repo_path)

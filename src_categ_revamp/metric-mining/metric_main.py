@@ -7,6 +7,8 @@ Mining metrics: Main
 import pandas as pd 
 import cPickle as pickle
 import metric_miner 
+import os 
+import csv 
 
 def getEligibleProjects(fileNameParam):
   repo_list = []
@@ -35,4 +37,4 @@ if __name__=='__main__':
     dic   = {}
     categ = [] 
     for proj_ in elgibleRepos:
-        per_proj_commit_dict, per_proj_full_defect_list = metric_miner.runMiner(orgName, proj_, 'master')    
+        metric_miner.runMiner(orgName, proj_, 'master')    
