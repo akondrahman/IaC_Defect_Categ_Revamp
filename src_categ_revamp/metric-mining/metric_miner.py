@@ -61,25 +61,39 @@ def getDiffStr(repo_path_p, commit_hash_p, file_p):
 
    return diff_output
 
+def getDiffLOC(diff_text):
+    add_cnt, del_cnt = 0, 0 
+    diff_text_list = diff_text.split('\n') 
+    diff_text_list = [x_ for x_ in diff_text_list if (('---' not in x_) or ('+++' not in x_)) ]
+    add_text_list  = [x_ for x_ in diff_text_list if x_.startswith('+')]
+    del_text_list  = [x_ for x_ in diff_text_list if x_.startswith('-')]
+
+    print add_text_list, del_text_list 
+    add_cnt, del_cnt = len(add_text_list), len(del_text_list)
+    return add_cnt, del_cnt 
+
+
 def mineCommitsOfTheRepo(repo_path_param, repo_branch_param, pupp_commits_mapping):
-    trac_exec_count = 0 
-    pupp_bug_list = []
-    all_commit_file_dict  = {}
-    all_defect_categ_list = []
-    hash_tracker = []
+    files_changed_dict, dirs_changed_dict = {}, {} 
+
     for tuple_ in pupp_commits_mapping:
-    file_ = tuple_[0]
-    commit_ = tuple_[1]
-    msg_commit =  commit_.message 
-    commit_hash = commit_.hexsha
+        file_ = tuple_[0]
+        commit_ = tuple_[1]
+        msg_commit =  commit_.message 
+        commit_hash = commit_.hexsha
 
-    timestamp_commit = commit_.committed_datetime
-    str_time_commit  = timestamp_commit.strftime('%Y-%m-%dT%H-%M-%S')
+        timestamp_commit = commit_.committed_datetime
+        str_time_commit  = timestamp_commit.strftime('%Y-%m-%dT%H-%M-%S')
 
-    diff_content_str = getDiffStr(repo_path_param, commit_hash, file_)
+        diff_content_str = getDiffStr(repo_path_param, commit_hash, file_)
+        loc_add, loc_del = getDiffLOC(diff_content_str) 
 
-    tup_ = (repo_path_param, trac_exec_count, commit_hash, file_, str_time_commit, msg_commit, diff_content_str, repo_branch_param )
-    print tup_[0], tup_[1], tup_[2], tup_[3], tup_[4], tup_[5]    
+        if commit_hash not in files_changed_dict:
+           files_changed_dict[commit_hash] = [(file_, repo_path_param)] 
+        else: 
+           files_changed_dict[commit_hash] = files_changed_dict[commit_hash] + [(file_, repo_path_param)]  
+
+
 
 def runMiner(orgParamName, repo_name_param, branchParam):
   
