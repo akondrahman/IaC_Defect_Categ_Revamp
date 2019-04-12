@@ -12,6 +12,7 @@ import time
 import  datetime 
 import os 
 import cPickle as pickle 
+import pandas as pd 
 
 def getPuppetFilesOfRepo(repo_dir_absolute_path):
     pp_, non_pp = [], []
@@ -108,8 +109,9 @@ def getDevsOfRepo(repo_path_param):
    return author_dict  
 
 
-def mineCommitsOfTheRepo(repo_path_param, repo_branch_param, pupp_commits_mapping):
+def mineCommitsOfTheRepo(repo_path_param, repo_branch_param, pupp_commits_mapping, dev_commit_dict):
     files_changed_dict, dirs_changed_dict = {}, {} 
+    all_commit_metrics = []
 
     for tuple_ in pupp_commits_mapping:
         file_ = tuple_[0]
@@ -126,13 +128,14 @@ def mineCommitsOfTheRepo(repo_path_param, repo_branch_param, pupp_commits_mappin
 
         dir_             = os.path.dirname(file_) 
         devs_for_file    = getDevCountForFile(file_, repo_path_param) 
+        committer_name   = dev_commit_dict[commit_hash] 
 
-        metric_tuple = (file_, dir_, repo_path_param, loc_tot, devs_for_file)  
-        print metric_tuple
-        if commit_hash not in files_changed_dict:
-           files_changed_dict[commit_hash] = [metric_tuple] 
-        else: 
-           files_changed_dict[commit_hash] = files_changed_dict[commit_hash] + [metric_tuple]  
+        metric_tuple = (commit_hash, file_, dir_, repo_path_param, loc_add, loc_del, loc_tot, devs_for_file, committer_name, str_time_commit)  
+        # print metric_tuple
+        all_commit_metrics.append(metric_tuple) 
+    
+    commit_metric_df = pd.DataFrame(all_commit_metrics, columns=['COMMIT_HASH', 'FILE', 'DIR', 'REPO', 'LOC_ADD', 'LOC_DEL', 'LOC_TOT', 'DEV_FILE', 'AUTHOR_COUNT_FILE', 'TIME']) 
+    return commit_metric_df 
 
 
 
@@ -142,7 +145,7 @@ def runMiner(orgParamName, repo_name_param, branchParam):
   repo_branch = branchParam
 
   all_devs_in_repo = getDevsOfRepo(repo_path)  
-  print all_devs_in_repo 
+  #   print all_devs_in_repo 
 
   all_pp_files_in_repo = getPuppetFilesOfRepo(repo_path)
   
@@ -150,4 +153,6 @@ def runMiner(orgParamName, repo_name_param, branchParam):
 
   pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
 
-  mineCommitsOfTheRepo(repo_path, repo_branch, pupp_commits_in_repo)
+  metric_df = mineCommitsOfTheRepo(repo_path, repo_branch, pupp_commits_in_repo, all_devs_in_repo) 
+
+  print metric_df.head() 
