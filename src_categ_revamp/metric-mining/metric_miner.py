@@ -13,6 +13,7 @@ import  datetime
 import os 
 import cPickle as pickle 
 import pandas as pd 
+from scipy.stats import entropy
 
 def getPuppetFilesOfRepo(repo_dir_absolute_path):
     pp_, non_pp = [], []
@@ -89,6 +90,7 @@ def getDevCountForFile(param_file_path, repo_path):
    return author_count
 
 def getDevsOfRepo(repo_path_param):
+   commit_dict       = {}
    author_dict       = {}
 
    cdCommand         = "cd " + repo_path_param + " ; "
@@ -102,11 +104,15 @@ def getDevsOfRepo(repo_path_param):
        
        author_ = commit_auth.split('_')[1]
        author_ = author_.replace(' ', '')
-
-       if commit_ not in author_dict:
-           author_dict[commit_] = author_ 
-
-   return author_dict  
+       # only one author for one commit 
+       if commit_ not in commit_dict:
+           commit_dict[commit_] = author_ 
+       # one author can be involved with multiple commits 
+       if author_ not in author_dict:
+           author_dict[author_] = [commit_] 
+       else:            
+           author_dict[author_] = author_dict[author_] + [commit_] 
+   return commit_dict, author_dict   
 
 
 def mineCommitsOfTheRepo(repo_path_param, repo_branch_param, pupp_commits_mapping, dev_commit_dict):
@@ -134,8 +140,44 @@ def mineCommitsOfTheRepo(repo_path_param, repo_branch_param, pupp_commits_mappin
         # print metric_tuple
         all_commit_metrics.append(metric_tuple) 
     
-    commit_metric_df = pd.DataFrame(all_commit_metrics, columns=['COMMIT_HASH', 'FILE', 'DIR', 'REPO', 'LOC_ADD', 'LOC_DEL', 'LOC_TOT', 'DEV_FILE', 'AUTHOR_COUNT_FILE', 'TIME']) 
+    commit_metric_df = pd.DataFrame(all_commit_metrics, columns=['COMMIT_HASH', 'FILE', 'DIR', 'REPO', 'LOC_ADD', 'LOC_DEL', 'LOC_TOT', 'DEVS_FILE', 'AUTHOR_NAME_FILE', 'TIME']) 
     return commit_metric_df 
+
+def calcSpread(loc_list):
+    if len(loc_list) > 0:
+      entr_ = entropy(loc_list) 
+    else:
+      entr_ = float(0) 
+    return entr_ 
+
+def getDevsExp(auth_name, auth_dict):
+  exp_ = float(0)
+  if auth_name in auth_dict:
+    auth_commits = auth_dict[auth_name] 
+    exp_ = len(auth_commits) 
+  return exp_
+    
+
+
+def finalizeMetrics(df_pa, dev_commit_p):
+  commit_hash_list = np.unique( df_pa['COMMIT_HASH'].tolist() )
+  for hash_ in commit_hash_list:
+    hash_df             = df_pa[df_pa['COMMIT_HASH']==hash_]
+
+    per_hash_files      = len(hash_df['FILE'].tolist() )
+    per_hash_dirs       = len(hash_df['DIR'].tolist() )
+    
+    per_hash_loc_list   = hash_df['LOC_TOT'].tolist() 
+    per_hash_tot_loc    = sum(per_hash_loc_list) 
+    
+    per_hash_spread     = calcSpread(per_hash_loc) 
+    
+    per_hash_devs_list  = hash_df['DEVS_FILE'].tolist() 
+    per_hash_devs       = sum(per_hash_devs_list)
+
+    per_hash_devs_exp   = getDevsExp(hash_df['AUTHOR_NAME_FILE'].tolist()[0], dev_commit_p) 
+
+    print hash_, per_hash_files, per_hash_dirs, per_hash_tot_loc, per_hash_spread, per_hash_devs, per_hash_devs_exp
 
 
 
@@ -144,7 +186,7 @@ def runMiner(orgParamName, repo_name_param, branchParam):
   repo_path   = '/Users/akond/PUPP_REPOS/' + orgParamName + "/" + repo_name_param
   repo_branch = branchParam
 
-  all_devs_in_repo = getDevsOfRepo(repo_path)  
+  all_devs_in_repo, dev_commit_repo = getDevsOfRepo(repo_path)  
   #   print all_devs_in_repo 
 
   all_pp_files_in_repo = getPuppetFilesOfRepo(repo_path)
@@ -156,3 +198,5 @@ def runMiner(orgParamName, repo_name_param, branchParam):
   metric_df = mineCommitsOfTheRepo(repo_path, repo_branch, pupp_commits_in_repo, all_devs_in_repo) 
 
   print metric_df.head() 
+
+  finalizeMetrics(metric_df, dev_commit_repo)  
