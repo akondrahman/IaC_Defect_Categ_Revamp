@@ -14,6 +14,8 @@ import os
 import cPickle as pickle 
 import pandas as pd 
 from scipy.stats import entropy
+import math 
+from collections import Counter
 
 def getPuppetFilesOfRepo(repo_dir_absolute_path):
     pp_, non_pp = [], []
@@ -116,7 +118,7 @@ def getDevsOfRepo(repo_path_param):
 
 
 def mineCommitsOfTheRepo(repo_path_param, repo_branch_param, pupp_commits_mapping, dev_commit_dict):
-    files_changed_dict, dirs_changed_dict = {}, {} 
+    commit_time_dict = {} 
     all_commit_metrics = []
 
     for tuple_ in pupp_commits_mapping:
@@ -139,15 +141,20 @@ def mineCommitsOfTheRepo(repo_path_param, repo_branch_param, pupp_commits_mappin
         metric_tuple = (commit_hash, file_, dir_, repo_path_param, loc_add, loc_del, loc_tot, devs_for_file, committer_name, str_time_commit)  
         # print metric_tuple
         all_commit_metrics.append(metric_tuple) 
+        # to get recent experience 
+        if commit_hash not in commit_time_dict:
+          commit_time_dict[commit_hash] = str_time_commit 
     
     commit_metric_df = pd.DataFrame(all_commit_metrics, columns=['COMMIT_HASH', 'FILE', 'DIR', 'REPO', 'LOC_ADD', 'LOC_DEL', 'LOC_TOT', 'DEVS_FILE', 'AUTHOR_NAME_FILE', 'TIME']) 
-    return commit_metric_df 
+    return commit_metric_df , commit_time_dict 
 
 def calcSpread(loc_list):
     if len(loc_list) > 0:
-      entr_ = entropy(loc_list) 
+      entr_ = round(entropy(loc_list) , 5)        
     else:
       entr_ = float(0) 
+    if (math.isnan(entr_)):
+      entr_ = float(0)       
     return entr_ 
 
 def getDevsExp(auth_name, auth_dict):
@@ -157,12 +164,38 @@ def getDevsExp(auth_name, auth_dict):
     exp_ = len(auth_commits) 
   return exp_
     
+def calcRecentExp(commit_year_list):
+    recent_exp_final = 0 
+
+    year_list = [int(x_) for x_ in commit_year_list ]
+    dict_ = dict(Counter(year_list)) 
+    unique_years = list(np.unique(year_list)) 
+    unique_years.sort(reverse = True) 
+    recent_exp_list = []
+    for year_index in xrange(len(unique_years)):
+        year_ = unique_years[year_index] 
+        contribs = dict_[year_] 
+        recent_exp = float(contribs) / float(year_index + 1)
+        recent_exp_list.append(recent_exp) 
+    recent_exp_final = sum(recent_exp_list) 
+
+    return recent_exp_final 
 
 
-def finalizeMetrics(df_pa, dev_commit_p):
+def getDevsRecentExp(auth_name, auth_dict, time_dict):
+  recent_exp_ = float(0)
+  if auth_name in auth_dict:
+    auth_commits     = auth_dict[auth_name] # get all commits for the author 
+    commit_time_list = [time_dict[x_] for x_ in auth_commits if x_ in time_dict] # get the timestamp for all commits for author
+    commit_year_list = [x_.split('T')[0].split('-')[0] for x_ in commit_time_list]  # get the year for all commits for author
+    recent_exp_      = calcRecentExp(commit_year_list) # pass the year list to func 
+  return recent_exp_
+
+def finalizeMetrics(df_pa, dev_commit_p, time_dict):
   commit_hash_list = np.unique( df_pa['COMMIT_HASH'].tolist() )
   for hash_ in commit_hash_list:
     hash_df             = df_pa[df_pa['COMMIT_HASH']==hash_]
+    dev_name            = hash_df['AUTHOR_NAME_FILE'].tolist()[0]
 
     per_hash_files      = len(hash_df['FILE'].tolist() )
     per_hash_dirs       = len(hash_df['DIR'].tolist() )
@@ -170,12 +203,14 @@ def finalizeMetrics(df_pa, dev_commit_p):
     per_hash_loc_list   = hash_df['LOC_TOT'].tolist() 
     per_hash_tot_loc    = sum(per_hash_loc_list) 
     
-    per_hash_spread     = calcSpread(per_hash_loc) 
+    per_hash_spread     = calcSpread(per_hash_loc_list) 
     
     per_hash_devs_list  = hash_df['DEVS_FILE'].tolist() 
     per_hash_devs       = sum(per_hash_devs_list)
 
-    per_hash_devs_exp   = getDevsExp(hash_df['AUTHOR_NAME_FILE'].tolist()[0], dev_commit_p) 
+    per_hash_devs_exp   = getDevsExp(dev_name, dev_commit_p) 
+
+    per_hash_devs_rexp  = getDevsRecentExp(dev_name, dev_commit_p, time_dict)  
 
     print hash_, per_hash_files, per_hash_dirs, per_hash_tot_loc, per_hash_spread, per_hash_devs, per_hash_devs_exp
 
@@ -195,8 +230,8 @@ def runMiner(orgParamName, repo_name_param, branchParam):
 
   pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
 
-  metric_df = mineCommitsOfTheRepo(repo_path, repo_branch, pupp_commits_in_repo, all_devs_in_repo) 
+  metric_df, time_comm_dict = mineCommitsOfTheRepo(repo_path, repo_branch, pupp_commits_in_repo, all_devs_in_repo) 
 
-  print metric_df.head() 
+  # print metric_df.head() 
 
-  finalizeMetrics(metric_df, dev_commit_repo)  
+  finalizeMetrics(metric_df, dev_commit_repo, time_comm_dict)   
