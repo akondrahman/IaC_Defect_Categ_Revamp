@@ -192,6 +192,7 @@ def getDevsRecentExp(auth_name, auth_dict, time_dict):
   return recent_exp_
 
 def finalizeMetrics(df_pa, dev_commit_p, time_dict):
+  commit_metric_list    = []
   commit_hash_list = np.unique( df_pa['COMMIT_HASH'].tolist() )
   for hash_ in commit_hash_list:
     hash_df             = df_pa[df_pa['COMMIT_HASH']==hash_]
@@ -212,8 +213,10 @@ def finalizeMetrics(df_pa, dev_commit_p, time_dict):
 
     per_hash_devs_rexp  = getDevsRecentExp(dev_name, dev_commit_p, time_dict)  
 
-    print hash_, per_hash_files, per_hash_dirs, per_hash_tot_loc, per_hash_spread, per_hash_devs, per_hash_devs_exp, per_hash_devs_rexp
-
+    metric_tuple        = ( hash_, per_hash_files, per_hash_dirs, per_hash_tot_loc, per_hash_spread, per_hash_devs, per_hash_devs_exp, per_hash_devs_rexp )
+    commit_metric_list.append(metric_tuple) 
+  
+  return commit_metric_list 
 
 
 def runMiner(orgParamName, repo_name_param, branchParam):
@@ -234,4 +237,5 @@ def runMiner(orgParamName, repo_name_param, branchParam):
 
   # print metric_df.head() 
 
-  finalizeMetrics(metric_df, dev_commit_repo, time_comm_dict)   
+  all_commit_all_metrics = finalizeMetrics(metric_df, dev_commit_repo, time_comm_dict)   
+  return all_commit_all_metrics 
