@@ -177,7 +177,7 @@ def calcRecentExp(commit_year_list):
         contribs = dict_[year_] 
         recent_exp = float(contribs) / float(year_index + 1)
         recent_exp_list.append(recent_exp) 
-    recent_exp_final = sum(recent_exp_list) 
+    recent_exp_final = round(sum(recent_exp_list) , 5) 
 
     return recent_exp_final 
 
@@ -197,8 +197,8 @@ def finalizeMetrics(df_pa, dev_commit_p, time_dict):
     hash_df             = df_pa[df_pa['COMMIT_HASH']==hash_]
     dev_name            = hash_df['AUTHOR_NAME_FILE'].tolist()[0]
 
-    per_hash_files      = len(hash_df['FILE'].tolist() )
-    per_hash_dirs       = len(hash_df['DIR'].tolist() )
+    per_hash_files      = len( np.unique( hash_df['FILE'].tolist() ) )
+    per_hash_dirs       = len( np.unique(hash_df['DIR'].tolist() ) )
     
     per_hash_loc_list   = hash_df['LOC_TOT'].tolist() 
     per_hash_tot_loc    = sum(per_hash_loc_list) 
@@ -212,7 +212,7 @@ def finalizeMetrics(df_pa, dev_commit_p, time_dict):
 
     per_hash_devs_rexp  = getDevsRecentExp(dev_name, dev_commit_p, time_dict)  
 
-    print hash_, per_hash_files, per_hash_dirs, per_hash_tot_loc, per_hash_spread, per_hash_devs, per_hash_devs_exp
+    print hash_, per_hash_files, per_hash_dirs, per_hash_tot_loc, per_hash_spread, per_hash_devs, per_hash_devs_exp, per_hash_devs_rexp
 
 
 
