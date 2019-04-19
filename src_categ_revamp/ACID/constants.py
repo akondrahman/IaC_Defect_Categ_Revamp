@@ -66,7 +66,7 @@ syntax_defect_kw_list = ['compil', 'class', 'lint', 'warning', 'warn', 'clean', 
 
 EXTRA_SYNTAX_KW       = ['definition', 'role', 'whitespace', 'parameter', 'lint', 'style', 'typo', 'variable', 'indent', 'test', 'pattern'] 
 EXTRA_CONFIG_KW       = ['url', 'version', 'config', 'sql', 'tcp', 'hiera', 'repo', 'vlan', 'connection']  
-EXTRA_DEPENDENCY_KW   = ['dep', 'ensur', 'requir', 'modul'] 
+EXTRA_DEPENDENCY_KW   = ['dep', 'ensur', 'requir', 'modul', 'packag']  
 EXTRA_SERVICE_KW      = ['test', 'setup', 'site', 'restart', 'deploy', 'start', 'driver']  
 EXTRA_DOCU_KW         = ['readme', 'doc', 'comment', 'license'] 
 EXTRA_FIX_KEYWORD     = 'fix'   
@@ -81,7 +81,7 @@ REVERT_REGEX = r'^revert.*\".*\"'
 diff_config_code_elems = ['hiera' , 'hash', 'parameter', 'user']
 VAR_SIGN = '='
 ATTR_SIGN = '=>'
-diff_depen_code_elems = ['~>' , '::', 'include']
+diff_depen_code_elems = ['~>' , '::', 'include', 'packag']
 diff_logic_code_elems = ['if' , 'unless', 'els', 'case']
 diff_secu_code_elems  = ['tls', 'cert', 'cred', 'ssl', 'password', 'pass', 'pwd'] 
 diff_service_code_elems = ['service', 'exec'] 
