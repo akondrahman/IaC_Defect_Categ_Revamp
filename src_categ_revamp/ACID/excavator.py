@@ -133,6 +133,7 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
       else:
         bug_categ_list = [ constants.NO_DEFECT_CATEG ]
 
+      bug_categ_list = np.unique( bug_categ_list )
       if (len(bug_categ_list) > 0):
         for bug_categ_ in bug_categ_list:      
             tup_ = (commit_hash, bug_categ_, repo_path_param, str_time_commit) 
