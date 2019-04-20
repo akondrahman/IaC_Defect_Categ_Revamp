@@ -50,7 +50,7 @@ prem_bug_kw_list      = ['error', 'bug', 'fix', 'issue', 'mistake', 'incorrect',
 config_defect_kw_list = ['connection', 'string', 'paramet', 'hash', 'value', 'config', 'field', 'option', 'version', 'url', 'setting', 'ip', 'repo', 'link', 'time', 'server', 'command', 'setting', 'hiera', 'data', 'sql', 'permiss', 'mode', 'dir', 'protocol', 'missing', 'reference', 'path', 'location', 'driver', 'port', 'protocol', 'gateway', 'tcp', 'udp', 'fact', 'id']
 dep_defect_kw_list    = ['requir', 'dep', 'dependency', 'relation', 'order', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'package', 'packag', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test', 'includ']
 doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice', 'header'] 
-idem_defect_kw_list   = ['idempoten']
+idem_defect_kw_list   = ['idempoten', 'idem']
 logic_defect_kw_list  = ['logic', 'conditional', 'condition', 'boolean']
 secu_defect_kw_list   = ['vulnerability', 'ssl', 'firewall', 'secret', 'authenticate', 'tls', 'ca_file', 'password', 'security', 'cve']
 
@@ -77,6 +77,7 @@ CLOSE_KW     = 'closes-bug'
 MERGE_KW     = 'merge' 
 REVERT_KW    = 'revert'
 REVERT_REGEX = r'^revert.*\".*\"'
+IDEM_XTRA_KW = 'idem'
 
 diff_config_code_elems = ['hiera' , 'hash', 'parameter', 'user']
 VAR_SIGN = '='

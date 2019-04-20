@@ -107,5 +107,7 @@ def detectCateg(msg_, diff_):
             defect_categ_list.append( constants.DOC_DEFECT_CATEG )
         if( any(y_ in temp_msg_list for y_ in constants.idem_defect_kw_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
             defect_categ_list.append( constants.IDEM_DEFECT_CATEG )
-        
+        if( any(constants.IDEM_XTRA_KW in z_ for z_ in temp_msg_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
+            defect_categ_list.append( constants.IDEM_DEFECT_CATEG )
+
     return defect_categ_list 
