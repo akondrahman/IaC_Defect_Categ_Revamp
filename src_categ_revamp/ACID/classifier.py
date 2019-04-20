@@ -94,7 +94,6 @@ def detectCateg(msg_, diff_):
             defect_categ_list.append( constants.SERVICE_DEFECT_CATEG )
         if(any(x_ in msg_ for x_ in constants.syntax_defect_kw_list )) and (diff_parser.checkDiffForSyntaxDefects(diff_)): 
             defect_categ_list.append( constants.SYNTAX_DEFECT_CATEG )
-        #based on false negative analysis of Wikimedia 
         if( any(y_ in temp_msg_list for y_ in constants.EXTRA_SYNTAX_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list):
             defect_categ_list.append( constants.SYNTAX_DEFECT_CATEG  )
         if( any(y_ in temp_msg_list for y_ in constants.EXTRA_CONFIG_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list):
@@ -107,7 +106,10 @@ def detectCateg(msg_, diff_):
             defect_categ_list.append( constants.DOC_DEFECT_CATEG )
         if( any(y_ in temp_msg_list for y_ in constants.idem_defect_kw_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
             defect_categ_list.append( constants.IDEM_DEFECT_CATEG )
+
         if( any(constants.IDEM_XTRA_KW in z_ for z_ in temp_msg_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
             defect_categ_list.append( constants.IDEM_DEFECT_CATEG )
+        if( any(constants.LOGIC_XTRA_KW in z_ for z_ in temp_msg_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
+            defect_categ_list.append( constants.LOGIC_DEFECT_CATEG )
 
     return defect_categ_list 

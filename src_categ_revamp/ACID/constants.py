@@ -72,12 +72,13 @@ EXTRA_DOCU_KW         = ['readme', 'doc', 'comment', 'license']
 EXTRA_FIX_KEYWORD     = 'fix'   
 
 
-DFLT_KW      = 'default'
-CLOSE_KW     = 'closes-bug'
-MERGE_KW     = 'merge' 
-REVERT_KW    = 'revert'
-REVERT_REGEX = r'^revert.*\".*\"'
-IDEM_XTRA_KW = 'idem'
+DFLT_KW       = 'default'
+CLOSE_KW      = 'closes-bug'
+MERGE_KW      = 'merge' 
+REVERT_KW     = 'revert'
+REVERT_REGEX  = r'^revert.*\".*\"'
+IDEM_XTRA_KW  = 'idem'
+LOGIC_XTRA_KW = 'condit'
 
 diff_config_code_elems = ['hiera' , 'hash', 'parameter', 'user']
 VAR_SIGN = '='
