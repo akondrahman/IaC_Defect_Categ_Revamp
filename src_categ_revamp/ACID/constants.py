@@ -90,3 +90,5 @@ diff_service_code_elems = ['service', 'exec']
 diff_syntax_code_elems = ['class']
 diff_idem_code_elem    = 'class' 
 diff_idem_removal_cnt  = 10 
+
+diff_extra_idem_elems  = ['ensure', 'unless', 'creates', 'replace'] 

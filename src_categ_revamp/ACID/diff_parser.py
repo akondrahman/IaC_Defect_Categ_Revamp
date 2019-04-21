@@ -225,3 +225,22 @@ def checkDiffForIdempotenceDefects(diff_text):
        final_flag = True 
 
     return final_flag 
+
+def checkDiffForIdemWithAttr(diff_text):
+    final_flag = False 
+    flag_list  = []
+    added_text , deleted_text = [], []
+
+    added_text, deleted_text = getAddDelLines(diff_text)
+    added_text   = filterTextList(added_text)
+    deleted_text = filterTextList(deleted_text)
+
+    if(len(deleted_text) < len(added_text)):
+        for text_ in added_text:
+            for elem in constants.diff_extra_idem_elems:
+                if elem in text_:
+                    flag_list.append(True) 
+    if (len(flag_list) > 0):    
+        final_flag = True 
+    return final_flag 
+    

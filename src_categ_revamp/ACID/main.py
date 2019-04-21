@@ -20,10 +20,10 @@ if __name__=='__main__':
     # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_CATEG_OUTPUT_FINAL.csv'
     # out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_CATEG_OUTPUT_FINAL.PKL'
 
-    orgName='openstack-downloads'
-    out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_COMM.PKL'
-    out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_CATEG_OUTPUT_FINAL.csv'
-    out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_CATEG_OUTPUT_FINAL.PKL'    
+    # orgName='openstack-downloads'
+    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_COMM.PKL'
+    # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_CATEG_OUTPUT_FINAL.csv'
+    # out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_CATEG_OUTPUT_FINAL.PKL'    
 
     fileName     = constants.ROOT_PUPP_DIR + orgName + '/' + constants.REPO_FILE_LIST 
     elgibleRepos = excavator.getEligibleProjects(fileName)

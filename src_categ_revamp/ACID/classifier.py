@@ -112,4 +112,8 @@ def detectCateg(msg_, diff_):
         if( any(constants.LOGIC_XTRA_KW in z_ for z_ in temp_msg_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
             defect_categ_list.append( constants.LOGIC_DEFECT_CATEG )
 
+        # extra rule for idempotence 
+        if(any(x_ in msg_ for x_ in constants.idem_defect_kw_list )) and (diff_parser.checkDiffForIdemWithAttr(diff_)): 
+            defect_categ_list.append( constants.IDEM_DEFECT_CATEG ) 
+
     return defect_categ_list 
