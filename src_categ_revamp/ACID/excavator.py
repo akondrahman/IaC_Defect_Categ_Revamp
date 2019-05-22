@@ -94,7 +94,6 @@ def processMessage(indi_comm_mess):
     return splitted_messages 
 
 def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
-  trac_exec_count = 0 
   pupp_bug_list = []
   all_commit_file_dict  = {}
   all_defect_categ_list = []
@@ -118,8 +117,6 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
 
     diff_content_str = getDiffStr(repo_path_param, commit_hash, file_)
 
-    # tup_ = (repo_path_param, trac_exec_count, commit_hash, file_, str_time_commit, msg_commit, diff_content_str, repo_branch_param )
-    # print tup_[0], tup_[1], tup_[2], tup_[3], tup_[4], tup_[5]
     #### categorization zone 
     if (commit_hash not in hash_tracker):
       bug_status, index_status = classifier.detectBuggyCommit(msg_commit)
@@ -138,6 +135,8 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
         for bug_categ_ in bug_categ_list:      
             tup_ = (commit_hash, bug_categ_, repo_path_param, str_time_commit) 
             all_defect_categ_list.append(tup_)  
+            print tup_[0], tup_[1], tup_[2], tup_[3]
+            print '-'*25
       else:    
             tup_ = (commit_hash, constants.NO_DEFECT_CATEG, repo_path_param, str_time_commit) 
             all_defect_categ_list.append(tup_)  

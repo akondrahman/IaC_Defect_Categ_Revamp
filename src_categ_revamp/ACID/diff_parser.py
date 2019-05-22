@@ -43,11 +43,12 @@ def getAddDelLines(diff_mess):
     added_text , deleted_text = [], []    
     for diff_ in whatthepatch.parse_patch(diff_mess):
         all_changes_line_by_line = diff_[1] ## diff_ is a tuple, changes is idnetified by the second index 
-        for change_tuple in all_changes_line_by_line:
-            if (change_tuple[0] != None ):
-                added_text.append(change_tuple[2])
-            if (change_tuple[1] != None ):
-                deleted_text.append(change_tuple[2])
+        if all_changes_line_by_line is not None:
+            for change_tuple in all_changes_line_by_line:
+                if (change_tuple[0] != None ):
+                    added_text.append(change_tuple[2])
+                if (change_tuple[1] != None ):
+                    deleted_text.append(change_tuple[2])
     return added_text, deleted_text
 
 def checkDiffForConfigDefects(diff_text):
@@ -94,14 +95,14 @@ def checkDiffForDocDefects(diff_text):
     for diff_ in whatthepatch.parse_patch(diff_text):
         all_changes_line_by_line = diff_[1] 
         line_numbers_added, line_numbers_deleted = [], [] 
-
-        for change_tuple in all_changes_line_by_line:
-            content = change_tuple[2] 
-            content = content.replace(constants.WHITE_SPACE, '')
-            if (change_tuple[0] != None ) and ( content.startswith(constants.HASH_SYMBOL) ):
-                line_numbers_added.append( content )
-            if (change_tuple[1] != None ) and ( content.startswith(constants.HASH_SYMBOL)  ):
-                line_numbers_deleted.append( content ) 
+        if all_changes_line_by_line is not None:
+            for change_tuple in all_changes_line_by_line:
+                content = change_tuple[2] 
+                content = content.replace(constants.WHITE_SPACE, '')
+                if (change_tuple[0] != None ) and ( content.startswith(constants.HASH_SYMBOL) ):
+                    line_numbers_added.append( content )
+                if (change_tuple[1] != None ) and ( content.startswith(constants.HASH_SYMBOL)  ):
+                    line_numbers_deleted.append( content ) 
         lines_changed = list(set(line_numbers_added).intersection(line_numbers_deleted)) 
         # print lines_changed
     lines_changed = [x_ for x_ in lines_changed if len(x_) > 1 ]
