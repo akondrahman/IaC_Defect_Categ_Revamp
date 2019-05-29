@@ -46,7 +46,7 @@ RACE_DEFECT_CATEG      = 'RACE_DEFECT'
 SERVICE_DEFECT_CATEG   = 'SERVICE_DEFECT'
 SYNTAX_DEFECT_CATEG    = 'SYNTAX_DEFECT'
 
-prem_bug_kw_list      = ['error', 'bug', 'fix', 'issue', 'mistake', 'incorrect', 'fault', 'defect', 'flaw' ]
+prem_bug_kw_list      = ['error', 'bug', 'fix', 'issue', 'mistake', 'incorrect', 'fault', 'defect', 'flaw', 'solve' ]
 config_defect_kw_list = ['connection', 'string', 'paramet', 'hash', 'value', 'config', 'field', 'option', 'version', 'url', 'setting', 'ip', 'repo', 'link', 'time', 'server', 'command', 'setting', 'hiera', 'data', 'sql', 'permiss', 'mode', 'dir', 'protocol', 'missing', 'reference', 'path', 'location', 'driver', 'port', 'protocol', 'gateway', 'tcp', 'udp', 'fact', 'id']
 dep_defect_kw_list    = ['requir', 'dep', 'dependency', 'relation', 'order', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'package', 'packag', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test', 'includ']
 doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice', 'header'] 
@@ -62,9 +62,9 @@ logging_defect_kw_list= ['log']
 network_defect_kw_list= ['provis', 'provision', 'network', 'l23', 'balancer', 'domain', 'route', 'proxy', 'dhcp']
 service_defect_kw_list= ['install', 'race', 'build', 'service', 'caching', 'backend', 'job', 'start', 'gate', 'stage', 'env', 'requirement', 'restore', 'server']
 
-syntax_defect_kw_list = ['compil', 'class', 'lint', 'warning', 'warn', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compilation', 'variable', 'spelling', 'declaration', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicate', 'deprecate', 'parameter', 'outdate', 'variabl']
+syntax_defect_kw_list = ['compil', 'class', 'lint', 'warn', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compil', 'variable', 'spelling', 'declar', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicat', 'deprecate', 'parameter', 'outdate', 'variabl']
 
-EXTRA_SYNTAX_KW       = ['definition', 'role', 'whitespace', 'parameter', 'lint', 'style', 'typo', 'variable', 'indent', 'test', 'pattern'] 
+EXTRA_SYNTAX_KW       = ['definition', 'role', 'whitespace', 'parameter', 'lint', 'style', 'typo', 'variable', 'indent', 'test', 'pattern', 'duplicate'] 
 EXTRA_CONFIG_KW       = ['url', 'version', 'config', 'sql', 'tcp', 'hiera', 'repo', 'vlan', 'connection']  
 EXTRA_DEPENDENCY_KW   = ['dep', 'ensur', 'requir', 'modul', 'packag']  
 EXTRA_SERVICE_KW      = ['test', 'setup', 'site', 'restart', 'deploy', 'start', 'driver']  
