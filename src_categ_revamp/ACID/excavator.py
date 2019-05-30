@@ -114,15 +114,15 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
 
     commit_hash = commit_.hexsha
 
-    '''
-    for testing purpose , uncomment only for tool accuracy purpose 
-    '''
-    if commit_hash in constants.ORACLE_HASH_CHECKLIST:
-      verbose = True 
-    else:
-      verbose = False 
-    '''
-    ''' 
+    # '''
+    # for testing purpose , uncomment only for tool accuracy purpose 
+    # '''
+    # if commit_hash in constants.ORACLE_HASH_CHECKLIST:
+    #   verbose = True 
+    # else:
+    #   verbose = False 
+    # '''
+    # ''' 
 
     timestamp_commit = commit_.committed_datetime
     str_time_commit  = timestamp_commit.strftime(constants.DATE_TIME_FORMAT)
@@ -140,10 +140,10 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
         for tokenized_msg in processed_message:
             bug_categ = classifier.detectCateg(tokenized_msg, diff_content_str, verbose)
             per_commit_defect_categ_list.append(  bug_categ )
-            if verbose:
-              print tokenized_msg
-              print commit_hash, bug_categ, repo_path_param, str_time_commit
-              print '-'*100   
+            # if verbose:
+            #   print tokenized_msg
+            #   print commit_hash, bug_categ, repo_path_param, str_time_commit
+            #   print '-'*100   
       else:
         per_commit_defect_categ_list  = [ constants.NO_DEFECT_CATEG ]
 
@@ -151,8 +151,8 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
       '''
       for testing purpose , uncomment only for tool accuracy purpose 
       '''
-      if verbose:
-        print bug_categ_list
+      # if verbose:
+      #   print bug_categ_list
       '''
       '''
       if (len(bug_categ_list) > 0):

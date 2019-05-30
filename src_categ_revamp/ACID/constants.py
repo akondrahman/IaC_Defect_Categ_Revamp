@@ -109,6 +109,10 @@ diff_extra_idem_elems  = ['ensure', 'unless', 'creates', 'replace']
 '''
 Oracle dataset work 
 '''
-ORACLE_HASH_CHECKLIST = ['52f0888af273e0ae9867ee6b5b645e0565732428', 
-                         '975d8ef0fb352f689f78ecb9c33e0aef4062d45e'
+ORACLE_HASH_CHECKLIST = ['75e460ab929a76e9e4a8d42740a529b3a476e952', 
+                         '9a5a540738f887f87886ae4f9f52d5ade1b26bc7', 
+                         '0d834093814b3d184eff36b2835530a847ee6421', 
+                         '854e0e7b9fc339dc56bf3e2b3de7107c3f35b835', 
+                         'a7dedf197a24bf8a3fad00d1d1f58eede2f43057',
+                         '114536ef2e7c569300019844e0ca57d278e27791'
                         ]

@@ -76,10 +76,10 @@ def detectCateg(msg_, diff_, verboseFlag=False):
     defect_categ_to_ret = constants.NO_DEFECT_CATEG 
     if (len(diff_) > 0):
         temp_msg_list = filterCommitMessage(msg_) # for extra false negative rules 
-        if verboseFlag:
-            print 'Originally was:',  msg_
-            temp_msg_     = constants.WHITE_SPACE.join(temp_msg_list) # for extra false negative rules 
-            print 'Now becomes:', temp_msg_
+        # if verboseFlag:
+        #     print 'Originally was:',  msg_
+        #     temp_msg_     = constants.WHITE_SPACE.join(temp_msg_list) # for extra false negative rules 
+        #     print 'Now becomes:', temp_msg_
         msg_       = doDepAnalysis(msg_) ## depnding on results, this extra step of dependnecy parsing may change 
         # print 'Dependency analysis output:', msg_ 
         # diff_parse_dict = diff_parser.parseTheDiff(diff_) 
