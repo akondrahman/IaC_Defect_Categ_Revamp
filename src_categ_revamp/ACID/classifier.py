@@ -62,12 +62,18 @@ def detectRevertedCommit(msg_):
         flag2ret = True 
     return flag2ret
 
-def detectCateg(msg_, diff_): 
-    defect_categ_list = []
+'''
+detectCateg takes a sentence and a diff from a commit message as input , and return a defect category (single value)
+'''
+def detectCateg(msg_, diff_, verboseFlag=False): 
+    temp_msg_ = '' ## for oracle dataset 
+    defect_categ_to_ret = constants.NO_DEFECT_CATEG 
     if (len(diff_) > 0):
         temp_msg_list = filterCommitMessage(msg_) # for extra false negative rules 
-        # print temp_msg_list        
-        # temp_msg_     = constants.WHITE_SPACE.join(temp_msg_list) # for extra false negative rules 
+        if verboseFlag:
+            print 'Originally was:',  msg_
+            temp_msg_     = constants.WHITE_SPACE.join(temp_msg_list) # for extra false negative rules 
+            print 'Now becomes:', temp_msg_
 
         msg_       = doDepAnalysis(msg_) ## depnding on results, this extra step of dependnecy parsing may change 
         # print 'Dependency analysis output:', msg_ 
@@ -75,45 +81,66 @@ def detectCateg(msg_, diff_):
         # print 'Lines is the diff:', len(diff_parse_dict) 
         
         if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)) and (diff_parser.checkDiffForConfigDefects(diff_)): 
-            defect_categ_list.append( constants.CONFIG_DEFECT_CATEG )
+            defect_categ_to_ret =  constants.CONFIG_DEFECT_CATEG 
         if(any(x_ in msg_ for x_ in constants.dep_defect_kw_list)) and (diff_parser.checkDiffForDepDefects(diff_)): 
-            defect_categ_list.append( constants.DEP_DEFECT_CATEG )       
+            defect_categ_to_ret = constants.DEP_DEFECT_CATEG 
         if(any(x_ in msg_ for x_ in constants.doc_defect_kw_list )) and (diff_parser.checkDiffForDocDefects(diff_)) : 
-            defect_categ_list.append( constants.DOC_DEFECT_CATEG )
+            defect_categ_to_ret = constants.DOC_DEFECT_CATEG 
         if(any(x_ in msg_ for x_ in constants.idem_defect_kw_list )) and (diff_parser.checkDiffForIdempotenceDefects(diff_)): 
-            defect_categ_list.append( constants.IDEM_DEFECT_CATEG )     
+            defect_categ_to_ret = constants.IDEM_DEFECT_CATEG 
         if(any(x_ in msg_ for x_ in constants.logic_defect_kw_list )) and (diff_parser.checkDiffForLogicDefects(diff_)) : 
-            defect_categ_list.append( constants.LOGIC_DEFECT_CATEG )
+            defect_categ_to_ret = constants.CONDI_DEFECT_CATEG 
         if(any(x_ in msg_ for x_ in constants.secu_defect_kw_list )) and (diff_parser.checkDiffForSecurityDefects(diff_)) : 
-            defect_categ_list.append( constants.SECU_DEFECT_CATEG )
+            defect_categ_to_ret = constants.SECU_DEFECT_CATEG 
         if(any(x_ in msg_ for x_ in constants.logging_defect_kw_list )) and (diff_parser.checkDiffForServiceDefects(diff_)) : 
-            defect_categ_list.append( constants.LOGGING_DEFECT_CATEG )
+            defect_categ_to_ret = constants.LOGGING_DEFECT_CATEG 
         if(any(x_ in msg_ for x_ in constants.network_defect_kw_list )) and (diff_parser.checkDiffForServiceDefects(diff_)): 
-            defect_categ_list.append( constants.NETWORK_DEFECT_CATEG )
+            defect_categ_to_ret = constants.NETWORK_DEFECT_CATEG 
         if(any(x_ in msg_ for x_ in constants.service_defect_kw_list )) and (diff_parser.checkDiffForServiceDefects(diff_)): 
-            defect_categ_list.append( constants.SERVICE_DEFECT_CATEG )
+            defect_categ_to_ret = constants.SERVICE_DEFECT_CATEG 
         if(any(x_ in msg_ for x_ in constants.syntax_defect_kw_list )) and (diff_parser.checkDiffForSyntaxDefects(diff_)): 
-            defect_categ_list.append( constants.SYNTAX_DEFECT_CATEG )
-        if( any(y_ in temp_msg_list for y_ in constants.EXTRA_SYNTAX_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list):
-            defect_categ_list.append( constants.SYNTAX_DEFECT_CATEG  )
-        if( any(y_ in temp_msg_list for y_ in constants.EXTRA_CONFIG_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list):
-            defect_categ_list.append( constants.CONFIG_DEFECT_CATEG )            
-        if( any(y_ in temp_msg_list for y_ in constants.EXTRA_SERVICE_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list):
-            defect_categ_list.append( constants.SERVICE_DEFECT_CATEG  )
-        if( any(y_ in temp_msg_list for y_ in constants.EXTRA_DEPENDENCY_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list):
-            defect_categ_list.append( constants.DEP_DEFECT_CATEG )
-        if( any(y_ in temp_msg_list for y_ in constants.EXTRA_DOCU_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
-            defect_categ_list.append( constants.DOC_DEFECT_CATEG )
-        if( any(y_ in temp_msg_list for y_ in constants.idem_defect_kw_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
-            defect_categ_list.append( constants.IDEM_DEFECT_CATEG )
+            defect_categ_to_ret = constants.SYNTAX_DEFECT_CATEG 
 
-        if( any(constants.IDEM_XTRA_KW in z_ for z_ in temp_msg_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
-            defect_categ_list.append( constants.IDEM_DEFECT_CATEG )
-        if( any(constants.LOGIC_XTRA_KW in z_ for z_ in temp_msg_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
-            defect_categ_list.append( constants.LOGIC_DEFECT_CATEG )
+        # if( any(y_ in temp_msg_list for y_ in constants.EXTRA_SYNTAX_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list):
+        #     defect_categ_list.append( constants.SYNTAX_DEFECT_CATEG  )
+        # if( any(y_ in temp_msg_list for y_ in constants.EXTRA_CONFIG_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list):
+        #     defect_categ_list.append( constants.CONFIG_DEFECT_CATEG )            
+        # if( any(y_ in temp_msg_list for y_ in constants.EXTRA_SERVICE_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list):
+        #     defect_categ_list.append( constants.SERVICE_DEFECT_CATEG  )
+        # if( any(y_ in temp_msg_list for y_ in constants.EXTRA_DEPENDENCY_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list):
+        #     defect_categ_list.append( constants.DEP_DEFECT_CATEG )
+        # if( any(y_ in temp_msg_list for y_ in constants.EXTRA_DOCU_KW )  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
+        #     defect_categ_list.append( constants.DOC_DEFECT_CATEG )
+        # if( any(y_ in temp_msg_list for y_ in constants.idem_defect_kw_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
+        #     defect_categ_list.append( constants.IDEM_DEFECT_CATEG )
+
+        # if( any(constants.IDEM_XTRA_KW in z_ for z_ in temp_msg_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
+        #     defect_categ_list.append( constants.IDEM_DEFECT_CATEG )
+        # if( any(constants.LOGIC_XTRA_KW in z_ for z_ in temp_msg_list ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_list) :
+        #     defect_categ_list.append( constants.LOGIC_DEFECT_CATEG )
 
         # extra rule for idempotence 
-        if(any(x_ in msg_ for x_ in constants.idem_defect_kw_list )) and (diff_parser.checkDiffForIdemWithAttr(diff_)): 
-            defect_categ_list.append( constants.IDEM_DEFECT_CATEG ) 
+        if ( constants.IDEM_XTRA_KW in temp_msg_ ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
+            defect_categ_to_ret = constants.IDEM_DEFECT_CATEG 
 
-    return defect_categ_list 
+        # extra rule for conditional 
+        if ( constants.LOGIC_XTRA_KW in temp_msg_ ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
+            defect_categ_to_ret =  constants.CONDI_DEFECT_CATEG 
+
+        # extra rule for syntax 
+        if (( constants.SYNTAX_XTRA_KW1 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW2 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW3 in temp_msg_ ) ) and (( constants.EXTRA_FIX_KEYWORD in temp_msg_ ) or (constants.EXTRA_SOLVE_KEYWORD in temp_msg_) ):
+            defect_categ_to_ret = constants.SYNTAX_DEFECT_CATEG 
+
+        # extra rule for doc 
+        if ( constants.DOC_XTRA_KW in temp_msg_  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
+            defect_categ_to_ret = constants.DOC_DEFECT_CATEG 
+
+        # extra rule for dep
+        if ( constants.DEPEND_XTRA_KW in temp_msg_  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
+            defect_categ_to_ret = constants.DEP_DEFECT_CATEG 
+
+        # extra rule for provisioning
+        if ( constants.NETWORK_XTRA_KW in temp_msg_  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
+            defect_categ_to_ret = constants.NETWORK_DEFECT_CATEG 
+
+    return defect_categ_to_ret 

@@ -94,11 +94,13 @@ def processMessage(indi_comm_mess):
     return splitted_messages 
 
 def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
+  verbose = False   # For oracle dataset it is True (later), otherwise it is False 
   pupp_bug_list = []
   all_commit_file_dict  = {}
   all_defect_categ_list = []
   hash_tracker = []
   for tuple_ in pupp_commits_mapping:
+
     file_ = tuple_[0]
     commit_ = tuple_[1]
     msg_commit =  commit_.message 
@@ -112,31 +114,53 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
 
     commit_hash = commit_.hexsha
 
+    '''
+    for testing purpose , uncomment only for tool accuracy purpose 
+    '''
+    if commit_hash in constants.ORACLE_HASH_CHECKLIST:
+      print commit_hash
+      print msg_commit 
+      print '*'*10
+      verbose = True 
+    else:
+      verbose = False 
+    '''
+    ''' 
+
     timestamp_commit = commit_.committed_datetime
     str_time_commit  = timestamp_commit.strftime(constants.DATE_TIME_FORMAT)
 
     diff_content_str = getDiffStr(repo_path_param, commit_hash, file_)
 
     #### categorization zone 
+    per_commit_defect_categ_list = []
     if (commit_hash not in hash_tracker):
       bug_status, index_status = classifier.detectBuggyCommit(msg_commit)
       if (bug_status) or (classifier.detectRevertedCommit(msg_commit) ):
         processed_message = processMessage(msg_commit)
+        # each commit has multiple messages, need to merge them together in one list here, not in classifier 
         for tokenized_msg in processed_message:
-            bug_categ_list = classifier.detectCateg(tokenized_msg, diff_content_str) 
+            per_commit_defect_categ_list.append( classifier.detectCateg(tokenized_msg, diff_content_str, verbose)  )
             # print tokenized_msg
             # print commit_hash, bug_categ, repo_path_param, str_time_commit
             # print '-'*100   
       else:
-        bug_categ_list = [ constants.NO_DEFECT_CATEG ]
+        per_commit_defect_categ_list  = [ constants.NO_DEFECT_CATEG ]
 
-      bug_categ_list = np.unique( bug_categ_list )
+      bug_categ_list = np.unique(  per_commit_defect_categ_list  )
+      '''
+      for testing purpose , uncomment only for tool accuracy purpose 
+      '''
+      if verbose:
+        print bug_categ_list
+      '''
+      '''
       if (len(bug_categ_list) > 0):
         for bug_categ_ in bug_categ_list:      
             tup_ = (commit_hash, bug_categ_, repo_path_param, str_time_commit) 
             all_defect_categ_list.append(tup_)  
-            print tup_[0], tup_[1], tup_[2], tup_[3]
-            print '-'*25
+            # print tup_[0], tup_[1], tup_[2], tup_[3]
+            # print '-'*25
       else:    
             tup_ = (commit_hash, constants.NO_DEFECT_CATEG, repo_path_param, str_time_commit) 
             all_defect_categ_list.append(tup_)  
