@@ -52,7 +52,7 @@ config_defect_kw_list = ['connection', 'string', 'hash', 'value', 'config', 'fie
 # dep_defect_kw_list    = ['requir', 'depend', 'relation', 'order', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'packag', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test', 'includ']
 dep_defect_kw_list    = ['requir', 'depend', 'relation', 'order', 'sync', 'compatibil', 'ordering', 'missing', 'ensure', 'packag', 'inherit', 'module', 'includ']
 doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice', 'header'] 
-idem_defect_kw_list   = ['idempoten', 'idem']
+idem_defect_kw_list   = ['idempot']
 logic_defect_kw_list  = ['logic', 'condition', 'boolean']
 # secu_defect_kw_list   = ['vulnerability', 'ssl', 'firewall', 'secret', 'authenticate', 'tls', 'ca_file', 'password', 'security', 'cve']
 secu_defect_kw_list   = ['vulnerability', 'ssl', 'firewall', 'secret', 'authenticate', 'password', 'security', 'cve']
@@ -84,11 +84,11 @@ CLOSE_KW        = 'closes-bug'
 MERGE_KW        = 'merge' 
 REVERT_KW       = 'revert'
 REVERT_REGEX    = r'^revert.*\".*\"'
-IDEM_XTRA_KW    = 'idem'
+IDEM_XTRA_KW    = 'idempot'
 LOGIC_XTRA_KW   = 'condit'
 SYNTAX_XTRA_KW1 = 'lint'
 SYNTAX_XTRA_KW2 = 'typo'
-SYNTAX_XTRA_KW3 = 'space'
+SYNTAX_XTRA_KW3 = 'spac'
 DOC_XTRA_KW     = 'notice' 
 DEPEND_XTRA_KW  = 'override' 
 NETWORK_XTRA_KW = 'provis'
@@ -110,7 +110,5 @@ diff_extra_idem_elems  = ['ensure', 'unless', 'creates', 'replace']
 Oracle dataset work 
 '''
 ORACLE_HASH_CHECKLIST = ['52f0888af273e0ae9867ee6b5b645e0565732428', 
-                         '975d8ef0fb352f689f78ecb9c33e0aef4062d45e', 
-                         '114536ef2e7c569300019844e0ca57d278e27791',
-                         'a7dedf197a24bf8a3fad00d1d1f58eede2f43057' 
+                         '975d8ef0fb352f689f78ecb9c33e0aef4062d45e'
                         ]

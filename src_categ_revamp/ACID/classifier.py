@@ -44,10 +44,16 @@ def doDepAnalysis(msg_par):
                 msg_to_analyze.append(x_.text)
     return constants.WHITE_SPACE.join(msg_to_analyze) 
 
-def detectBuggyCommit(msg_):
+def detectBuggyCommit(msg_, verboseFlag = False):
     flag2ret  = False 
     index2ret = 0
     msg_ = msg_.lower()
+
+    if constants.IDEM_XTRA_KW in msg_:
+        msg_ = msg_.replace(constants.CLOSE_KW, constants.WHITE_SPACE)
+        msg_ = msg_.replace(constants.MERGE_KW, constants.WHITE_SPACE)
+        msg_ = msg_.replace(constants.DFLT_KW, constants.WHITE_SPACE)
+
     if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and ( constants.CLOSE_KW not in msg_) and (constants.MERGE_KW not in msg_) :    
         str2see = [y_ for y_ in constants.prem_bug_kw_list][0]
         index2ret = msg_.find( str2see  ) 
@@ -74,7 +80,6 @@ def detectCateg(msg_, diff_, verboseFlag=False):
             print 'Originally was:',  msg_
             temp_msg_     = constants.WHITE_SPACE.join(temp_msg_list) # for extra false negative rules 
             print 'Now becomes:', temp_msg_
-
         msg_       = doDepAnalysis(msg_) ## depnding on results, this extra step of dependnecy parsing may change 
         # print 'Dependency analysis output:', msg_ 
         # diff_parse_dict = diff_parser.parseTheDiff(diff_) 

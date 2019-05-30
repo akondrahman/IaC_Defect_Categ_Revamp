@@ -118,9 +118,6 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
     for testing purpose , uncomment only for tool accuracy purpose 
     '''
     if commit_hash in constants.ORACLE_HASH_CHECKLIST:
-      print commit_hash
-      print msg_commit 
-      print '*'*10
       verbose = True 
     else:
       verbose = False 
@@ -135,15 +132,18 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
     #### categorization zone 
     per_commit_defect_categ_list = []
     if (commit_hash not in hash_tracker):
-      bug_status, index_status = classifier.detectBuggyCommit(msg_commit)
+      bug_status, index_status = classifier.detectBuggyCommit(msg_commit, verbose) 
+      # print bug_status 
       if (bug_status) or (classifier.detectRevertedCommit(msg_commit) ):
         processed_message = processMessage(msg_commit)
         # each commit has multiple messages, need to merge them together in one list here, not in classifier 
         for tokenized_msg in processed_message:
-            per_commit_defect_categ_list.append( classifier.detectCateg(tokenized_msg, diff_content_str, verbose)  )
-            # print tokenized_msg
-            # print commit_hash, bug_categ, repo_path_param, str_time_commit
-            # print '-'*100   
+            bug_categ = classifier.detectCateg(tokenized_msg, diff_content_str, verbose)
+            per_commit_defect_categ_list.append(  bug_categ )
+            if verbose:
+              print tokenized_msg
+              print commit_hash, bug_categ, repo_path_param, str_time_commit
+              print '-'*100   
       else:
         per_commit_defect_categ_list  = [ constants.NO_DEFECT_CATEG ]
 
