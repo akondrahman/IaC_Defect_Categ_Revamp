@@ -86,9 +86,12 @@ REVERT_KW       = 'revert'
 REVERT_REGEX    = r'^revert.*\".*\"'
 IDEM_XTRA_KW    = 'idempot'
 LOGIC_XTRA_KW   = 'condit'
+
 SYNTAX_XTRA_KW1 = 'lint'
 SYNTAX_XTRA_KW2 = 'typo'
 SYNTAX_XTRA_KW3 = 'spac'
+SYNTAX_XTRA_KW4 = 'syntax'
+
 DOC_XTRA_KW     = 'notice' 
 DEPEND_XTRA_KW  = 'override' 
 NETWORK_XTRA_KW = 'provis'

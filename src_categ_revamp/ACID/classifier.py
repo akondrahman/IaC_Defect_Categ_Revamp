@@ -44,15 +44,23 @@ def doDepAnalysis(msg_par):
                 msg_to_analyze.append(x_.text)
     return constants.WHITE_SPACE.join(msg_to_analyze) 
 
+
+def doTempCleanUp(msg_str):
+
+    msg_ = msg_str.replace(constants.CLOSE_KW, constants.WHITE_SPACE)
+    msg_ = msg_.replace(constants.MERGE_KW, constants.WHITE_SPACE)
+    msg_ = msg_.replace(constants.DFLT_KW, constants.WHITE_SPACE)    
+
+    return msg_
+
 def detectBuggyCommit(msg_, verboseFlag = False):
     flag2ret  = False 
     index2ret = 0
     msg_ = msg_.lower()
 
-    if constants.IDEM_XTRA_KW in msg_:
-        msg_ = msg_.replace(constants.CLOSE_KW, constants.WHITE_SPACE)
-        msg_ = msg_.replace(constants.MERGE_KW, constants.WHITE_SPACE)
-        msg_ = msg_.replace(constants.DFLT_KW, constants.WHITE_SPACE)
+    if (constants.IDEM_XTRA_KW in msg_) or (constants.SYNTAX_XTRA_KW2 in msg_):
+        msg_ = doTempCleanUp(msg_)
+
 
     if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and ( constants.CLOSE_KW not in msg_) and (constants.MERGE_KW not in msg_) :    
         str2see = [y_ for y_ in constants.prem_bug_kw_list][0]
@@ -76,9 +84,10 @@ def detectCateg(msg_, diff_, verboseFlag=False):
     defect_categ_to_ret = constants.NO_DEFECT_CATEG 
     if (len(diff_) > 0):
         temp_msg_list = filterCommitMessage(msg_) # for extra false negative rules 
+        temp_msg_     = constants.WHITE_SPACE.join(temp_msg_list) # for extra false negative rules 
+        
         # if verboseFlag:
         #     print 'Originally was:',  msg_
-        #     temp_msg_     = constants.WHITE_SPACE.join(temp_msg_list) # for extra false negative rules 
         #     print 'Now becomes:', temp_msg_
         msg_       = doDepAnalysis(msg_) ## depnding on results, this extra step of dependnecy parsing may change 
         # print 'Dependency analysis output:', msg_ 
@@ -133,7 +142,7 @@ def detectCateg(msg_, diff_, verboseFlag=False):
             defect_categ_to_ret =  constants.CONDI_DEFECT_CATEG 
 
         # extra rule for syntax 
-        if (( constants.SYNTAX_XTRA_KW1 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW2 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW3 in temp_msg_ ) ) and (( constants.EXTRA_FIX_KEYWORD in temp_msg_ ) or (constants.EXTRA_SOLVE_KEYWORD in temp_msg_) ):
+        if (( constants.SYNTAX_XTRA_KW1 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW2 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW3 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW4 in temp_msg_ ) ) and (( constants.EXTRA_FIX_KEYWORD in temp_msg_ ) or (constants.EXTRA_SOLVE_KEYWORD in temp_msg_) ):
             defect_categ_to_ret = constants.SYNTAX_DEFECT_CATEG 
 
         # extra rule for doc 

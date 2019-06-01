@@ -39,11 +39,15 @@ def printAccu(file_name):
   '''
   accuracy_score_output = accuracy_score(actualLabels, predictedLabels)
   # preserve the order first test(real values from dataset), then predcited (from the classifier )
-  print "Accuracy output is ", accuracy_score_output
-  print">"*10
+  # print "Accuracy output is ", accuracy_score_output
+  # print">"*10
 
 
 if __name__=='__main__':
 
-   acid_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ACCURACY_ORACLE.csv'
-   printAccu(acid_ds)
+  #  acid_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/LOCKED_FOR_PAPER_FINAL_CLASSI_OUTPUT_ORACLE.csv'
+  #  printAccu(acid_ds)
+
+
+  #  sanity_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/sanity-check-2019/ACCURACY_SANITY_CHECK.csv'
+  #  printAccu(sanity_ds)
