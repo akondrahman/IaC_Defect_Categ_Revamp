@@ -62,7 +62,8 @@ def detectBuggyCommit(msg_, verboseFlag = False):
         msg_ = doTempCleanUp(msg_)
 
 
-    if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and ( constants.CLOSE_KW not in msg_) and (constants.MERGE_KW not in msg_) :    
+    # if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and ( constants.CLOSE_KW not in msg_) and (constants.MERGE_KW not in msg_) :    
+    if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and (constants.MERGE_KW not in msg_) :    
         str2see = [y_ for y_ in constants.prem_bug_kw_list][0]
         index2ret = msg_.find( str2see  ) 
         flag2ret = True 
@@ -138,7 +139,7 @@ def detectCateg(msg_, diff_, verboseFlag=False):
             defect_categ_to_ret = constants.IDEM_DEFECT_CATEG 
 
         # extra rule for conditional 
-        if ( constants.LOGIC_XTRA_KW in temp_msg_ ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
+        if (( constants.LOGIC_XTRA_KW1 in temp_msg_ ) or ( constants.LOGIC_XTRA_KW2 in temp_msg_ ) or ( constants.LOGIC_XTRA_KW3 in temp_msg_ ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
             defect_categ_to_ret =  constants.CONDI_DEFECT_CATEG 
 
         # extra rule for syntax 

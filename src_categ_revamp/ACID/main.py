@@ -26,10 +26,10 @@ def getBranchName(proj_):
 
 if __name__=='__main__':
 
-    orgName     = 'oracle-dataset'
-    out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ORACLE_DATASET_COMM.PKL'
-    out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ORACLE_CATEG_OUTPUT_SEMIFINAL.csv'
-    out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ORACLE_CATEG_OUTPUT_SEMIFINAL.PKL'
+    # orgName     = 'oracle-dataset'
+    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ORACLE_DATASET_COMM.PKL'
+    # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ORACLE_CATEG_OUTPUT_SEMIFINAL.csv'
+    # out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ORACLE_CATEG_OUTPUT_SEMIFINAL.PKL'
 
     # orgName='ghub-downloads'
     # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_PUPP_COMM.PKL'
@@ -54,7 +54,8 @@ if __name__=='__main__':
         branchName = getBranchName(proj_) 
         per_proj_commit_dict, per_proj_full_defect_list = excavator.runMiner(orgName, proj_, branchName)
         categ = categ + per_proj_full_defect_list 
-        print proj_ , len(per_proj_full_defect_list) 
+        # print proj_ , len(per_proj_full_defect_list) 
+        print 'Analyzing:', proj_
         dic[proj_] = (per_proj_commit_dict, per_proj_full_defect_list) 
         print '='*50 
     

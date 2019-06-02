@@ -57,7 +57,7 @@ if __name__=='__main__':
     # full_df = mapDiffsToCateg(diff_df, diff_categ_df, categ_dict)
     # full_df.to_csv('/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/FINAL_CATEG_MAPPING.csv')
 
-    oracle_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/LOCKED_FINAL_ORACLE_DATASET.csv'
+    oracle_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/LOCKED_FOR_PAPER_FINAL_CLASSI_OUTPUT_ORACLE.csv'
     oracle_df   = pd.read_csv(oracle_file)
     tool_file   = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ORACLE_CATEG_OUTPUT_SEMIFINAL.csv'
     tool_df     = pd.read_csv(tool_file)

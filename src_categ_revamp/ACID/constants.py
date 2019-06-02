@@ -85,7 +85,10 @@ MERGE_KW        = 'merge'
 REVERT_KW       = 'revert'
 REVERT_REGEX    = r'^revert.*\".*\"'
 IDEM_XTRA_KW    = 'idempot'
-LOGIC_XTRA_KW   = 'condit'
+
+LOGIC_XTRA_KW1  = 'condit'
+LOGIC_XTRA_KW2  = 'logic'
+LOGIC_XTRA_KW3  = 'bool' 
 
 SYNTAX_XTRA_KW1 = 'lint'
 SYNTAX_XTRA_KW2 = 'typo'
