@@ -47,7 +47,20 @@ def getCategFreq(file_name):
         print 'CATEG:{}, RAW_COUNT:{}, PROP_DEFECT_COMMIT:{}'.format(categ, categ_count, prop_defect_commit)
         print '*'*50 
 
+def getAtLeastOne(file_param):
+    full_df          = pd.read_csv(file_param) 
+    full_hash_ls     =  np.unique( full_df['HASH'].tolist() )
+    tot_hash_cnt     = len(full_hash_ls)
+    print 'DATASET:', file_param
+    print 'TOTAL_COMMIT_COUNT:', tot_hash_cnt
+    only_defect_df   = full_df[full_df['CATEG']!='NO_DEFECT'] 
+    only_defect_hash = np.unique( only_defect_df['HASH'].tolist()  )
+    only_defect_cnt  = len(only_defect_hash)  
+    atleast_one_hash = (float(only_defect_cnt) / float(tot_hash_cnt) ) *100
+    print 'AT_LEAST_ONE_DEFECT_RELATED_COMMIT:{}, PERC:{}'.format(only_defect_cnt, atleast_one_hash) 
+    print '='*100    
 
 if __name__=='__main__':
     acid_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_OUTPUT_FINAL.csv'
     getCategFreq(acid_output_file)
+    getAtLeastOne(acid_output_file)
