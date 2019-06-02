@@ -27,6 +27,9 @@ def getCategFreq(file_name):
     full_df      = pd.read_csv(file_name) 
     full_hash_ls =  np.unique( full_df['HASH'].tolist() )
     tot_hash_cnt = len(full_hash_ls)
+    print 'DATASET:', file_name
+    print 'TOTAL_COMMIT_COUNT:', tot_hash_cnt
+    print '='*100
     for indi_hash in full_hash_ls:
         indi_hash_df    = full_df[full_df['HASH']==indi_hash] 
         indi_hash_categ = np.unique(indi_hash_df['CATEG'].tolist())
