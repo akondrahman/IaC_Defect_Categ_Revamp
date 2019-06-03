@@ -48,7 +48,7 @@ SYNTAX_DEFECT_CATEG    = 'SYNTAX_DEFECT'
 
 prem_bug_kw_list      = ['error', 'bug', 'fix', 'issue', 'mistake', 'incorrect', 'fault', 'defect', 'flaw', 'solve' ]
 # config_defect_kw_list = ['connection', 'string', 'paramet', 'hash', 'value', 'config', 'field', 'option', 'version', 'url', 'setting', 'ip', 'repo', 'link', 'time', 'server', 'command', 'setting', 'hiera', 'data', 'sql', 'permiss', 'mode', 'dir', 'protocol', 'missing', 'reference', 'path', 'location', 'driver', 'port', 'protocol', 'gateway', 'tcp', 'udp', 'fact', 'id']
-config_defect_kw_list = ['value', 'config', 'option', 'version', 'setting', 'hiera', 'data']
+config_defect_kw_list = ['value', 'config', 'option',  'setting', 'hiera' ]
 # dep_defect_kw_list    = ['requir', 'depend', 'relation', 'order', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'packag', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test', 'includ']
 dep_defect_kw_list    = ['requir', 'depend', 'relation', 'order', 'sync', 'compatibil', 'ensure',  'inherit'] 
 doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice', 'header'] 
@@ -75,7 +75,7 @@ syntax_defect_kw_list = ['compil', 'lint', 'warn', 'typo', 'spell', 'indent', 'r
 # EXTRA_DEPENDENCY_KW   = ['dep', 'ensur', 'requir', 'modul', 'packag']  
 # EXTRA_SERVICE_KW      = ['test', 'setup', 'site', 'restart', 'deploy', 'start', 'driver']  
 # EXTRA_DOCU_KW         = ['readme', 'doc', 'comment', 'license'] 
-# EXTRA_FIX_KEYWORD     = 'fix'   
+EXTRA_FIX_KEYWORD     = 'fix'   
 # EXTRA_SOLVE_KEYWORD   = 'solve'
 
 

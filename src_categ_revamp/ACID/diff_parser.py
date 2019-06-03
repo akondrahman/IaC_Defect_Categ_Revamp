@@ -136,7 +136,7 @@ def checkDiffForConfigDefects(diff_text):
     attr_assi_dict_deli = getSpecialConfigDict(deleted_text, constants.ATTR_SIGN)
 
     # config_change_tracker = getConfigChangeCnt(valu_assi_dict_addi, valu_assi_dict_deli) + getConfigChangeCnt(valu_assi_dict_deli, valu_assi_dict_addi) + getConfigChangeCnt(attr_assi_dict_addi, attr_assi_dict_deli) + getConfigChangeCnt( attr_assi_dict_deli, attr_assi_dict_addi)
-    config_change_tracker = getConfigChangeCnt(valu_assi_dict_addi, valu_assi_dict_deli) 
+    config_change_tracker = getConfigChangeCnt(valu_assi_dict_addi, valu_assi_dict_deli) + getConfigChangeCnt(attr_assi_dict_addi, attr_assi_dict_deli)
 
     if config_change_tracker > 0 :
         final_flag = True 
