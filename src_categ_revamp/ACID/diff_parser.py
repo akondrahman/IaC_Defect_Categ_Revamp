@@ -8,6 +8,8 @@ import whatthepatch
 
 import constants
 
+from fuzzywuzzy import fuzz
+
 # [(1, None, '# == Class cdh4::pig'), (None, 1, '# == Class cdh::pig'), (2, 2, '#'), (3, None, '# Installs and configures Apache Pig.'), (None, 3, '# Installs and configures Apache Pig and Pig DataFu.'), (4, 4, '#'), (5, None, 'class cdh4::pig {'), (6, None, "  package { 'pig':"), (7, None, "    ensure => 'installed',"), (8, None, '  }'), (None, 5, 'class cdh::pig('), (None, 6, "    $pig_properties_template = 'cdh/pig/pig.properties.erb',"), (None, 7, "    $log4j_template          = 'cdh/pig/log4j.properties.erb',"), (None, 8, ')'), (None, 9, '{'), (None, 10, '    # cdh::pig requires hadoop client and configs are installed.'), (None, 11, "    Class['cdh::hadoop'] -> Class['cdh::pig']"), (9, 12, ''), (10, None, "  file { '/etc/pig/conf/pig.properties':"), (11, None, "    content => template('cdh4/pig/pig.properties.erb'),"), (12, None, "    require => Package['pig'],"), (13, None, '  }'), (None, 13, "    package { 'pig':"), (None, 14, "        ensure => 'installed',"), (None, 15, '    }'), (None, 16, "    package { 'pig-udf-datafu':"), (None, 17, "        ensure => 'installed',"), (None, 18, '    }'), (None, 19, ''), (None, 20, '    $config_directory = "/etc/pig/conf.${cdh::hadoop::cluster_name}"'), (None, 21, '    # Create the $cluster_name based $config_directory.'), (None, 22, '    file { $config_directory:'), (None, 23, "        ensure  => 'directory',"), (None, 24, "        require => Package['pig'],"), (None, 25, '    }'), (None, 26, "    cdh::alternative { 'pig-conf':"), (None, 27, "        link    => '/etc/pig/conf',"), (None, 28, '        path    => $config_directory,'), (None, 29, '    }'), (None, 30, ''), (None, 31, '    file { "${config_directory}/pig.properties":'), (None, 32, '        content => template($pig_properties_template),'), (None, 33, "        require => Package['pig'],"), (None, 34, '    }'), (None, 35, '    file { "${config_directory}/log4j.properties":'), (None, 36, '        content => template($log4j_template),'), (None, 37, "        require => Package['pig'],"), (None, 38, '    }'), (14, 39, '}')]
 
 def parseTheDiff(diff_text):
@@ -57,15 +59,33 @@ def checkDiffForConfigDefects(diff_text):
     added_text, deleted_text = getAddDelLines(diff_text)
     added_text   = filterTextList(added_text)
     deleted_text = filterTextList(deleted_text)
-    if( any(x_ in added_text for x_ in constants.config_defect_kw_list) ) and ( any(x_ in deleted_text for x_ in constants.config_defect_kw_list) ):
-            final_flag = True 
-    elif ( any(constants.VAR_SIGN in x_ for x_ in added_text) ) and ( any(constants.VAR_SIGN in x_ for x_ in deleted_text) ):
-            var_add_lis = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[0] for x_ in added_text if constants.VAR_SIGN in x_ ]
-            var_del_lis = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[0] for x_ in deleted_text if constants.VAR_SIGN in x_ ] 
-            var_common  = list(set(var_add_lis).intersection(var_del_lis)) 
-            # print var_add_lis, var_del_lis
-            # print var_common
-            if len(var_common) > 0:
+    # if( any(x_ in added_text for x_ in constants.config_defect_kw_list) ) and ( any(x_ in deleted_text for x_ in constants.config_defect_kw_list) ):
+    #         final_flag = True 
+    # elif ( any(constants.VAR_SIGN in x_ for x_ in added_text) ) and ( any(constants.VAR_SIGN in x_ for x_ in deleted_text) ): ## for variables 
+    #         var_add_lis = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[0] for x_ in added_text if constants.VAR_SIGN in x_ ]
+    #         var_del_lis = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[0] for x_ in deleted_text if constants.VAR_SIGN in x_ ] 
+    #         var_common  = list(set(var_add_lis).intersection(var_del_lis)) 
+    #         if len(var_common) > 0:
+    #             final_flag = True
+    # elif ( any(constants.ATTR_SIGN in x_ for x_ in added_text) ) and ( any(constants.ATTR_SIGN in x_ for x_ in deleted_text) ): ## for attributes 
+    #         attr_add_lis = [x_.replace(constants.WHITE_SPACE, '').split(constants.ATTR_SIGN)[0] for x_ in added_text if constants.ATTR_SIGN in x_ ]
+    #         attr_del_lis = [x_.replace(constants.WHITE_SPACE, '').split(constants.ATTR_SIGN)[0] for x_ in deleted_text if constants.ATTR_SIGN in x_ ] 
+    #         attr_common  = list(set(attr_add_lis).intersection(attr_del_lis)) 
+    #         if len(attr_common) > 0:
+    #             final_flag = True
+    if ( any(constants.ATTR_SIGN in x_ for x_ in added_text) ) and ( any(constants.ATTR_SIGN in x_ for x_ in deleted_text) ): ## for RHS comparisons, detect msi matches, and they are indicative of code changes 
+            attr_add_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.ATTR_SIGN)[1] for x_ in added_text if constants.ATTR_SIGN in x_ ]
+            attr_del_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.ATTR_SIGN)[1] for x_ in deleted_text if constants.ATTR_SIGN in x_ ] 
+            mismatches_del = [x_ for x_ in attr_del_lis if x_ not in attr_add_lis]
+            mismatches_add = [x_ for x_ in attr_add_lis if x_ not in attr_del_lis]
+            if (len(mismatches_add) > 0) or (len(mismatches_del) > 0):
+                final_flag = True
+    elif ( any(constants.VAR_SIGN in x_ for x_ in added_text) ) and ( any(constants.VAR_SIGN in x_ for x_ in deleted_text) ): ## for RHS comparisons, detect msi matches, and they are indicative of code changes 
+            attr_add_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[1] for x_ in added_text if constants.VAR_SIGN in x_ ]
+            attr_del_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[1] for x_ in deleted_text if constants.VAR_SIGN in x_ ] 
+            mismatches_del = [x_ for x_ in attr_del_lis if x_ not in attr_add_lis]
+            mismatches_add = [x_ for x_ in attr_add_lis if x_ not in attr_del_lis]
+            if (len(mismatches_add) > 0) or (len(mismatches_del) > 0):
                 final_flag = True
     return final_flag
 
@@ -176,39 +196,45 @@ def checkDiffForServiceDefects(diff_text):
        final_flag = True 
     return final_flag
 
+def matchStringsFuzzily(add_str_lis, del_str_lis):
+    # takes two sring as input, returns levesjhteins's ratio, reff: https://www.datacamp.com/community/tutorials/fuzzy-string-python
+    add_str = constants.WHITE_SPACE.join(add_str_lis)
+    del_str = constants.WHITE_SPACE.join(del_str_lis) 
+    lower_add_str = add_str.lower() 
+    lower_del_str = del_str.lower()
+    lev_str_ratio = fuzz.token_sort_ratio( lower_add_str, lower_del_str  ) ## this is levenshteien ratio, in a sorted manner 
+    return lev_str_ratio
+
+
 def checkDiffForSyntaxDefects(diff_text):
     final_flag = False 
     added_text , deleted_text = [], []
+    attr_added_text , attr_deleted_text = [], []
+    var_added_text , var_deleted_text = [], []
 
     added_text, deleted_text = getAddDelLines(diff_text)
     added_text   = filterTextList(added_text)
     deleted_text = filterTextList(deleted_text)
-    '''
-    look for classes 
-    '''
-    non_value_added_text   = [x_ for x_ in added_text if constants.VAR_SIGN  not in x_ ]
-    non_value_added_text   = [x_.lower() for x_ in non_value_added_text if constants.ATTR_SIGN not in x_ ]
 
-    non_value_deleted_text = [x_ for x_ in deleted_text if constants.VAR_SIGN not in x_ ]
-    non_value_deleted_text = [x_.lower() for x_ in non_value_deleted_text if constants.ATTR_SIGN not in x_ ]
-
-    non_value_added_text   = [z_ for z_ in non_value_added_text if any(x_ in z_ for x_ in constants.diff_syntax_code_elems ) ]
-    non_value_deleted_text = [z_ for z_ in non_value_deleted_text if any(x_ in z_ for x_ in constants.diff_syntax_code_elems ) ] 
     '''
     look for variable name change 
     '''
-    added_text    = [x_.lower() for x_ in added_text if constants.ATTR_SIGN in x_ ]
-    added_text    = [x_.lower().replace(constants.WHITE_SPACE, '') for x_ in added_text if constants.VAR_SIGN in x_ ]
+    attr_added_text   = [x_.lower() for x_ in added_text if constants.ATTR_SIGN in x_ ]
+    var_added_text    = [x_.lower().replace(constants.WHITE_SPACE, '') for x_ in added_text if constants.VAR_SIGN in x_ ]
 
-    deleted_text  = [x_.lower() for x_ in deleted_text if constants.ATTR_SIGN in x_ ]
-    deleted_text  = [x_.lower().replace(constants.WHITE_SPACE, '') for x_ in deleted_text if constants.VAR_SIGN in x_ ]
+    attr_deleted_text = [x_.lower() for x_ in deleted_text if constants.ATTR_SIGN in x_ ]
+    var_deleted_text  = [x_.lower().replace(constants.WHITE_SPACE, '') for x_ in deleted_text if constants.VAR_SIGN in x_ ]
     '''
     Now compare 
     '''
-    if (len(non_value_added_text) > 0 ) and (len(non_value_deleted_text) > 0 ) :
-       final_flag = True 
-    elif (len(added_text)) and (len(deleted_text)): 
-       final_flag = True 
+
+    # if (len(added_text)) and (len(deleted_text)): ## wrong logic 
+    if ((len(attr_added_text)) == (len(attr_deleted_text))) or (len(var_added_text) == len(var_deleted_text) ) : ## right logic , same number of additions and deletiosn for variables 
+        final_flag = True 
+    elif ( (matchStringsFuzzily(attr_added_text, attr_deleted_text) > constants.lev_cutoff ) or (matchStringsFuzzily(var_added_text, var_deleted_text) > constants.lev_cutoff ) ):
+        final_flag - True 
+
+
     return final_flag
 
 
