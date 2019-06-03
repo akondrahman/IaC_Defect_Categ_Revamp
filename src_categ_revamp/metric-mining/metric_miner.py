@@ -136,7 +136,10 @@ def mineCommitsOfTheRepo(repo_path_param, repo_branch_param, pupp_commits_mappin
 
         dir_             = os.path.dirname(file_) 
         devs_for_file    = getDevCountForFile(file_, repo_path_param) 
-        committer_name   = dev_commit_dict[commit_hash] 
+        if commit_hash in dev_commit_dict:
+          committer_name   = dev_commit_dict[commit_hash] 
+        else:
+          committer_name   = 'TEMP'
 
         metric_tuple = (commit_hash, file_, dir_, repo_path_param, loc_add, loc_del, loc_tot, devs_for_file, committer_name, str_time_commit)  
         # print metric_tuple
@@ -219,10 +222,21 @@ def finalizeMetrics(df_pa, dev_commit_p, time_dict):
   return commit_metric_list 
 
 
+def getBranchName(proj_):
+    branch_name = ''
+    proj_branch = {'biemond@biemond-oradb':'puppet4_3_data', 'derekmolloy@exploringBB':'version2', 'exploringBB':'version2', 
+                   'jippi@puppet-php':'php7.0', 'maxchk@puppet-varnish':'develop', 'threetreeslight@my-boxen':'mine'
+                  } 
+    if proj_ in proj_branch:
+        branch_name = proj_branch[proj_]
+    else:
+        branch_name = 'master'
+    return branch_name
+
 def runMiner(orgParamName, repo_name_param, branchParam):
   
-  repo_path   = '/Users/akond/PUPP_REPOS/' + orgParamName + "/" + repo_name_param
-  repo_branch = branchParam
+  repo_path   = '/Users/akond/ICSE2020_PUPP_REPOS/' + orgParamName + "/" + repo_name_param
+  repo_branch = getBranchName(repo_name_param)
 
   all_devs_in_repo, dev_commit_repo = getDevsOfRepo(repo_path)  
   #   print all_devs_in_repo 

@@ -23,13 +23,17 @@ This script goes to each repo and mines commits and get metrics for each commit
 ###  columns=['COMMIT_HASH', 'FILE_CNT', 'DIR_CNT', 'LOC_MODI' 'SPREAD', 'DEVS_FILE', 'DEVS_EXP', 'DEVS_REXP']
 
 if __name__=='__main__': 
+
+  # orgName='ghub-downloads'
+  # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/GHUB_METRICS_OUTPUT_FINAL.csv'
+
   orgName='wikimedia-downloads'
   out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_METRICS_OUTPUT_FINAL.csv'
 
   # orgName='openstack-downloads'
   # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_METRICS_OUTPUT_FINAL.csv'
 
-  fileName          = '/Users/akond/PUPP_REPOS/'  + orgName + '/' + 'eligible_repos.csv' 
+  fileName          = '/Users/akond/ICSE2020_PUPP_REPOS/'  + orgName + '/' + 'eligible_repos.csv' 
   elgibleRepos      = getEligibleProjects(fileName)
   metrics_all_proj  = [] 
   for proj_ in elgibleRepos:
@@ -39,4 +43,4 @@ if __name__=='__main__':
 
   final_metric_df = pd.DataFrame(metrics_all_proj)
   print final_metric_df.head() 
-  final_metric_df.to_csv(out_csv_fil)     
+  final_metric_df.to_csv(out_csv_fil, header=['HASH', 'MOD_FILES', 'DIRS', 'TOT_SLOC', 'SPREAD', 'DEV_CNT_MOD_FILES', 'DEV_EXP', 'DEV_REXP'], index=False)   

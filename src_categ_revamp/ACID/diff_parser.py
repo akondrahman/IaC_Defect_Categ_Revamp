@@ -61,16 +61,36 @@ def getSpecialConfigDict(text_str_list, splitter):
             _val_ = x_.replace(constants.WHITE_SPACE, '').split(splitter)[-1] 
             if _key_ not in dic2ret:
                 dic2ret[_key_] = _val_
+    # print text_str_list
+    # print dic2ret
     return dic2ret
+
+def filterConfig(oldValue):
+    oldValue = oldValue.replace(',', '')
+    oldValue = oldValue.replace("'","")
+    oldValue = oldValue.replace(";","")
+    val_     = oldValue.replace('>', '')
+
+    return val_ 
 
 def getConfigChangeCnt(start_dict, end_dict):
     tracker = 0 
-    for k_, v_ in start_dict.iteritems:
-        if k_ in end_dict:
+    track_list = []
+    val_track_list = []
+    for k_, v_ in start_dict.iteritems():
+        if (k_ in end_dict ) and (k_ not in track_list) and (v_ not in val_track_list) and (len(v_) > 1): 
             oldValue     = end_dict[k_] 
             newValue     = v_ 
+            # need more pre processign ugh 
+            oldValue = filterConfig(oldValue) 
+            newValue = filterConfig(newValue)
             if newValue != oldValue:
+                # print k_
+                # print oldValue, newValue
                 tracker = tracker + 1 
+        track_list.append(k_)
+        val_track_list.append(v_) 
+    # print '>'*5
     return tracker 
 
 def checkDiffForConfigDefects(diff_text):
@@ -115,7 +135,8 @@ def checkDiffForConfigDefects(diff_text):
     attr_assi_dict_addi = getSpecialConfigDict(added_text, constants.ATTR_SIGN)
     attr_assi_dict_deli = getSpecialConfigDict(deleted_text, constants.ATTR_SIGN)
 
-    config_change_tracker = getConfigChangeCnt(valu_assi_dict_addi, valu_assi_dict_deli) + getConfigChangeCnt(valu_assi_dict_deli, valu_assi_dict_addi) + getConfigChangeCnt(attr_assi_dict_addi, attr_assi_dict_deli) + getConfigChangeCnt( attr_assi_dict_deli, attr_assi_dict_addi)
+    # config_change_tracker = getConfigChangeCnt(valu_assi_dict_addi, valu_assi_dict_deli) + getConfigChangeCnt(valu_assi_dict_deli, valu_assi_dict_addi) + getConfigChangeCnt(attr_assi_dict_addi, attr_assi_dict_deli) + getConfigChangeCnt( attr_assi_dict_deli, attr_assi_dict_addi)
+    config_change_tracker = getConfigChangeCnt(valu_assi_dict_addi, valu_assi_dict_deli) 
 
     if config_change_tracker > 0 :
         final_flag = True 

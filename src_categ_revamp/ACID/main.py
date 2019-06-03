@@ -46,6 +46,11 @@ if __name__=='__main__':
     out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_OUTPUT_FINAL.csv'
     out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_OUTPUT_FINAL.PKL'    
 
+    # orgName='test-repos'
+    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/TEST_ONLY.PKL'
+    # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/TEST_ONLY_CATEG_OUTPUT_FINAL.csv'
+    # out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/TEST_ONLY_CATEG_OUTPUT_FINAL.PKL' 
+
     fileName     = constants.ROOT_PUPP_DIR + orgName + '/' + constants.REPO_FILE_LIST 
     elgibleRepos = excavator.getEligibleProjects(fileName)
     dic   = {}
@@ -60,7 +65,7 @@ if __name__=='__main__':
         print '='*50 
     
     all_proj_df = pd.DataFrame(categ) 
-    all_proj_df.to_csv(out_csv_fil) 
+    all_proj_df.to_csv(out_csv_fil, header=['HASH','CATEG','REPO','TIME'], index=False) 
 
     with open(out_pkl_fil, 'wb') as fp_:
         pickle.dump(dic, fp_)    
