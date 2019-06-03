@@ -48,14 +48,14 @@ SYNTAX_DEFECT_CATEG    = 'SYNTAX_DEFECT'
 
 prem_bug_kw_list      = ['error', 'bug', 'fix', 'issue', 'mistake', 'incorrect', 'fault', 'defect', 'flaw', 'solve' ]
 # config_defect_kw_list = ['connection', 'string', 'paramet', 'hash', 'value', 'config', 'field', 'option', 'version', 'url', 'setting', 'ip', 'repo', 'link', 'time', 'server', 'command', 'setting', 'hiera', 'data', 'sql', 'permiss', 'mode', 'dir', 'protocol', 'missing', 'reference', 'path', 'location', 'driver', 'port', 'protocol', 'gateway', 'tcp', 'udp', 'fact', 'id']
-config_defect_kw_list = ['hash', 'value', 'config', 'option', 'version', 'setting', 'hiera', 'data']
+config_defect_kw_list = ['value', 'config', 'option', 'version', 'setting', 'hiera', 'data']
 # dep_defect_kw_list    = ['requir', 'depend', 'relation', 'order', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'packag', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test', 'includ']
-dep_defect_kw_list    = ['requir', 'depend', 'relation', 'order', 'sync', 'compatibil', 'ensure',  'inherit',  'includ']
+dep_defect_kw_list    = ['requir', 'depend', 'relation', 'order', 'sync', 'compatibil', 'ensure',  'inherit'] 
 doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice', 'header'] 
 idem_defect_kw_list   = ['idempot']
-logic_defect_kw_list  = ['logic', 'condition', 'boolean']
+logic_defect_kw_list  = ['logic', 'condition', 'bool']
 # secu_defect_kw_list   = ['vulnerability', 'ssl', 'firewall', 'secret', 'authenticate', 'tls', 'ca_file', 'password', 'security', 'cve']
-secu_defect_kw_list   = ['vulnerability', 'ssl', 'secr', 'authenti', 'password', 'security', 'cve']
+secu_defect_kw_list   = ['vulnerab', 'ssl', 'secr', 'authenti', 'password', 'security', 'cve']
 
 # build_defect_kw_list  = ['build']
 # db_defect_kw_list     = ['db', 'database', 'databas']
@@ -68,7 +68,7 @@ network_defect_kw_list= ['provis', 'network', 'proxy', 'dhcp']
 service_defect_kw_list= ['race', 'build', 'service', 'requirement', 'restore', 'server']
 
 # syntax_defect_kw_list = ['compil', 'class', 'lint', 'warn', 'clean', 'typo', 'comma', 'style', 'wrong', 'quote', 'cosmetic', 'compil', 'variable', 'spelling', 'declar', 'missing', 'indent', 'definition', 'regex', 'type', 'format', 'duplicat', 'deprecate', 'parameter', 'outdate', 'variabl']
-syntax_defect_kw_list = ['compil', 'lint', 'warn', 'typo', 'cosmetic', 'spell', 'indent', 'regex', 'format', 'duplicat', 'variabl']
+syntax_defect_kw_list = ['compil', 'lint', 'warn', 'typo', 'spell', 'indent', 'regex', 'duplicat', 'variabl', 'whitespac']
 
 # EXTRA_SYNTAX_KW       = ['definition', 'role', 'whitespace', 'parameter', 'lint', 'style', 'typo', 'variable', 'indent', 'test', 'pattern', 'duplicate'] 
 # EXTRA_CONFIG_KW       = ['url', 'version', 'config', 'sql', 'tcp', 'hiera', 'repo', 'vlan', 'connection']  
@@ -85,14 +85,14 @@ MERGE_KW        = 'merge'
 REVERT_KW       = 'revert'
 REVERT_REGEX    = r'^revert.*\".*\"'
 
-# IDEM_XTRA_KW    = 'idempot'
+IDEM_XTRA_KW    = 'idempot' # for detectBuggyCommit() 
 
 # LOGIC_XTRA_KW1  = 'condit'
 # LOGIC_XTRA_KW2  = 'logic'
 # LOGIC_XTRA_KW3  = 'bool' 
 
 # SYNTAX_XTRA_KW1 = 'lint'
-# SYNTAX_XTRA_KW2 = 'typo'
+SYNTAX_XTRA_KW2 = 'typo' # for detectBuggyCommit() 
 # SYNTAX_XTRA_KW3 = 'spac'
 # SYNTAX_XTRA_KW4 = 'syntax'
 
@@ -106,14 +106,14 @@ ATTR_SIGN = '=>'
 diff_depen_code_elems = ['~>' , '::', 'include', 'packag', 'exec']
 diff_logic_code_elems = ['if' , 'unless', 'els', 'case']
 diff_secu_code_elems  = ['tls', 'cert', 'cred', 'ssl', 'password', 'pass', 'pwd'] 
-diff_service_code_elems = ['service', 'exec'] 
-diff_syntax_code_elems = ['class']
+diff_service_code_elems = ['service'] 
+# diff_syntax_code_elems = ['class']
 diff_idem_code_elem    = 'class' 
 diff_idem_removal_cnt  = 10 
 
 diff_extra_idem_elems  = ['ensure', 'unless', 'creates', 'replace'] 
 
-lev_cutoff = 80 
+lev_cutoff = 75
 
 '''
 Oracle dataset work 

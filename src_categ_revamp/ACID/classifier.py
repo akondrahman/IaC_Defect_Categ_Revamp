@@ -64,7 +64,7 @@ def detectBuggyCommit(msg_, verboseFlag = False):
         msg_ = doTempCleanUp(msg_)
 
 
-    # if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and ( constants.CLOSE_KW not in msg_) and (constants.MERGE_KW not in msg_) :    
+    # if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and ( constants.CLOSE_KW not in msg_) and (constants.MERGE_KW not in msg_) :  ## this gives too mnay false negatives   
     if(any(x_ in msg_ for x_ in constants.prem_bug_kw_list)) and ( constants.DFLT_KW not in msg_) and (constants.MERGE_KW not in msg_) :    
         str2see = [y_ for y_ in constants.prem_bug_kw_list][0]
         index2ret = msg_.find( str2see  ) 
@@ -97,27 +97,55 @@ def detectCateg(msg_, diff_, verboseFlag=False):
         # diff_parse_dict = diff_parser.parseTheDiff(diff_) 
         # print 'Lines is the diff:', len(diff_parse_dict) 
         
-        if(any(x_ in msg_ for x_ in constants.syntax_defect_kw_list )) or (diff_parser.checkDiffForSyntaxDefects(diff_)): 
+        # if(any(x_ in msg_ for x_ in constants.syntax_defect_kw_list )) or (diff_parser.checkDiffForSyntaxDefects(diff_)): 
+        #     defect_categ_to_ret = constants.SYNTAX_DEFECT_CATEG 
+        # if(any(x_ in msg_ for x_ in constants.syntax_defect_kw_list )) : #more restriictive rule  
+        #     defect_categ_to_ret = constants.SYNTAX_DEFECT_CATEG 
+        # else:
+        #     if(any(x_ in msg_ for x_ in constants.dep_defect_kw_list)) or (diff_parser.checkDiffForDepDefects(diff_)): 
+        #         defect_categ_to_ret = constants.DEP_DEFECT_CATEG 
+        #     if(any(x_ in msg_ for x_ in constants.doc_defect_kw_list )) or (diff_parser.checkDiffForDocDefects(diff_)) : 
+        #         defect_categ_to_ret = constants.DOC_DEFECT_CATEG 
+        #     if(any(x_ in msg_ for x_ in constants.idem_defect_kw_list )) or (diff_parser.checkDiffForIdempotenceDefects(diff_) or (diff_parser.checkDiffForIdemWithAttr(diff_)) ): 
+        #         defect_categ_to_ret = constants.IDEM_DEFECT_CATEG 
+        #     # if(any(x_ in msg_ for x_ in constants.logic_defect_kw_list )) or (diff_parser.checkDiffForLogicDefects(diff_)) : 
+        #     #     defect_categ_to_ret = constants.CONDI_DEFECT_CATEG 
+        #     if(any(x_ in msg_ for x_ in constants.logic_defect_kw_list )) and (diff_parser.checkDiffForLogicDefects(diff_)) : #more restricitve
+        #         defect_categ_to_ret = constants.CONDI_DEFECT_CATEG 
+        #     # if(any(x_ in msg_ for x_ in constants.secu_defect_kw_list )) or (diff_parser.checkDiffForSecurityDefects(diff_)) : 
+        #     #     defect_categ_to_ret = constants.SECU_DEFECT_CATEG 
+        #     if(any(x_ in msg_ for x_ in constants.secu_defect_kw_list ))  : # more restrictive rule  
+        #         defect_categ_to_ret = constants.SECU_DEFECT_CATEG 
+        #     if(any(x_ in msg_ for x_ in constants.logging_defect_kw_list )) or (diff_parser.checkDiffForServiceDefects(diff_)) : 
+        #         defect_categ_to_ret = constants.LOGGING_DEFECT_CATEG 
+        #     if(any(x_ in msg_ for x_ in constants.network_defect_kw_list )) or (diff_parser.checkDiffForServiceDefects(diff_)): 
+        #         defect_categ_to_ret = constants.NETWORK_DEFECT_CATEG 
+        #     if(any(x_ in msg_ for x_ in constants.service_defect_kw_list )) or (diff_parser.checkDiffForServiceDefects(diff_)): 
+        #         defect_categ_to_ret = constants.SERVICE_DEFECT_CATEG 
+        #     if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)) or (diff_parser.checkDiffForConfigDefects(diff_)): 
+        #         defect_categ_to_ret =  constants.CONFIG_DEFECT_CATEG                 
+
+        if(any(x_ in msg_ for x_ in constants.syntax_defect_kw_list )) : #more restriictive rule  
             defect_categ_to_ret = constants.SYNTAX_DEFECT_CATEG 
         else:
-            if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)) or (diff_parser.checkDiffForConfigDefects(diff_)): 
-                defect_categ_to_ret =  constants.CONFIG_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.dep_defect_kw_list)) or (diff_parser.checkDiffForDepDefects(diff_)): 
+            if(any(x_ in msg_ for x_ in constants.dep_defect_kw_list))  or (diff_parser.checkDiffForDepDefects(diff_)): 
                 defect_categ_to_ret = constants.DEP_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.doc_defect_kw_list )) or (diff_parser.checkDiffForDocDefects(diff_)) : 
+            if(any(x_ in msg_ for x_ in constants.doc_defect_kw_list )) or (diff_parser.checkDiffForDocDefects(diff_))  : 
                 defect_categ_to_ret = constants.DOC_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.idem_defect_kw_list )) or (diff_parser.checkDiffForIdempotenceDefects(diff_) or (diff_parser.checkDiffForIdemWithAttr(diff_)) ): 
+            if(any(x_ in msg_ for x_ in constants.idem_defect_kw_list )): 
                 defect_categ_to_ret = constants.IDEM_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.logic_defect_kw_list )) or (diff_parser.checkDiffForLogicDefects(diff_)) : 
+            if(any(x_ in msg_ for x_ in constants.logic_defect_kw_list )): #more restricitve
                 defect_categ_to_ret = constants.CONDI_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.secu_defect_kw_list )) or (diff_parser.checkDiffForSecurityDefects(diff_)) : 
+            if(any(x_ in msg_ for x_ in constants.secu_defect_kw_list )): # more restrictive rule  
                 defect_categ_to_ret = constants.SECU_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.logging_defect_kw_list )) or (diff_parser.checkDiffForServiceDefects(diff_)) : 
+            if(any(x_ in msg_ for x_ in constants.logging_defect_kw_list )): 
                 defect_categ_to_ret = constants.LOGGING_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.network_defect_kw_list )) or (diff_parser.checkDiffForServiceDefects(diff_)): 
+            if(any(x_ in msg_ for x_ in constants.network_defect_kw_list )) : 
                 defect_categ_to_ret = constants.NETWORK_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.service_defect_kw_list )) or (diff_parser.checkDiffForServiceDefects(diff_)): 
+            if(any(x_ in msg_ for x_ in constants.service_defect_kw_list )) or (diff_parser.checkDiffForServiceDefects(diff_)) : 
                 defect_categ_to_ret = constants.SERVICE_DEFECT_CATEG 
+            if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)) or (diff_parser.checkDiffForConfigDefects(diff_)): 
+                defect_categ_to_ret =  constants.CONFIG_DEFECT_CATEG                 
 
         # # extra rule for idempotence 
         # if ( constants.IDEM_XTRA_KW in temp_msg_ ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):

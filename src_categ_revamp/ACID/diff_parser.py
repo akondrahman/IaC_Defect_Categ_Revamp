@@ -53,12 +53,33 @@ def getAddDelLines(diff_mess):
                     deleted_text.append(change_tuple[2])
     return added_text, deleted_text
 
+def getSpecialConfigDict(text_str_list, splitter):
+    dic2ret = {}
+    for x_ in text_str_list:
+        if (splitter in x_):
+            _key_ = x_.replace(constants.WHITE_SPACE, '').split(splitter)[0] 
+            _val_ = x_.replace(constants.WHITE_SPACE, '').split(splitter)[-1] 
+            if _key_ not in dic2ret:
+                dic2ret[_key_] = _val_
+    return dic2ret
+
+def getConfigChangeCnt(start_dict, end_dict):
+    tracker = 0 
+    for k_, v_ in start_dict.iteritems:
+        if k_ in end_dict:
+            oldValue     = end_dict[k_] 
+            newValue     = v_ 
+            if newValue != oldValue:
+                tracker = tracker + 1 
+    return tracker 
+
 def checkDiffForConfigDefects(diff_text):
     added_text , deleted_text = [], []
     final_flag = False 
     added_text, deleted_text = getAddDelLines(diff_text)
     added_text   = filterTextList(added_text)
     deleted_text = filterTextList(deleted_text)
+    config_change_tracker = 0 
     # if( any(x_ in added_text for x_ in constants.config_defect_kw_list) ) and ( any(x_ in deleted_text for x_ in constants.config_defect_kw_list) ):
     #         final_flag = True 
     # elif ( any(constants.VAR_SIGN in x_ for x_ in added_text) ) and ( any(constants.VAR_SIGN in x_ for x_ in deleted_text) ): ## for variables 
@@ -73,20 +94,33 @@ def checkDiffForConfigDefects(diff_text):
     #         attr_common  = list(set(attr_add_lis).intersection(attr_del_lis)) 
     #         if len(attr_common) > 0:
     #             final_flag = True
-    if ( any(constants.ATTR_SIGN in x_ for x_ in added_text) ) and ( any(constants.ATTR_SIGN in x_ for x_ in deleted_text) ): ## for RHS comparisons, detect msi matches, and they are indicative of code changes 
-            attr_add_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.ATTR_SIGN)[1] for x_ in added_text if constants.ATTR_SIGN in x_ ]
-            attr_del_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.ATTR_SIGN)[1] for x_ in deleted_text if constants.ATTR_SIGN in x_ ] 
-            mismatches_del = [x_ for x_ in attr_del_lis if x_ not in attr_add_lis]
-            mismatches_add = [x_ for x_ in attr_add_lis if x_ not in attr_del_lis]
-            if (len(mismatches_add) > 0) or (len(mismatches_del) > 0):
-                final_flag = True
-    elif ( any(constants.VAR_SIGN in x_ for x_ in added_text) ) and ( any(constants.VAR_SIGN in x_ for x_ in deleted_text) ): ## for RHS comparisons, detect msi matches, and they are indicative of code changes 
-            attr_add_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[1] for x_ in added_text if constants.VAR_SIGN in x_ ]
-            attr_del_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[1] for x_ in deleted_text if constants.VAR_SIGN in x_ ] 
-            mismatches_del = [x_ for x_ in attr_del_lis if x_ not in attr_add_lis]
-            mismatches_add = [x_ for x_ in attr_add_lis if x_ not in attr_del_lis]
-            if (len(mismatches_add) > 0) or (len(mismatches_del) > 0):
-                final_flag = True
+    # if ( any(constants.ATTR_SIGN in x_ for x_ in added_text) ) and ( any(constants.ATTR_SIGN in x_ for x_ in deleted_text) ): ## for RHS comparisons, detect msi matches, and they are indicative of code changes 
+    #         attr_add_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.ATTR_SIGN)[1] for x_ in added_text if constants.ATTR_SIGN in x_ ]
+    #         attr_del_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.ATTR_SIGN)[1] for x_ in deleted_text if constants.ATTR_SIGN in x_ ] 
+    #         mismatches_del = [x_ for x_ in attr_del_lis if x_ not in attr_add_lis]
+    #         mismatches_add = [x_ for x_ in attr_add_lis if x_ not in attr_del_lis]
+    #         if (len(mismatches_add) > 0) or (len(mismatches_del) > 0):
+    #             final_flag = True
+    # elif ( any(constants.VAR_SIGN in x_ for x_ in added_text) ) and ( any(constants.VAR_SIGN in x_ for x_ in deleted_text) ): ## for RHS comparisons, detect msi matches, and they are indicative of code changes 
+    #         attr_add_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[1] for x_ in added_text if constants.VAR_SIGN in x_ ]
+    #         attr_del_lis   = [x_.replace(constants.WHITE_SPACE, '').split(constants.VAR_SIGN)[1] for x_ in deleted_text if constants.VAR_SIGN in x_ ] 
+    #         mismatches_del = [x_ for x_ in attr_del_lis if x_ not in attr_add_lis]
+    #         mismatches_add = [x_ for x_ in attr_add_lis if x_ not in attr_del_lis]
+    #         if (len(mismatches_add) > 0) or (len(mismatches_del) > 0):
+    #             final_flag = True
+
+    valu_assi_dict_addi = getSpecialConfigDict(added_text, constants.VAR_SIGN)
+    valu_assi_dict_deli = getSpecialConfigDict(deleted_text, constants.VAR_SIGN)
+ 
+    attr_assi_dict_addi = getSpecialConfigDict(added_text, constants.ATTR_SIGN)
+    attr_assi_dict_deli = getSpecialConfigDict(deleted_text, constants.ATTR_SIGN)
+
+    config_change_tracker = getConfigChangeCnt(valu_assi_dict_addi, valu_assi_dict_deli) + getConfigChangeCnt(valu_assi_dict_deli, valu_assi_dict_addi) + getConfigChangeCnt(attr_assi_dict_addi, attr_assi_dict_deli) + getConfigChangeCnt( attr_assi_dict_deli, attr_assi_dict_addi)
+
+    if config_change_tracker > 0 :
+        final_flag = True 
+
+
     return final_flag
 
 def checkDiffForDepDefects(diff_text):
