@@ -46,8 +46,12 @@ def printAccu(file_name):
 if __name__=='__main__':
 
   #  acid_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/LOCKED_FOR_PAPER_FINAL_CLASSI_OUTPUT_ORACLE.csv'
-  #  printAccu(acid_ds)
+   acid_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/OR_ACCURACY_ORACLE.csv'
+  
+   printAccu(acid_ds)
 
   #  sanity_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/sanity-check-2019/500_ACCURACY_SANITY_CHECK_OSTK.csv'
+  # sanity_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/sanity-check-2019/OR_500_ACCURACY_SANITY_CHECK_OTUPUT_OSTK.csv'
+
   # sanity_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/sanity-check-2019/500_LOCKED_FOR_PAPER_SANITY_CHECK_RESULTS_WIKI.csv'
-  printAccu(sanity_ds)
+  # printAccu(sanity_ds)
