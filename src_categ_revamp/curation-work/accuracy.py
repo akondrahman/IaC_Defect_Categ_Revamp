@@ -21,18 +21,16 @@ def printAccu(file_name):
   '''
   getting the confusion matrix
   '''
-  print "Confusion matrix start"
-  #print conf_matr_output
-  conf_matr_output = confusion_matrix(actualLabels, predictedLabels)
-  print conf_matr_output
-  print "Confusion matrix end"
-  print ">"*10
+  # print "Confusion matrix start"
+  # conf_matr_output = confusion_matrix(actualLabels, predictedLabels)
+  # print conf_matr_output
+  # print "Confusion matrix end"
+  # print ">"*10
   '''
   '''
   print "precison, recall, F-stat"
   class_report = classification_report(actualLabels, predictedLabels)
   print class_report
-  print ">"*10
   '''
   accuracy_score ... reff: http://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter .... percentage of correct predictions
   ideally 1.0, higher the better
@@ -45,11 +43,16 @@ def printAccu(file_name):
 
 if __name__=='__main__':
 
-   acid_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/LOCKED_ORACLE_DATASET.csv'  
-   printAccu(acid_ds)
+  print 'ORACLE'
+  print '*'*50
+  
+  acid_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/LOCKED_ORACLE_DATASET.csv'  
+  printAccu(acid_ds)
 
-  #  sanity_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/sanity-check-2019/500_ACCURACY_SANITY_CHECK_OSTK.csv'
-  # sanity_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/sanity-check-2019/OR_500_ACCURACY_SANITY_CHECK_OTUPUT_OSTK.csv'
+  print 'SANITY (OST)'
+  print '*'*50
 
-  # sanity_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/sanity-check-2019/500_LOCKED_FOR_PAPER_SANITY_CHECK_RESULTS_WIKI.csv'
-  # printAccu(sanity_ds)
+  sanity_ds = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/sanity-check-2019/LOCKED_OST_SANITY.csv'
+  printAccu(sanity_ds)
+
+  print '*'*50
