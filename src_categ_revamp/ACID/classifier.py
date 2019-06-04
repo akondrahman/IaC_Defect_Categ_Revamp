@@ -128,40 +128,40 @@ def detectCateg(msg_, diff_, verboseFlag=False):
         if(any(x_ in msg_ for x_ in constants.syntax_defect_kw_list )) : #more restriictive rule  
             defect_categ_to_ret = constants.SYNTAX_DEFECT_CATEG 
         else:
-            if(any(x_ in msg_ for x_ in constants.dep_defect_kw_list))  or (diff_parser.checkDiffForDepDefects(diff_) and constants.EXTRA_FIX_KEYWORD in temp_msg_ ): 
+            if(any(x_ in msg_ for x_ in constants.dep_defect_kw_list))  or (diff_parser.checkDiffForDepDefects(diff_) and (constants.EXTRA_FIX_KEYWORD in temp_msg_  )  ): 
                 defect_categ_to_ret = constants.DEP_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.doc_defect_kw_list )) or (diff_parser.checkDiffForDocDefects(diff_) and constants.EXTRA_FIX_KEYWORD in temp_msg_ ): 
+            if(any(x_ in msg_ for x_ in constants.doc_defect_kw_list )) or (diff_parser.checkDiffForDocDefects(diff_) and (constants.EXTRA_FIX_KEYWORD in temp_msg_  )  ): 
                 defect_categ_to_ret = constants.DOC_DEFECT_CATEG 
             if(any(x_ in msg_ for x_ in constants.idem_defect_kw_list )): 
                 defect_categ_to_ret = constants.IDEM_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.logic_defect_kw_list )): #more restricitve
+            if(any(x_ in msg_ for x_ in constants.logic_defect_kw_list )): 
                 defect_categ_to_ret = constants.CONDI_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.secu_defect_kw_list )): # more restrictive rule  
+            if(any(x_ in msg_ for x_ in constants.secu_defect_kw_list )): 
                 defect_categ_to_ret = constants.SECU_DEFECT_CATEG 
             if(any(x_ in msg_ for x_ in constants.logging_defect_kw_list )): 
                 defect_categ_to_ret = constants.LOGGING_DEFECT_CATEG 
             if(any(x_ in msg_ for x_ in constants.network_defect_kw_list )) : 
                 defect_categ_to_ret = constants.NETWORK_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.service_defect_kw_list )) or ( diff_parser.checkDiffForServiceDefects(diff_) and constants.EXTRA_FIX_KEYWORD in temp_msg_  ): 
+            if(any(x_ in msg_ for x_ in constants.service_defect_kw_list )) or ( diff_parser.checkDiffForServiceDefects(diff_) and (constants.EXTRA_FIX_KEYWORD in temp_msg_  )  ): 
                 defect_categ_to_ret = constants.SERVICE_DEFECT_CATEG 
-            if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)) or ( (diff_parser.checkDiffForConfigDefects(diff_)) and constants.EXTRA_FIX_KEYWORD in temp_msg_  ): 
+            if(any(x_ in msg_ for x_ in constants.config_defect_kw_list)) or ( (diff_parser.checkDiffForConfigDefects(diff_)) and (constants.EXTRA_FIX_KEYWORD in temp_msg_  )): 
                 defect_categ_to_ret =  constants.CONFIG_DEFECT_CATEG                 
 
-        # # extra rule for idempotence 
-        # if ( constants.IDEM_XTRA_KW in temp_msg_ ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
-        #     defect_categ_to_ret = constants.IDEM_DEFECT_CATEG 
+        # extra rule for idempotence 
+        if ( constants.IDEM_XTRA_KW in temp_msg_ ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
+            defect_categ_to_ret = constants.IDEM_DEFECT_CATEG 
 
-        # # extra rule for conditional 
-        # if (( constants.LOGIC_XTRA_KW1 in temp_msg_ ) or ( constants.LOGIC_XTRA_KW2 in temp_msg_ ) or ( constants.LOGIC_XTRA_KW3 in temp_msg_ ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
-        #     defect_categ_to_ret =  constants.CONDI_DEFECT_CATEG 
+        # extra rule for conditional 
+        if (( constants.LOGIC_XTRA_KW1 in temp_msg_ ) or ( constants.LOGIC_XTRA_KW2 in temp_msg_ ) or ( constants.LOGIC_XTRA_KW3 in temp_msg_ ) ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
+            defect_categ_to_ret =  constants.CONDI_DEFECT_CATEG 
 
-        # # extra rule for syntax 
-        # if (( constants.SYNTAX_XTRA_KW1 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW2 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW3 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW4 in temp_msg_ ) ) and (( constants.EXTRA_FIX_KEYWORD in temp_msg_ ) or (constants.EXTRA_SOLVE_KEYWORD in temp_msg_) ):
-        #     defect_categ_to_ret = constants.SYNTAX_DEFECT_CATEG 
+        # extra rule for syntax 
+        if (( constants.SYNTAX_XTRA_KW1 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW2 in temp_msg_ ) or ( constants.SYNTAX_XTRA_KW4 in temp_msg_ ) ) and (( constants.EXTRA_FIX_KEYWORD in temp_msg_ )  ):
+            defect_categ_to_ret = constants.SYNTAX_DEFECT_CATEG 
 
-        # # extra rule for doc 
-        # if ( constants.DOC_XTRA_KW in temp_msg_  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
-        #     defect_categ_to_ret = constants.DOC_DEFECT_CATEG 
+        # extra rule for doc 
+        if ( constants.DOC_XTRA_KW in temp_msg_  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):
+            defect_categ_to_ret = constants.DOC_DEFECT_CATEG 
 
         # # extra rule for dep
         # if ( constants.DEPEND_XTRA_KW in temp_msg_  ) and ( constants.EXTRA_FIX_KEYWORD in temp_msg_ ):

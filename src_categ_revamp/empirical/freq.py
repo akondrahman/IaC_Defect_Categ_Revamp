@@ -77,6 +77,7 @@ def getOnlyDefectCategFreq(file_name):
         print '*'*50 
 
 def getAtLeastOne(file_param):
+    print '='*100    
     full_df          = pd.read_csv(file_param) 
     full_hash_ls     =  np.unique( full_df['HASH'].tolist() )
     tot_hash_cnt     = len(full_hash_ls)
@@ -90,8 +91,8 @@ def getAtLeastOne(file_param):
     print '='*100    
 
 if __name__=='__main__':
-    acid_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_OUTPUT_FINAL.csv'
-    # acid_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_OUTPUT_FINAL.csv'
+    # acid_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_OUTPUT_FINAL.csv'
+    acid_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_OUTPUT_FINAL.csv'
     # acid_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_OUTPUT_FINAL.csv'
 
     getAtLeastOne(acid_output_file)

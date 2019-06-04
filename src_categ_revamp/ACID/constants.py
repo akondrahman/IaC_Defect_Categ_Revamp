@@ -48,10 +48,10 @@ SYNTAX_DEFECT_CATEG    = 'SYNTAX_DEFECT'
 
 prem_bug_kw_list      = ['error', 'bug', 'fix', 'issue', 'mistake', 'incorrect', 'fault', 'defect', 'flaw', 'solve' ]
 # config_defect_kw_list = ['connection', 'string', 'paramet', 'hash', 'value', 'config', 'field', 'option', 'version', 'url', 'setting', 'ip', 'repo', 'link', 'time', 'server', 'command', 'setting', 'hiera', 'data', 'sql', 'permiss', 'mode', 'dir', 'protocol', 'missing', 'reference', 'path', 'location', 'driver', 'port', 'protocol', 'gateway', 'tcp', 'udp', 'fact', 'id']
-config_defect_kw_list = ['value', 'config', 'option',  'setting', 'hiera' ]
+config_defect_kw_list = ['value', 'config', 'option',  'setting', 'hiera', 'data' ]
 # dep_defect_kw_list    = ['requir', 'depend', 'relation', 'order', 'sync', 'compatibility', 'ordering', 'missing', 'ensure', 'packag', 'conflict', 'name', 'inherit', 'module', 'merge', 'namespace', 'test', 'includ']
 dep_defect_kw_list    = ['requir', 'depend', 'relation', 'order', 'sync', 'compatibil', 'ensure',  'inherit'] 
-doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice', 'header'] 
+doc_defect_kw_list    = ['doc', 'comment', 'spec', 'license', 'copyright', 'notice', 'header', 'readme'] 
 idem_defect_kw_list   = ['idempot']
 logic_defect_kw_list  = ['logic', 'condition', 'bool']
 # secu_defect_kw_list   = ['vulnerability', 'ssl', 'firewall', 'secret', 'authenticate', 'tls', 'ca_file', 'password', 'security', 'cve']
@@ -77,7 +77,7 @@ syntax_defect_kw_list = ['compil', 'lint', 'warn', 'typo', 'spell', 'indent', 'r
 # EXTRA_DOCU_KW         = ['readme', 'doc', 'comment', 'license'] 
 EXTRA_FIX_KEYWORD     = 'fix'   
 # EXTRA_SOLVE_KEYWORD   = 'solve'
-
+EXTRA_BUG_KEYWORD     = 'bug'   
 
 DFLT_KW         = 'default'
 CLOSE_KW        = 'closes-bug'
@@ -87,16 +87,16 @@ REVERT_REGEX    = r'^revert.*\".*\"'
 
 IDEM_XTRA_KW    = 'idempot' # for detectBuggyCommit() 
 
-# LOGIC_XTRA_KW1  = 'condit'
-# LOGIC_XTRA_KW2  = 'logic'
-# LOGIC_XTRA_KW3  = 'bool' 
+LOGIC_XTRA_KW1  = 'condit'
+LOGIC_XTRA_KW2  = 'logic'
+LOGIC_XTRA_KW3  = 'bool' 
 
-# SYNTAX_XTRA_KW1 = 'lint'
+SYNTAX_XTRA_KW1 = 'lint'
 SYNTAX_XTRA_KW2 = 'typo' # for detectBuggyCommit() 
 # SYNTAX_XTRA_KW3 = 'spac'
-# SYNTAX_XTRA_KW4 = 'syntax'
+SYNTAX_XTRA_KW4 = 'syntax'
 
-# DOC_XTRA_KW     = 'notice' 
+DOC_XTRA_KW     = 'notice' 
 # DEPEND_XTRA_KW  = 'override' 
 # NETWORK_XTRA_KW = 'provis'
 
