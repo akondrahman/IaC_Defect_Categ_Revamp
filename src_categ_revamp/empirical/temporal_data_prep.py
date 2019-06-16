@@ -8,7 +8,9 @@ import numpy as np
 import pandas as pd 
 import os 
 
-categ_list = ['SERVICE_DEFECT', 'SECU_DEFECT', 'DEP_DEFECT', 'DOC_DEFECT', 'CONFIG_DEFECT', 'SYNTAX_DEFECT', 'CONDI_DEFECT', 'IDEM_DEFECT']
+categ_list     = ['SERVICE_DEFECT', 'SECU_DEFECT', 'DEP_DEFECT', 'DOC_DEFECT', 'CONFIG_DEFECT', 'SYNTAX_DEFECT', 'CONDI_DEFECT', 'IDEM_DEFECT']
+invalid_months = ['2019-06', '2019-05', '2005-01', '2005-02', '2005-03', '2005-04', '2005-05', '2005-06', '2005-07']
+
 
 def dumpContentIntoFile(strP, fileP):
     fileToWrite = open( fileP, 'w')
@@ -46,16 +48,17 @@ def makeTimeWiseDataset(file_name):
     # print acid_df.head() 
     acid_all_months =  np.unique( acid_df['MONTH'].tolist() ) 
     for per_month in acid_all_months: 
-        per_mon_df = acid_df[acid_df['MONTH']==per_month]
-        per_mon_commits = np.unique( per_mon_df['HASH'].tolist() )
-        commit_cnt  = len(per_mon_commits)
-        for categ_ in categ_list: 
-            per_mon_categ_df = per_mon_df[per_mon_df['CHANGED_CATEG']==categ_]
-            per_categ_hashes = np.unique( per_mon_categ_df['HASH'].tolist() )
-            categ_cnt = len(per_categ_hashes) 
-            categ_perc = round(float(categ_cnt)/float(commit_cnt) , 5) * 100 
-            str_builder = str_builder + per_month + ',' + categ_ + ',' + str(categ_perc) + '\n' 
-    dump_file_name =  '../../output/' + file_name.split('/')[-1].split('_')[0] + '_TEMPORAL.csv' 
+        if per_month not in invalid_months: 
+            per_mon_df = acid_df[acid_df['MONTH']==per_month]
+            per_mon_commits = np.unique( per_mon_df['HASH'].tolist() )
+            commit_cnt  = len(per_mon_commits)
+            for categ_ in categ_list: 
+                per_mon_categ_df = per_mon_df[per_mon_df['CHANGED_CATEG']==categ_]
+                per_categ_hashes = np.unique( per_mon_categ_df['HASH'].tolist() )
+                categ_cnt = len(per_categ_hashes) 
+                categ_perc = round(float(categ_cnt)/float(commit_cnt) , 5) * 100 
+                str_builder = str_builder + per_month + ',' + categ_ + ',' + str(categ_perc) + '\n' 
+    dump_file_name =  '../../output/' + file_name.split('/')[-1].split('_')[0] + '_TEMPORAL_FINAL.csv' 
     str_builder = 'MONTH,CATEG,CATEG_PERC' + '\n' + str_builder
     dumpContentIntoFile(str_builder, dump_file_name)
     

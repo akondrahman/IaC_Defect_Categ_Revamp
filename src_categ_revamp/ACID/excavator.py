@@ -180,7 +180,7 @@ def getHgLegitFiles(fileListParam):
   outputList = []
   for file_ in fileListParam:
     tmp_ = file_[4] 
-    if '.pp' in tmp_:
+    if constants.PP_EXTENSION in tmp_:
       outputList.append(tmp_)
   return outputList
 
