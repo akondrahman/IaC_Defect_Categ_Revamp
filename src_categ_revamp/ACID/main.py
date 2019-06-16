@@ -7,6 +7,8 @@ import excavator
 import constants
 import pandas as pd 
 import cPickle as pickle
+import time
+import datetime
 
 
 '''
@@ -15,7 +17,8 @@ This script goes to each repo and mines commits and commit messages and then get
 def getBranchName(proj_):
     branch_name = ''
     proj_branch = {'biemond@biemond-oradb':'puppet4_3_data', 'derekmolloy@exploringBB':'version2', 'exploringBB':'version2', 
-                   'jippi@puppet-php':'php7.0', 'maxchk@puppet-varnish':'develop', 'threetreeslight@my-boxen':'mine'
+                   'jippi@puppet-php':'php7.0', 'maxchk@puppet-varnish':'develop', 'threetreeslight@my-boxen':'mine', 
+                   'puppet':'production'
                   } 
     if proj_ in proj_branch:
         branch_name = proj_branch[proj_]
@@ -24,8 +27,16 @@ def getBranchName(proj_):
     return branch_name
 
 
+def giveTimeStamp():
+  tsObj = time.time()
+  strToret = datetime.datetime.fromtimestamp(tsObj).strftime('%Y-%m-%d %H:%M:%S')
+  return strToret
+
 if __name__=='__main__':
 
+    t1 = time.time()
+    print 'Started at:', giveTimeStamp()
+    print '*'*100
     # orgName     = 'oracle-dataset'
     # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ORACLE_DATASET_COMM.PKL'
     # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ORACLE_CATEG_OUTPUT_SEMIFINAL.csv'
@@ -36,15 +47,15 @@ if __name__=='__main__':
     # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_OUTPUT_FINAL.csv'
     # out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_OUTPUT_FINAL.PKL'
 
-    # orgName='wikimedia-downloads'
-    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_PUPP_COMM.PKL'
-    # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_OUTPUT_FINAL.csv'
-    # out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_OUTPUT_FINAL.PKL'
+    orgName='wikimedia-downloads'
+    out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_PUPP_COMM.PKL'
+    out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_OUTPUT_FINAL.csv'
+    out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_OUTPUT_FINAL.PKL'
 
-    orgName     = 'mozilla-releng-downloads'
-    out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/MOZI_PUPP_COMM.PKL'
-    out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/MOZI_CATEG_OUTPUT_FINAL.csv'
-    out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/MOZI_CATEG_OUTPUT_FINAL.PKL'
+    # orgName     = 'mozilla-releng-downloads'
+    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/MOZI_PUPP_COMM.PKL'
+    # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/MOZI_CATEG_OUTPUT_FINAL.csv'
+    # out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/MOZI_CATEG_OUTPUT_FINAL.PKL'
 
     # orgName='openstack-downloads'
     # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_PUPP_COMM.PKL'
@@ -65,7 +76,7 @@ if __name__=='__main__':
         per_proj_commit_dict, per_proj_full_defect_list = excavator.runMiner(orgName, proj_, branchName)
         categ = categ + per_proj_full_defect_list 
         # print proj_ , len(per_proj_full_defect_list) 
-        print 'Analyzing:', proj_
+        print 'Finished analyzing:', proj_
         dic[proj_] = (per_proj_commit_dict, per_proj_full_defect_list) 
         print '='*50 
     
@@ -73,6 +84,13 @@ if __name__=='__main__':
     all_proj_df.to_csv(out_csv_fil, header=['HASH','CATEG','REPO','TIME'], index=False) 
 
     with open(out_pkl_fil, 'wb') as fp_:
-        pickle.dump(dic, fp_)    
+        pickle.dump(dic, fp_)  
+    print '*'*100
+    print 'Ended at:', giveTimeStamp()
+    print '*'*100
+    t2 = time.time()
+    time_diff = round( (t2 - t1 ) / 60, 5) 
+    print "Duration: {} minutes".format(time_diff)
+    print '*'*100  
 
         

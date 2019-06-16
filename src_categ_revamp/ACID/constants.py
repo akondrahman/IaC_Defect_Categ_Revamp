@@ -22,6 +22,7 @@ GIT_COMM_CMD_2 = "  | awk '/.pp/ {print $2}'"
 BASH_CMD = 'bash'
 BASH_FLAG = '-c'
 GIT_DIFF_CMD = " git diff  "
+HG_REV_SPECL_CMD   = " ; hg log -p -r " 
 
 ENCODING = 'utf8'
 UTF_ENCODING = 'utf-8'

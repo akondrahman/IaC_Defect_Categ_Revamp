@@ -128,7 +128,7 @@ def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
     # ''' 
 
     timestamp_commit = commit_.committed_datetime
-    str_time_commit  = timestamp_commit.strftime(constants.DATE_TIME_FORMAT)
+    str_time_commit  = timestamp_commit.strftime(constants.DATE_TIME_FORMAT) ## date with time 
 
     diff_content_str = getDiffStr(repo_path_param, commit_hash, file_)
 
@@ -191,7 +191,7 @@ def getHgPuppetCommitMapping(all_commits_param, legit_files_param, bashCommand):
     timestamp   = e[-1]
     message     = e[-2]
     diffCommand = bashCommand + commit_hash #reff: https://stackoverflow.com/questions/5376642/mercurial-diffs-in-a-particular-changeset
-    diff_output = subprocess.check_output(['bash','-c', diffCommand])
+    diff_output = subprocess.check_output([ constants.BASH_CMD , constants.BASH_FLAG, diffCommand])
 
     for legitFile in legit_files_param:
       if(legitFile in diff_output):
@@ -257,7 +257,7 @@ def runMiner(orgParamName, repo_name_param, branchParam):
   repo_branch = branchParam
 
   if 'mozilla' in orgParamName:
-    bashCommand= " cd " + repo_path  +" ; hg log -p -r "
+    bashCommand= constants.CHANGE_DIR_CMD + repo_path  + constants.HG_REV_SPECL_CMD 
     repo_complete = hglib.open(repo_path)
     files = list(repo_complete.manifest())
     pp_files =getHgLegitFiles(files)
