@@ -228,7 +228,7 @@ def analyzeHgCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
       if (bug_status) or (classifier.detectRevertedCommit(msg_commit) ):
         processed_message = processMessage(msg_commit)
         for tokenized_msg in processed_message:
-            bug_categ = classifier.detectCateg(tokenized_msg, diff_content_str, verbose)
+            bug_categ = classifier.detectCateg(tokenized_msg, diff_content_str)
             per_commit_defect_categ_list.append(  bug_categ )
       else:
         per_commit_defect_categ_list  = [ constants.NO_DEFECT_CATEG ]
@@ -237,7 +237,7 @@ def analyzeHgCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
       if (len(bug_categ_list) > 0):
         for bug_categ_ in bug_categ_list:      
             tup_ = (commit_hash, bug_categ_, repo_path_param, str_time_commit) 
-            print tup_ 
+            # print tup_ 
             all_defect_categ_list.append(tup_)  
       else:    
             tup_ = (commit_hash, constants.NO_DEFECT_CATEG, repo_path_param, str_time_commit) 

@@ -51,6 +51,9 @@ def getAddDelLines(diff_mess):
                     added_text.append(change_tuple[2])
                 if (change_tuple[1] != None ):
                     deleted_text.append(change_tuple[2])
+    # print added_text 
+    # print deleted_text
+    # print '#'*10 
     return added_text, deleted_text
 
 def getSpecialConfigDict(text_str_list, splitter):
