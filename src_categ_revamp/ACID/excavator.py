@@ -96,6 +96,18 @@ def processMessage(indi_comm_mess):
        splitted_messages = sent_tokenize(indi_comm_mess)
     return splitted_messages 
 
+def dumpDiffText(commit_repo_path, commit_hash, file_, diff_content_str, text_comm, date_time):
+    dump_str = ''
+    dump_str = dump_str + '='*25 + ':'*3  + commit_repo_path  + ':'*3 + commit_hash + ':'*3 + 'START!' + '='*25
+    dump_str = dump_str +  file_ 
+    dump_str = dump_str +  '*'*10 + '\n'
+    dump_str = dump_str +  text_comm
+    dump_str = dump_str +  '*'*10 + '\n'
+    dump_str = dump_str +  'DECISION===>:'
+    dump_str = dump_str +  '*'*10
+    dump_str = dump_str +  '='*25 + ':'*3   + date_time + ':'*3 + 'END!!!' + '='*25    
+    print dump_str 
+
 def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
   verbose = False   # For oracle dataset it is True (later), otherwise it is False 
   pupp_bug_list = []
@@ -199,11 +211,13 @@ def getHgPuppetCommitMapping(all_commits_param, legit_files_param, bashCommand):
         listToRet.append(tmp_tup)
   return listToRet
 
+
 def analyzeHgCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
   pupp_bug_list = []
   all_commit_file_dict  = {}
   all_defect_categ_list = []
   hash_tracker = []
+  full_str_for_sanity = ''
   for tuple_ in pupp_commits_mapping:
 
     commit_hash      = tuple_[0]

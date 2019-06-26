@@ -7,6 +7,13 @@ import pandas as pd
 import numpy as np 
 import os 
 import hglib 
+from git import Repo
+from datetime import datetime
+
+def days_between(d1_, d2_): ## pass in date time objects, if string see commented code 
+    # d1_ = datetime.strptime(d1_, "%Y-%m-%d")
+    # d2_ = datetime.strptime(d2_, "%Y-%m-%d")
+    return abs((d2_ - d1_).days)
 
 def getBranchName(proj_):
     branch_name = ''
@@ -17,7 +24,7 @@ def getBranchName(proj_):
     if proj_ in proj_branch:
         branch_name = proj_branch[proj_]
     else:
-        branch_name = constants.MASTER_BRANCH
+        branch_name = 'master'
     return branch_name
 
 def changeCategIfNeeded(categ_param):
@@ -61,9 +68,14 @@ def getFullCategFreq(file_name):
         print 'CATEG:{}, RAW_COUNT:{}, PROP_DEFECT_COMMIT:{}'.format(categ, categ_count, prop_defect_commit)
         print '*'*50 
 
+def getDay(single_time):
+    day_ = single_time.split('T')[0] 
+    return day_  
+
 def getOnlyDefectCategFreq(file_name):
     categ_dict   = {}
     full_df      = pd.read_csv(file_name) 
+
     full_hash_ls =  np.unique( full_df['HASH'].tolist() )
     tot_hash_cnt = len(full_hash_ls)
 
@@ -121,7 +133,7 @@ def getRepoDetails(_dir):
     return all_files, iac_files
 
 def getHgCommitCount(repo_name):
-    repo_complete = hglib.open(repo_path)
+    repo_complete = hglib.open(repo_name)
     all_commits = repo_complete.log()
 
     return all_commits 
@@ -129,7 +141,7 @@ def getHgCommitCount(repo_name):
 def getGitCommitCount(repo_name):
     proj_name  = repo_name.split('/')[-1]
     branchName = getBranchName(proj_name) 
-    repo_  = Repo(repo_dir_absolute_path)
+    repo_  = Repo(repo_name)
     all_commits = list(repo_.iter_commits(branchName))
     return all_commits     
 
@@ -138,37 +150,49 @@ def getSummary(out_fil):
     df_ = pd.read_csv(out_fil) 
     pupp_hashes = np.unique( df_['HASH'].tolist() ) 
     repos = np.unique( df_['REPO'].tolist() ) 
+    df_['DAY'] = df_['TIME'].apply(getDay) 
+    all_day_list   = np.unique( df_['DAY'].tolist() )
+    all_day_list   = [datetime(int(x_.split('-')[0]), int(x_.split('-')[1]), int(x_.split('-')[2]), 12, 30) for x_ in all_day_list]
+    min_day        = min(all_day_list) 
+    max_day        = max(all_day_list) 
+    ds_life_days   = days_between(min_day, max_day)
+    ds_life_months = round(float(ds_life_days)/float(30), 5)
+
+
     for repo_ in repos:
         repo_all_files, repo_pp_files = getRepoDetails(repo_) 
         all_files = all_files + repo_all_files 
         pp_files  = pp_files + repo_pp_files 
-        if 'MOZI' in repo_: 
+        if 'mozilla-releng-downloads' in repo_: 
             all_commits = all_commits + getHgCommitCount(repo_)
         else:
             all_commits = all_commits + getGitCommitCount(repo_)
     pp_files_loc = [sum(1 for line in open(x_ , 'rU')) for x_ in pp_files if os.path.exists(x_) ]
+    ds_comm_mon  = round(float(len(all_commits))/float(ds_life_months), 5)
 
     print '='*100
+    print 'Dataset name:', out_fil.split('/')[-1] 
     print 'Total repo count:', len(repos)
+    print 'Total duration: First:{}, last:{} duration in months:{}'.format(min_day, max_day, ds_life_months)
     print 'Total commits:', len(all_commits) 
+    print 'Dataset commit per month:', ds_comm_mon 
     print 'Total puppet-related commits:', len(pupp_hashes) 
     print 'Total files:', len(all_files) 
     print 'Total Puppet scripts:', len(pp_files) 
     print 'Total Puppet LOC:', sum(pp_files_loc) 
     print '='*100
 
-
 if __name__=='__main__':
-    acid_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_OUTPUT_FINAL.csv'
+    # acid_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_OUTPUT_FINAL.csv'
     # acid_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/MOZI_CATEG_OUTPUT_FINAL.csv'    
     # acid_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_OUTPUT_FINAL.csv'
     # acid_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_OUTPUT_FINAL.csv'
 
 
+    # getFullCategFreq(acid_output_file)
     # getAtLeastOne(acid_output_file)
-    # getOnlyDefectCategFreq(acid_output_file)
 
     '''
     dataset summary: one time use 
     ''' 
-    getSummary(acid_output_file) 
+    # getSummary(acid_output_file) 
