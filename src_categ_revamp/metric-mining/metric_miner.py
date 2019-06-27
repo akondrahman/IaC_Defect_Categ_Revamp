@@ -16,6 +16,7 @@ import pandas as pd
 from scipy.stats import entropy
 import math 
 from collections import Counter
+import hglib
 
 def getPuppetFilesOfRepo(repo_dir_absolute_path):
     pp_, non_pp = [], []
@@ -27,10 +28,31 @@ def getPuppetFilesOfRepo(repo_dir_absolute_path):
                pp_.append(full_p_file)
     return pp_
 
+
+
 def getRelPathOfFiles(all_pp_param, repo_dir_absolute_path):
   common_path = repo_dir_absolute_path
   files_relative_paths = [os.path.relpath(path, common_path) for path in all_pp_param]
   return files_relative_paths 
+
+def getPuppRelatedHgCommits(repo_dir_absolute_path, ppListinRepo, branchName='master'):
+  mappedPuppetList=[]
+  repo_complete = hglib.open(repo_dir_absolute_path)
+  all_commits = repo_complete.log()
+  for each_commit in all_commits:
+      commit_hash = each_commit[1]
+      commit_ts   = each_commit[-1] 
+      str_time_commit  = commit_ts.strftime('%Y-%m-%dT%H-%M-%S')    
+      diffCommand = 'cd ' + repo_dir_absolute_path + ' ; hg log -p -r ' + commit_hash + ' ; '
+      diff_output = subprocess.check_output([ 'bash' , '-c', diffCommand])
+
+      for legitFile in ppListinRepo:
+        if legitFile in diff_output:
+          file_with_path = os.path.join(repo_dir_absolute_path, legitFile)
+          mapped_tuple = (file_with_path, str(commit_hash), str_time_commit )
+          mappedPuppetList.append(mapped_tuple)
+  return mappedPuppetList
+
 
 def getPuppRelatedCommits(repo_dir_absolute_path, ppListinRepo, branchName='master'):
   mappedPuppetList=[]
@@ -65,6 +87,17 @@ def getDiffStr(repo_path_p, commit_hash_p, file_p):
 
    return diff_output
 
+def getHgDiffStr(repo_path_p, commit_hash_p, file_p):
+   
+   cdCommand   = "cd " + repo_path_p + " ; "
+   theFile     = os.path.relpath(file_p, repo_path_p)
+   
+   diffCommand = " hg log -p -r   " + commit_hash_p +  " "
+   command2Run = cdCommand + diffCommand
+   diff_output = subprocess.check_output(['bash', '-c', command2Run])
+
+   return diff_output
+
 def getDiffLOC(diff_text):
     add_cnt, del_cnt = 0, 0 
     diff_text_list = diff_text.split('\n') 
@@ -91,6 +124,21 @@ def getDevCountForFile(param_file_path, repo_path):
 
    return author_count
 
+def getHgDevCountForFile(param_file_path, repo_path):
+   author_count      = 1 
+
+   cdCommand         = "cd " + repo_path + " ; "
+   theFile           = os.path.relpath(param_file_path, repo_path)
+   commitCountCmd    = "hg churn --diffstat  " + theFile + " | awk '{print $1}'  "
+   command2Run = cdCommand + commitCountCmd 
+
+   commit_count_output = subprocess.check_output(['bash','-c', command2Run])
+   author_count_output = commit_count_output.split('\n')
+   author_count_output = [x_ for x_ in author_count_output if x_!='']
+   author_count = len(np.unique(author_count_output))
+
+   return author_count
+
 def getDevsOfRepo(repo_path_param):
    commit_dict       = {}
    author_dict       = {}
@@ -106,6 +154,25 @@ def getDevsOfRepo(repo_path_param):
        
        author_ = commit_auth.split('_')[1]
        author_ = author_.replace(' ', '')
+       # only one author for one commit 
+       if commit_ not in commit_dict:
+           commit_dict[commit_] = author_ 
+       # one author can be involved with multiple commits 
+       if author_ not in author_dict:
+           author_dict[author_] = [commit_] 
+       else:            
+           author_dict[author_] = author_dict[author_] + [commit_] 
+   return commit_dict, author_dict   
+
+def getDevsOfHgRepo(repo_path_param):
+   commit_dict       = {}
+   author_dict       = {}
+   
+   repo_complete = hglib.open(repo_path_param)  
+   all_commits = repo_complete.log() 
+   for commit in all_commits:
+       author_ = str(commit.author)
+       commit_ = str(commit.rev) 
        # only one author for one commit 
        if commit_ not in commit_dict:
            commit_dict[commit_] = author_ 
@@ -150,6 +217,36 @@ def mineCommitsOfTheRepo(repo_path_param, repo_branch_param, pupp_commits_mappin
     
     commit_metric_df = pd.DataFrame(all_commit_metrics, columns=['COMMIT_HASH', 'FILE', 'DIR', 'REPO', 'LOC_ADD', 'LOC_DEL', 'LOC_TOT', 'DEVS_FILE', 'AUTHOR_NAME_FILE', 'TIME']) 
     return commit_metric_df , commit_time_dict 
+
+def mineCommitsOfTheHgRepo(repo_path_param, repo_branch_param, pupp_commits_mapping, dev_commit_dict):
+    commit_time_dict = {} 
+    all_commit_metrics = []
+
+    for tuple_ in pupp_commits_mapping:
+        file_       = tuple_[0]
+        commit_hash = tuple_[1]
+        str_time_commit  = tuple_[2]
+
+        diff_content_str = getHgDiffStr(repo_path_param, commit_hash, file_)
+        loc_add, loc_del = getDiffLOC(diff_content_str) 
+        loc_tot          = loc_add + loc_del 
+
+        dir_             = os.path.dirname(file_) 
+        devs_for_file    = getHgDevCountForFile(file_, repo_path_param) 
+        if commit_hash in dev_commit_dict:
+          committer_name   = dev_commit_dict[commit_hash] 
+        else:
+          committer_name   = 'TEMP'
+
+        metric_tuple = (commit_hash, file_, dir_, repo_path_param, loc_add, loc_del, loc_tot, devs_for_file, committer_name, str_time_commit)  
+        # print metric_tuple
+        all_commit_metrics.append(metric_tuple) 
+        # to get recent experience 
+        if commit_hash not in commit_time_dict:
+          commit_time_dict[commit_hash] = str_time_commit 
+    
+    commit_metric_df = pd.DataFrame(all_commit_metrics, columns=['COMMIT_HASH', 'FILE', 'DIR', 'REPO', 'LOC_ADD', 'LOC_DEL', 'LOC_TOT', 'DEVS_FILE', 'AUTHOR_NAME_FILE', 'TIME']) 
+    return commit_metric_df , commit_time_dict
 
 def calcSpread(loc_list):
     if len(loc_list) > 0:
@@ -238,18 +335,19 @@ def runMiner(orgParamName, repo_name_param, branchParam):
   repo_path   = '/Users/akond/ICSE2020_PUPP_REPOS/' + orgParamName + "/" + repo_name_param
   repo_branch = getBranchName(repo_name_param)
 
-  all_devs_in_repo, dev_commit_repo = getDevsOfRepo(repo_path)  
-  #   print all_devs_in_repo 
-
-  all_pp_files_in_repo = getPuppetFilesOfRepo(repo_path)
-  
-  rel_path_pp_files = getRelPathOfFiles(all_pp_files_in_repo, repo_path)
-
-  pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
-
-  metric_df, time_comm_dict = mineCommitsOfTheRepo(repo_path, repo_branch, pupp_commits_in_repo, all_devs_in_repo) 
-
-  # print metric_df.head() 
+  if 'mozilla-releng' in orgParamName:
+    all_devs_in_repo, dev_commit_repo = getDevsOfHgRepo(repo_path)  
+    all_pp_files_in_repo = getPuppetFilesOfRepo(repo_path)  
+    rel_path_pp_files = getRelPathOfFiles(all_pp_files_in_repo, repo_path)
+    pupp_commits_in_repo = getPuppRelatedHgCommits(repo_path, rel_path_pp_files, repo_branch)
+    metric_df, time_comm_dict = mineCommitsOfTheHgRepo(repo_path, repo_branch, pupp_commits_in_repo, all_devs_in_repo)   
+  else:
+    all_devs_in_repo, dev_commit_repo = getDevsOfRepo(repo_path)  
+    all_pp_files_in_repo = getPuppetFilesOfRepo(repo_path)  
+    rel_path_pp_files = getRelPathOfFiles(all_pp_files_in_repo, repo_path)
+    pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
+    metric_df, time_comm_dict = mineCommitsOfTheRepo(repo_path, repo_branch, pupp_commits_in_repo, all_devs_in_repo) 
 
   all_commit_all_metrics = finalizeMetrics(metric_df, dev_commit_repo, time_comm_dict)   
+
   return all_commit_all_metrics 

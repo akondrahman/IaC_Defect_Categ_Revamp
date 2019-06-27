@@ -27,11 +27,14 @@ if __name__=='__main__':
   # orgName='ghub-downloads'
   # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/GHUB_METRICS_OUTPUT_FINAL.csv'
 
-  orgName='wikimedia-downloads'
-  out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_METRICS_OUTPUT_FINAL.csv'
+  orgName     = 'mozilla-releng-downloads'
+  out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/MOZI_METRICS_OUTPUT_FINAL.csv'
 
   # orgName='openstack-downloads'
   # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_METRICS_OUTPUT_FINAL.csv'
+
+  # orgName='wikimedia-downloads'
+  # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_METRICS_OUTPUT_FINAL.csv'
 
   fileName          = '/Users/akond/ICSE2020_PUPP_REPOS/'  + orgName + '/' + 'eligible_repos.csv' 
   elgibleRepos      = getEligibleProjects(fileName)
