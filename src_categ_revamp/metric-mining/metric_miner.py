@@ -259,6 +259,9 @@ def calcSpread(loc_list):
 
 def getDevsExp(auth_name, auth_dict):
   exp_ = float(0)
+  print auth_name 
+  print auth_dict 
+  print '='*10
   if auth_name in auth_dict:
     auth_commits = auth_dict[auth_name] 
     exp_ = len(auth_commits) 
@@ -294,6 +297,7 @@ def getDevsRecentExp(auth_name, auth_dict, time_dict):
 def finalizeMetrics(df_pa, dev_commit_p, time_dict):
   commit_metric_list    = []
   commit_hash_list = np.unique( df_pa['COMMIT_HASH'].tolist() )
+  print dev_pa.head()
   for hash_ in commit_hash_list:
     hash_df             = df_pa[df_pa['COMMIT_HASH']==hash_]
     dev_name            = hash_df['AUTHOR_NAME_FILE'].tolist()[0]
@@ -322,8 +326,9 @@ def finalizeMetrics(df_pa, dev_commit_p, time_dict):
 def getBranchName(proj_):
     branch_name = ''
     proj_branch = {'biemond@biemond-oradb':'puppet4_3_data', 'derekmolloy@exploringBB':'version2', 'exploringBB':'version2', 
-                   'jippi@puppet-php':'php7.0', 'maxchk@puppet-varnish':'develop', 'threetreeslight@my-boxen':'mine'
-                  } 
+                'jippi@puppet-php':'php7.0', 'maxchk@puppet-varnish':'develop', 'threetreeslight@my-boxen':'mine', 
+                'puppet':'production'
+              } 
     if proj_ in proj_branch:
         branch_name = proj_branch[proj_]
     else:
@@ -333,6 +338,7 @@ def getBranchName(proj_):
 def runMiner(orgParamName, repo_name_param, branchParam):
   
   repo_path   = '/Users/akond/ICSE2020_PUPP_REPOS/' + orgParamName + "/" + repo_name_param
+  print repo_path
   repo_branch = getBranchName(repo_name_param)
 
   if 'mozilla-releng' in orgParamName:
@@ -351,3 +357,21 @@ def runMiner(orgParamName, repo_name_param, branchParam):
   all_commit_all_metrics = finalizeMetrics(metric_df, dev_commit_repo, time_comm_dict)   
 
   return all_commit_all_metrics 
+
+def getPuppFilesNHashes(orgParamName, repo_name_param, branchParam):
+  fileHashList = []
+  repo_path   = '/Users/akond/ICSE2020_PUPP_REPOS/' + orgParamName + "/" + repo_name_param
+  print 'Processing:', repo_path
+  repo_branch = getBranchName(repo_name_param)
+  all_pp_files_in_repo = getPuppetFilesOfRepo(repo_path)  
+  rel_path_pp_files = getRelPathOfFiles(all_pp_files_in_repo, repo_path)
+
+
+  if 'mozilla-releng' in orgParamName:
+    pupp_commits_in_repo = getPuppRelatedHgCommits(repo_path, rel_path_pp_files, repo_branch)
+  else:
+    pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
+  for tup_ in pupp_commits_in_repo:
+    fileHashList.append( (tup_[0], tup_[1]) )
+
+  return fileHashList
