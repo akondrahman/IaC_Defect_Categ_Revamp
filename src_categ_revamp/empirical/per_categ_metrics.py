@@ -67,8 +67,8 @@ def getFileDist(categ_f, hash_mapping_f):
         if categ_!= 'NO_DEFECT': 
             print 'CATEGORY:{}, SCRIPT_PROP(%):{}'.format(categ_, per_categ_file_prop) 
             print '*'*25
-    atleast_one = round(float( atleat_one_files )   ) / float(len(all_files)), 5)* 100
-    print 'Puppet scripts with at least one defect(%):', atleast_one 
+    atleast_one = round( (float( len( np.unique( atleat_one_files ) ) )    / float(len(all_files)) ) , 5)* 100
+    print 'Puppet scripts with at least one defect category(%):', atleast_one 
     print '='*50     
 
 
