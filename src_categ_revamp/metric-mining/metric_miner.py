@@ -372,6 +372,6 @@ def getPuppFilesNHashes(orgParamName, repo_name_param, branchParam):
   else:
     pupp_commits_in_repo = getPuppRelatedCommits(repo_path, rel_path_pp_files, repo_branch)
   for tup_ in pupp_commits_in_repo:
-    fileHashList.append( (tup_[0], tup_[1]) )
+    fileHashList.append( (tup_[1], tup_[0]) )
 
   return fileHashList
