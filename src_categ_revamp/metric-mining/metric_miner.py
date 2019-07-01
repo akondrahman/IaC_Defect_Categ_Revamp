@@ -375,3 +375,20 @@ def getPuppFilesNHashes(orgParamName, repo_name_param, branchParam):
     fileHashList.append( (tup_[1], tup_[0]) )
 
   return fileHashList
+
+
+def getGitDevEmailsOfRepo(repo_path_param):
+   per_repo_emails = []
+   cdCommand         = "cd " + repo_path_param + " ; "
+   commitCountCmd    = " git log --pretty=format:'%H_%aE' " # E for email, n for name 
+   command2Run = cdCommand + commitCountCmd
+
+   commit_count_output = subprocess.check_output(['bash','-c', command2Run])
+   author_count_output = commit_count_output.split('\n')
+   for commit_auth in author_count_output:
+       commit_ = commit_auth.split('_')[0]       
+       author_ = commit_auth.split('_')[1]
+       author_ = author_.replace(' ', '')
+       print repo_path_param + ',' + author_ 
+       per_repo_emails.append(author_) 
+   return per_repo_emails
