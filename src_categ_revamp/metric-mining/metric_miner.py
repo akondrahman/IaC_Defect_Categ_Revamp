@@ -392,3 +392,19 @@ def getGitDevEmailsOfRepo(repo_path_param):
        print repo_path_param + ',' + author_ 
        per_repo_emails.append(author_) 
    return per_repo_emails
+
+def getAuthorOfHash(hash_p, repo_p): 
+   # reff: https://stackoverflow.com/questions/29876342/how-to-get-only-author-name-or-email-in-git-given-sha1
+   author_emails = []
+
+   cdCommand         = "cd " + repo_p + " ; "
+   commitCountCmd    = " git show -s --format='%ae' " + hash_p 
+   command2Run = cdCommand + commitCountCmd
+
+   commit_count_output = subprocess.check_output(['bash','-c', command2Run])
+   author_count_output = commit_count_output.split('\n')
+
+   author_emails = [x_ for x_ in author_count_output if '@' in x_] 
+
+   return author_emails
+ 

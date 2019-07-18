@@ -30,7 +30,7 @@ This script goes to each repo and mines commits and get metrics for each commit
 ###  columns=['COMMIT_HASH', 'FILE_CNT', 'DIR_CNT', 'LOC_MODI' 'SPREAD', 'DEVS_FILE', 'DEVS_EXP', 'DEVS_REXP']
 
 if __name__=='__main__': 
-  metric_flag = False 
+  metric_flag = True  
   t1 = time.time()
   print 'Started at:', giveTimeStamp()
   print '*'*100  
@@ -54,32 +54,36 @@ if __name__=='__main__':
   fileName          = '/Users/akond/ICSE2020_PUPP_REPOS/'  + orgName + '/' + 'eligible_repos.csv' 
   elgibleRepos      = getEligibleProjects(fileName)
   metrics_all_proj  = [] 
-  # if metric_flag:
-  #   for proj_ in elgibleRepos:
-  #     metrics_as_list   = metric_miner.runMiner(orgName, proj_, 'master')    
-  #     metrics_all_proj = metrics_all_proj + metrics_as_list 
+  if metric_flag: # this branch gets metrics 
+    for proj_ in elgibleRepos:
+      metrics_as_list   = metric_miner.runMiner(orgName, proj_, 'master')    
+      metrics_all_proj = metrics_all_proj + metrics_as_list 
 
-  #   final_metric_df = pd.DataFrame(metrics_all_proj)
-  #   print final_metric_df.head() 
-  #   final_metric_df.to_csv(out_csv_fil, header=['HASH', 'MOD_FILES', 'DIRS', 'TOT_SLOC', 'SPREAD', 'DEV_CNT_MOD_FILES', 'DEV_EXP', 'DEV_REXP'], index=False)   
-  # else: 
-  #   for proj_ in elgibleRepos:
-  #     files_as_list     = metric_miner.getPuppFilesNHashes(orgName, proj_, 'master')    
-  #     metrics_all_proj  = metrics_all_proj + files_as_list
+    final_metric_df = pd.DataFrame(metrics_all_proj)
+    print final_metric_df.head() 
+    final_metric_df.to_csv(out_csv_fil, header=['HASH', 'MOD_FILES', 'DIRS', 'TOT_SLOC', 'SPREAD', 'DEV_CNT_MOD_FILES', 'DEV_EXP', 'DEV_REXP'], index=False)   
+  else:  # this branch gets file names and corresponding hashes 
+    for proj_ in elgibleRepos:
+      files_as_list     = metric_miner.getPuppFilesNHashes(orgName, proj_, 'master')    
+      metrics_all_proj  = metrics_all_proj + files_as_list
 
-  #   final_metric_df = pd.DataFrame(metrics_all_proj)
-  #   print final_metric_df.head() 
-  #   final_metric_df.to_csv(out_hash_file, header=['HASH', 'FILE'], index=False)     
+    final_metric_df = pd.DataFrame(metrics_all_proj)
+    print final_metric_df.head() 
+    final_metric_df.to_csv(out_hash_file, header=['HASH', 'FILE'], index=False)     
   
-  '''
-  to get GitHub emails 
-  '''
-  # email_str = ''
+  # '''
+  # to get GitHub emails 
+  # '''
   # all_emails = []
-  # for proj_ in elgibleRepos:
-  #     repo_path   = '/Users/akond/ICSE2020_PUPP_REPOS/' + orgName + "/" + proj_
-  #     emails      = metric_miner.getGitDevEmailsOfRepo(repo_path)  
-  #     all_emails  = all_emails + emails 
+  # email_str = ''
+  # email_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_OUTPUT_FINAL.csv'
+  # email_df = pd.read_csv(email_file) 
+  # all_ghub_hashes = email_df['HASH'].tolist() 
+  # for hash_ in all_ghub_hashes:
+  #   repo_         = email_df[email_df['HASH']==hash_]['REPO'].tolist()[0]
+  #   author_emails = metric_miner.getAuthorOfHash(hash_, repo_) 
+  #   all_emails    = all_emails + author_emails 
+
   # all_emails = list(np.unique(all_emails)) 
   # for email_ in all_emails:
   #   email_str = email_str + email_ + ',' + '\n'
