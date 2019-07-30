@@ -49,6 +49,7 @@ def getFileDist(categ_f, hash_mapping_f):
     full_df  = pd.merge(categ_df, map_df, on=['HASH'])    
     # print full_df.tail() 
     all_files = list(np.unique(full_df['FILE'].tolist())) 
+    print 'Dataset name:', categ_f.split('/')[-1] 
     print 'Total count of Puppet scripts:', len(all_files)
     print '='*50 
     atleat_one_files = []
@@ -71,8 +72,49 @@ def getFileDist(categ_f, hash_mapping_f):
     print 'Puppet scripts with at least one defect category(%):', atleast_one 
     print '='*50     
 
+def analyzeCommitsForCoOccurence(file_name):
+    dict_output          = {2:[], 3: [], 4: [], 5: [], 6: [], 7:[], 8:[]}
+    categ_df_full        = pd.read_csv(file_name) 
+    df_only_defect_categ = categ_df_full[categ_df_full['CATEG']!='NO_DEFECT']
+    df_only_defect_categ['CHANGED_CATEG'] = df_only_defect_categ['CATEG'].apply(changeCategIfNeeded) 
+    commits              = np.unique( df_only_defect_categ['HASH'].tolist() )
+    for commit_hash in commits:
+        commit_df        = df_only_defect_categ[df_only_defect_categ['HASH']==commit_hash]
+        commit_categs    = list ( np.unique( commit_df['CHANGED_CATEG'].tolist() ) )
+        commit_categ_cnt = len(commit_categs)  
+        if commit_categ_cnt > 1:
+            dict_output[commit_categ_cnt] = dict_output[commit_categ_cnt] + [commit_hash]  
+    return dict_output     
 
+def getCommitCoOccurence(categ_file): 
+    print categ_file 
+    categ_df_full        = pd.read_csv(categ_file) 
+    categ_commits        = list( np.unique( categ_df_full['HASH'].tolist() ) )
+    dict_output = analyzeCommitsForCoOccurence(categ_file)
+    print '*'*50
+    for k_, v_ in dict_output.iteritems():
+        def_pop = round( (float(len(v_))/float(len(categ_commits)) ) * 100, 5)
+        print '{} categories of defects observed for {}% commits (defect proportion)'.format(k_, def_pop)
+    print '*'*50
+    return dict_output
 
+def getFileCoOccurence(categ_file, hash_script_file): 
+    print categ_file 
+    hash_script_df_full        = pd.read_csv(hash_script_file)  
+    all_scripts = np.unique(hash_script_df_full['FILE'].tolist())
+    dict_output = analyzeCommitsForCoOccurence(categ_file)
+    print '*'*50
+    for k_, v_ in dict_output.iteritems():
+        script_list = [] 
+        for hash_ in v_:
+            hash_df      = hash_script_df_full[hash_script_df_full['HASH']==hash_]
+            hash_scripts = list( np.unique( hash_df['FILE'].tolist() ) )
+            script_list  = script_list + hash_scripts
+        script_list =  list( np.unique( script_list ) )
+        fil_pop = round( (float(len(script_list))/float(len(all_scripts)) ) * 100, 5)
+        print '{} categories of defects observed for {}% scripts (script proportion)'.format(k_, fil_pop)
+    print '*'*50
+    return dict_output
 
 if __name__=='__main__': 
     # categ_output_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_OUTPUT_FINAL.csv'
@@ -83,14 +125,19 @@ if __name__=='__main__':
     # metric_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/MOZI_METRICS_OUTPUT_FINAL.csv' 
     # hash_mapping_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/MOZI_HASH_FILE_OUTPUT_FINAL.csv'
 
-    categ_output_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_OUTPUT_FINAL.csv'
-    metric_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_METRICS_OUTPUT_FINAL.csv' 
-    hash_mapping_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_HASH_FILE_OUTPUT_FINAL.csv' 
+    # categ_output_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_OUTPUT_FINAL.csv'
+    # metric_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_METRICS_OUTPUT_FINAL.csv' 
+    # hash_mapping_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_HASH_FILE_OUTPUT_FINAL.csv' 
 
     # categ_output_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_OUTPUT_FINAL.csv'
     # metric_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_METRICS_OUTPUT_FINAL.csv' 
     # hash_mapping_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_HASH_FILE_OUTPUT_FINAL.csv' 
 
+    # RQ3 - Part#A
     # getMetricDist(categ_output_file, metric_output_file)
-
-    getFileDist(categ_output_file, hash_mapping_file) 
+    # RQ3 - Part#B
+    # getFileDist(categ_output_file, hash_mapping_file) 
+    # RQ3 - Part#C
+    # getCommitCoOccurence(categ_output_file)
+    # RQ3 - Part#D
+    # getFileCoOccurence(categ_output_file, hash_mapping_file) 
