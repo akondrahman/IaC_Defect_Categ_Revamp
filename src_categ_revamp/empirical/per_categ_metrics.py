@@ -116,6 +116,7 @@ def getFileCoOccurence(categ_file, hash_script_file):
     print '*'*50
     return dict_output
 
+
 if __name__=='__main__': 
     # categ_output_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_OUTPUT_FINAL.csv'
     # metric_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/GHUB_METRICS_OUTPUT_FINAL.csv' 
@@ -133,11 +134,28 @@ if __name__=='__main__':
     # metric_output_file = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_METRICS_OUTPUT_FINAL.csv' 
     # hash_mapping_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_HASH_FILE_OUTPUT_FINAL.csv' 
 
-    # RQ3 - Part#A
+    '''
+    Config sub category 
+    '''
+    # categ_output_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_SUBCONFIG_FINAL.csv'
+    # hash_mapping_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/GHUB_HASH_FILE_OUTPUT_FINAL.csv'
+
+    # categ_output_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/MOZI_CATEG_SUBCONFIG_FINAL.csv'
+    # hash_mapping_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/MOZI_HASH_FILE_OUTPUT_FINAL.csv'
+
+    # categ_output_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_SUBCONFIG_FINAL.csv'
+    # hash_mapping_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_HASH_FILE_OUTPUT_FINAL.csv' 
+
+    # categ_output_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_SUBCONFIG_FINAL.csv'
+    # hash_mapping_file  = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/WIKI_HASH_FILE_OUTPUT_FINAL.csv'
+
+
+    # RQ3 - Part#A, not used in paper
     # getMetricDist(categ_output_file, metric_output_file)
-    # RQ3 - Part#B
-    # getFileDist(categ_output_file, hash_mapping_file) 
-    # RQ3 - Part#C
+    # RQ3 - Part#B,  used in paper
+    getFileDist(categ_output_file, hash_mapping_file) 
+
+    # RQ3 - Part#C : Co-occurrence , not used in paper
     # getCommitCoOccurence(categ_output_file)
-    # RQ3 - Part#D
+    # RQ3 - Part#D : Co-occurrence , not used in paper
     # getFileCoOccurence(categ_output_file, hash_mapping_file) 

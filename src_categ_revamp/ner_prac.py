@@ -70,17 +70,36 @@ def removeHash(mess):
     out_mes   = re.sub(r'[a-f0-9]{40}(:.+)?$', '', mess) ##  working 
     splitted_str = out_mes.split(' ')
     splitted_str = [x_ for x_ in splitted_str if len(x_) > 1 ]
+    splitted_str = [x_.replace(':', '') for x_ in splitted_str if len(x_) > 1 ]
     final_str = ' '.join(splitted_str)
     return final_str 
 
-def doDepAnalysis(msg_par):
-    unicode_msg  = unicode(msg_par, 'utf-8')
-    spacy_doc = spacy_engine(unicode_msg)
-    for token in spacy_doc:
-        #if (token.dep_ == 'ROOT'):
+def doDepAnalysis(msg_par, commit_hash, commit_repo):
+    unicode_msg = ''
+    try:
+       unicode_msg  = unicode(msg_par, 'utf-8')
+       spacy_doc = spacy_engine(unicode_msg)
+       for token in spacy_doc:
+        if (token.dep_ == 'ROOT') and (token.text == 'fix'):
+            print '='*50 
+            print commit_repo              
+            print '-'*10 
+            print commit_hash             
+            print '-'*10 
             print msg_par
+            print '-'*10 
+            print unicode_msg
+            print '-'*10 
             print(token.text, token.dep_, token.head.text, token.head.pos_, [x_ for x_ in token.children])  
-            print '-'*100    
+            print '='*50 
+    except: 
+        print 'Unicode error!'
+
+
+    # print spacy_doc.print_tree()
+    # for chunk_ in spacy_doc.noun_chunks:
+    #     print chunk_.root.text, chunk_.root.dep_ , chunk_.text   
+
 
 def doNERAnalysis(msg_par):
     print msg_par
@@ -92,33 +111,37 @@ def doNERAnalysis(msg_par):
             print 'Type: {}, Value: {}'.format ( tag_type, tag_value )
             print '-'*50
 
-def detectBuggyCommitMessages(msg_lis):
+def detectBuggyCommitMessages(msg_lis, hash_, repo_):
+    prem_kw_list = ['error', 'bug', 'fix', 'issue', 'mistake', 'incorrect', 'fault', 'defect', 'flaw' ]
     # print msg_lis
     # https://towardsdatascience.com/named-entity-recognition-with-nltk-and-spacy-8c4a7d88e7da
     for msg_ in msg_lis:
         msg_ = msg_.lower()
-        if(('error' in msg_) or ('bug' in msg_ ) or ('fix' in msg_) or ('issue' in msg_) or ('mistake' in msg_) or ('incorrect' in msg_) or ('fault' in msg_) or ('defect' in msg_) or ('flaw' in msg_)) and ('default' not in msg_) and ('closes-bug' not in msg_):
+        if(any(x_ in msg_ for x_ in prem_kw_list)) and ('default' not in msg_) and ('closes-bug' not in msg_):
             msg_ = removeHash(msg_)
-            doDepAnalysis(msg_)
+            doDepAnalysis(msg_, hash_, repo_)
             # doNERAnalysis(msg_)
 
-def processMessage(indi_comm_mess):
+def processMessage(indi_comm_mess, hash_, repo_):
     if ('*' in indi_comm_mess):
        splitted_messages = indi_comm_mess.split('*')
     else:
        splitted_messages = sent_tokenize(indi_comm_mess)
     # print splitted_messages 
-    detectBuggyCommitMessages(splitted_messages)
+    detectBuggyCommitMessages(splitted_messages, hash_, repo_) 
     
 
 
-def processMessages(comm_list):
-    for comm_mess in comm_list:
-        processMessage(comm_mess)
+def processMessages(comm_df):
+    comm_hash_list =  np.unique( comm_df['HASH'].tolist() )
+    for comm_ in comm_hash_list:
+        per_comm_df = comm_df[comm_df['HASH']==comm_]
+        comm_mess   = per_comm_df['MESSAGE'].tolist()[0]
+        comm_repo   = per_comm_df['REPO'].tolist()[0]
+        processMessage(comm_mess, comm_, comm_repo)  
 
 if __name__=='__main__':
-    comm_mess_file='/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_COMM_ONLY_DEFE.csv'
+    comm_mess_file='/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/dataset/OSTK_PUPP_ONLY_DEFE_COMM.csv'
     comm_mess_df  = pd.read_csv(comm_mess_file)
-    comm_mess_ls  = np.unique ( comm_mess_df['MESSAGE'].tolist() )
-    # print comm_mess_df.head()
-    processMessages(comm_mess_ls)
+
+    processMessages(comm_mess_df)

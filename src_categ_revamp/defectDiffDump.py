@@ -64,7 +64,7 @@ def dumpDefectCommitText(df_p, fil_p):
         text_comm        = commit_df['MESSAGE'].tolist()[0]
         date_time        = commit_df['TIME'].tolist()[0]
         
-        dump_str = dump_str + date_time + ',' + commit_repo_path + ',' + text_comm + ',' + '\n' 
+        dump_str = dump_str + date_time + ','  + commit_repo_path + ',' + commit_hash + ',' + text_comm + ',' + '\n' 
 
     dumpContentIntoFile(dump_str, fil_p) 
 
