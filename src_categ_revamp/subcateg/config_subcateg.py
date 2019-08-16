@@ -102,7 +102,7 @@ def processMessage(indi_comm_mess):
 
 def getIndiSubCateg(message_):
   message_ = message_.lower() 
-  sub_categ = 'DATASTORAGE_CONFIG_DEFECT'
+  sub_categ = 'NETWORK_CONFIG_DEFECT'
   '''
   (i) for data storage systems such as Amazon S3, Elastisearch, MySQL, MongDB, Openstack Swift, and SQLite; 
   (ii) for file system issues such as specifying file permissions and file names; 
@@ -110,13 +110,14 @@ def getIndiSubCateg(message_):
   (iv) for user credentials such as usernames and passwords; and 
   (v) caching systems such as Memcached. 
   '''
-  if ('s3' in message_ or 'elastisearch' in message_ or 'sql' in message_ or 'db' in message_ or 'database'in message_ ):
+  # if ('s3' in message_ or 'elastisearch' in message_ or 'sql' in message_ or 'db' in message_ or 'database'in message_ ):
+  if ('sql' in message_ or 'db' in message_ or 'database'in message_ ):
     sub_categ = 'DATASTORAGE_CONFIG_DEFECT'
-  elif ('file' in message_ or 'disk' in message_ ):
+  elif ('file' in message_ or 'disk' in message_ or 'path' in message_ or 'dir' in message_):
     sub_categ = 'FILESYSTEM_CONFIG_DEFECT'
-  elif ('network' in message_ or 'router' in message_ or 'port' in message_):
+  elif ('network' in message_ or 'router' in message_ or 'port' in message_ or 'address' in message_ or 'dns' in message_ or 'dhcp' in message_ or 'tcp' in message_):
     sub_categ = 'NETWORK_CONFIG_DEFECT'    
-  elif ('password' in message_ or 'name' in message_ or 'cred' in message_):
+  elif ('password' in message_ or 'name' in message_ or 'cred' in message_ or 'user' in message_ or 'auth' in message_):
     sub_categ = 'CREDENTIAL_CONFIG_DEFECT'    
   elif ('cache' in message_ ):
     sub_categ = 'CACHE_CONFIG_DEFECT'    
@@ -270,9 +271,9 @@ if __name__=='__main__':
     print 'Started at:', giveTimeStamp()
     print '*'*100
 
-    orgName          = 'ghub-downloads'
-    out_csv_fil      = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_SUBCONFIG_FINAL.csv'
-    config_categ_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_OUTPUT_FINAL.csv'    
+    # orgName          = 'ghub-downloads'
+    # out_csv_fil      = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_SUBCONFIG_FINAL.csv'
+    # config_categ_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_CATEG_OUTPUT_FINAL.csv'    
 
     # orgName          = 'mozilla-releng-downloads'
     # out_csv_fil      = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/MOZI_CATEG_SUBCONFIG_FINAL.csv'
@@ -282,9 +283,9 @@ if __name__=='__main__':
     # out_csv_fil      = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_SUBCONFIG_FINAL.csv'
     # config_categ_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_OUTPUT_FINAL.csv'
 
-    # orgName          = 'wikimedia-downloads'
-    # out_csv_fil      = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_SUBCONFIG_FINAL.csv'
-    # config_categ_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_OUTPUT_FINAL.csv'
+    orgName          = 'wikimedia-downloads'
+    out_csv_fil      = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_SUBCONFIG_FINAL.csv'
+    config_categ_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_CATEG_OUTPUT_FINAL.csv'
 
     fileName     = '/Users/akond/ICSE2020_PUPP_REPOS/'  + orgName + '/' + 'eligible_repos.csv'
     elgibleRepos = getEligibleProjects(fileName)

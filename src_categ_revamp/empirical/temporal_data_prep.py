@@ -50,7 +50,8 @@ def makeYear(time_single_val):
 def changeCategForPlotting(categ_name):
     new_categ_dict = {
         'CONDI_DEFECT':'CONDITION', 
-        'CONFIG_DEFECT':'CONFIG', 
+        # 'CONFIG_DEFECT':'CONFIG', 
+        'CONFIG_DEFECT':'CONF_DATA', 
         'DEP_DEFECT':'DEPEND',
         'DOC_DEFECT':'DOCUMENT',
         'IDEM_DEFECT':'IDEMPOT',
