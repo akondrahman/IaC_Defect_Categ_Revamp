@@ -14,7 +14,8 @@ from fuzzywuzzy import fuzz
 
 def parseTheDiff(diff_text):
     parse_out_dict = {}
-    for diff_ in whatthepatch.parse_patch(diff_text):
+    diff_mess_str = str(diff_text) ## changes for Python 3 migration 
+    for diff_ in whatthepatch.parse_patch(diff_mess_str):
         all_changes_line_by_line = diff_[1] ## diff_ is a tuple, changes is idnetified by the second index 
         line_numbers_added, line_numbers_deleted = [], [] 
         add_dic, del_dic = {}, {}
@@ -43,7 +44,9 @@ def filterTextList(txt_lis):
 
 def getAddDelLines(diff_mess):
     added_text , deleted_text = [], []    
-    for diff_ in whatthepatch.parse_patch(diff_mess):
+    # print(diff_mess, type(diff_mess)) 
+    diff_mess_str = str(diff_mess) ## changes for Python 3 migration 
+    for diff_ in whatthepatch.parse_patch(diff_mess_str):
         all_changes_line_by_line = diff_[1] ## diff_ is a tuple, changes is idnetified by the second index 
         if all_changes_line_by_line is not None:
             for change_tuple in all_changes_line_by_line:
@@ -80,7 +83,7 @@ def getConfigChangeCnt(start_dict, end_dict):
     tracker = 0 
     track_list = []
     val_track_list = []
-    for k_, v_ in start_dict.iteritems():
+    for k_, v_ in start_dict.items():
         if (k_ in end_dict ) and (k_ not in track_list) and (v_ not in val_track_list) and (len(v_) > 1): 
             oldValue     = end_dict[k_] 
             newValue     = v_ 
@@ -170,7 +173,8 @@ def checkDiffForDepDefects(diff_text):
 def checkDiffForDocDefects(diff_text):
     lines_changed = []
     final_flag = False 
-    for diff_ in whatthepatch.parse_patch(diff_text):
+    diff_mess_str = str(diff_text) ## changes for Python 3 migration 
+    for diff_ in whatthepatch.parse_patch(diff_mess_str):
         all_changes_line_by_line = diff_[1] 
         line_numbers_added, line_numbers_deleted = [], [] 
         if all_changes_line_by_line is not None:

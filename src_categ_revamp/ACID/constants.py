@@ -4,7 +4,7 @@ Mar 19, 2019
 ACID: Store configuration strings and cosntants here 
 '''
 
-ROOT_PUPP_DIR  = '/Users/akond/ICSE2020_PUPP_REPOS/' 
+ROOT_PUPP_DIR  = '/Users/arahman/ICSE2020_REPOS/' 
 REPO_FILE_LIST = 'eligible_repos.csv'
 MASTER_BRANCH  = 'master' 
 FILE_READ_MODE = 'rU' 

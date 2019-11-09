@@ -6,7 +6,8 @@ ACID: Main
 import excavator
 import constants
 import pandas as pd 
-import cPickle as pickle
+# import cPickle as pickle
+import _pickle as pickle 
 import time
 import datetime
 
@@ -35,8 +36,8 @@ def giveTimeStamp():
 if __name__=='__main__':
 
     t1 = time.time()
-    print 'Started at:', giveTimeStamp()
-    print '*'*100
+    print('Started at:', giveTimeStamp()) 
+    print('*'*100)
     # orgName     = 'oracle-dataset'
     # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ORACLE_DATASET_COMM.PKL'
     # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/closed-coding-2019/ORACLE_CATEG_OUTPUT_SEMIFINAL.csv'
@@ -62,10 +63,10 @@ if __name__=='__main__':
     # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_OUTPUT_FINAL.csv'
     # out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_CATEG_OUTPUT_FINAL.PKL'    
 
-    # orgName='test-repos'
-    # out_fil_nam = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/TEST_ONLY.PKL'
-    # out_csv_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/TEST_ONLY_CATEG_OUTPUT_FINAL.csv'
-    # out_pkl_fil = '/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/TEST_ONLY_CATEG_OUTPUT_FINAL.PKL' 
+    orgName='test-repos'
+    out_fil_nam = '/Users/arahman/Documents/OneDriveWingUp/OneDrive-TennesseeTechUniversity/Research/IaC/iac-ncsu/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/TEST_ONLY.PKL'
+    out_csv_fil = '/Users/arahman/Documents/OneDriveWingUp/OneDrive-TennesseeTechUniversity/Research/IaC/iac-ncsu/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/TEST_ONLY_CATEG_OUTPUT_FINAL.csv'
+    out_pkl_fil = '/Users/arahman/Documents/OneDriveWingUp/OneDrive-TennesseeTechUniversity/Research/IaC/iac-ncsu/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/TEST_ONLY_CATEG_OUTPUT_FINAL.PKL' 
 
     fileName     = constants.ROOT_PUPP_DIR + orgName + '/' + constants.REPO_FILE_LIST 
     elgibleRepos = excavator.getEligibleProjects(fileName)
@@ -76,21 +77,21 @@ if __name__=='__main__':
         per_proj_commit_dict, per_proj_full_defect_list = excavator.runMiner(orgName, proj_, branchName)
         categ = categ + per_proj_full_defect_list 
         # print proj_ , len(per_proj_full_defect_list) 
-        print 'Finished analyzing:', proj_
+        print('Finished analyzing:', proj_)
         dic[proj_] = (per_proj_commit_dict, per_proj_full_defect_list) 
-        print '='*50 
+        print('='*50)  
     
     all_proj_df = pd.DataFrame(categ) 
     all_proj_df.to_csv(out_csv_fil, header=['HASH','CATEG','REPO','TIME'], index=False) 
 
     with open(out_pkl_fil, 'wb') as fp_:
         pickle.dump(dic, fp_)  
-    print '*'*100
-    print 'Ended at:', giveTimeStamp()
-    print '*'*100
+    print('*'*100)
+    print('Ended at:', giveTimeStamp())
+    print('*'*100)
     t2 = time.time()
     time_diff = round( (t2 - t1 ) / 60, 5) 
-    print "Duration: {} minutes".format(time_diff)
-    print '*'*100  
+    print("Duration: {} minutes".format(time_diff))
+    print('*'*100)   
 
         

@@ -11,15 +11,15 @@ from git import Repo
 import  subprocess
 import time 
 import  datetime 
-import cPickle as pickle 
+import _pickle as pickle 
 from nltk.tokenize import sent_tokenize
 import constants
 import classifier
 import hglib  # reff: https://www.mercurial-scm.org/wiki/PythonHglib
 import re
 
-reload(sys)
-sys.setdefaultencoding(constants.ENCODING) 
+# reload(sys)
+# sys.setdefaultencoding(constants.ENCODING) 
 
 
 def getEligibleProjects(fileNameParam):
@@ -56,9 +56,11 @@ def getPuppRelatedCommits(repo_dir_absolute_path, ppListinRepo, branchName=const
     cmd_of_interrest1 = constants.CHANGE_DIR_CMD + repo_dir_absolute_path + " ; "
     cmd_of_interrest2 = constants.GIT_COMM_CMD_1 + str(each_commit)  +  constants.GIT_COMM_CMD_2
     cmd_of_interrest = cmd_of_interrest1 + cmd_of_interrest2
-    commit_of_interest  = subprocess.check_output([constants.BASH_CMD, constants.BASH_FLAG, cmd_of_interrest])
+    commit_of_interest  = str(subprocess.check_output([constants.BASH_CMD, constants.BASH_FLAG, cmd_of_interrest])) #in Python 3 subprocess.check_output returns byte
+
 
     for ppFile in ppListinRepo:
+      # print(ppFile, commit_of_interest)
       if ppFile in commit_of_interest:
 
        file_with_path = os.path.join(repo_dir_absolute_path, ppFile)
@@ -106,7 +108,7 @@ def dumpDiffText(commit_repo_path, commit_hash, file_, diff_content_str, text_co
     dump_str = dump_str +  'DECISION===>:'
     dump_str = dump_str +  '*'*10
     dump_str = dump_str +  '='*25 + ':'*3   + date_time + ':'*3 + 'END!!!' + '='*25    
-    print dump_str 
+    # print dump_str 
 
 def analyzeCommit(repo_path_param, repo_branch_param, pupp_commits_mapping):
   verbose = False   # For oracle dataset it is True (later), otherwise it is False 

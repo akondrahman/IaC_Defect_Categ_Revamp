@@ -6,26 +6,26 @@ library(ggplot2)
 # THE_FILE    <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/GHUB_YEAR_TEMPORAL_FINAL.csv"
 # THE_LIMIT   <- 25
 # THE_DS_NAME <- "GITHUB"
-# OUT_FIL     <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/writing/iac-categ-draft/plots/fig-freq-ghub.pdf"
+# OUT_FIL     <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/writing/iac-categ-draft-jul20/plots/fig-freq-ghub.pdf"
 
 # THE_FILE    <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/MOZI_YEAR_TEMPORAL_FINAL.csv"
 # THE_LIMIT   <- 9
 # THE_DS_NAME <- "MOZILLA"
-# OUT_FIL     <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/writing/iac-categ-draft/plots/fig-freq-mozi.pdf"
+# OUT_FIL     <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/writing/iac-categ-draft-jul20/plots/fig-freq-mozi.pdf"
 
 # THE_FILE    <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/OSTK_YEAR_TEMPORAL_FINAL.csv"
 # THE_LIMIT   <- 9
 # THE_DS_NAME <- "OPENSTACK"
-# OUT_FIL     <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/writing/iac-categ-draft/plots/fig-freq-ostk.pdf"
+# OUT_FIL     <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/writing/iac-categ-draft-jul20/plots/fig-freq-ostk.pdf"
 
 # THE_FILE    <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/output/WIKI_YEAR_TEMPORAL_FINAL.csv"
 # THE_LIMIT   <- 9
 # THE_DS_NAME <- "WIKIMEDIA"
-# OUT_FIL     <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/writing/iac-categ-draft/plots/fig-freq-wiki.pdf"
+# OUT_FIL     <- "/Users/akond/Documents/AkondOneDrive/OneDrive/IaC-Defect-Categ-Project/IaC_Defect_Categ_Revamp/writing/iac-categ-draft-jul20/plots/fig-freq-wiki.pdf"
 
 ### ======================================================================================== ###
 
-Y_LABEL     <- "Defect/Month"
+Y_LABEL     <- "Defect/Year"
 
 LINE_DATA <- read.csv(THE_FILE)
 LINE_DATA$YEAR <- as.factor(LINE_DATA$YEAR)
