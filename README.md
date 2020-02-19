@@ -17,7 +17,9 @@ The artifact is available here: https://hub.docker.com/r/akondrahman/acid-puppet
 3. run the command `docker pull akondrahman/acid-puppet`
 4. run the command `docker run -it --name acid akondrahman/acid-puppet bash` 
 5. run the command `cd /ARTIFACT/IaC_Defect_Categ_Revamp/src_categ_revamp/ACID`
-6. To get the results for test repositories it takes *0.8 minutes to complete*. run `python3 main.py`. This command will execute ACID for the test scripts. Upon completion of the analysis `Ended at: 2020-0X-XX XX:XX:XX`, and `Duration: 0.85513 minutes` will be displayed, which indicates that ACID's execution is complete. 
+6. To get the results for test repositories it takes *0.8 minutes to complete*. run `python3 main.py`. This command will execute ACID for the test Puppet scripts. Upon completion of the analysis `Ended at: 2020-0X-XX XX:XX:XX`, and `Duration: 0.85513 minutes` will be displayed, which indicates that ACID's execution is complete. Resultant output can be found at `/ARTIFACT/OUTPUT/TEST_ONLY_CATEG_OUTPUT_FINAL.csv`. The CSV file provides a mapping between a commit and the corresponding defect category.   
+
+> If you are interested in exploring more repositories then run `python3 main.py -x`. This command will execute ACID for the more extra test Puppet scripts downloaded from public GitHub. Upon completion of the analysis `Ended at: 2020-0X-XX XX:XX:XX`, and `Duration: 9.05 minutes` will be displayed, which indicates that ACID's execution is complete. Resultant output can be found at `/ARTIFACT/OUTPUT/EXTRA_TEST_ONLY_CATEG_OUTPUT_FINAL.csv`. The CSV file provides a mapping between a commit and the corresponding defect category.    
 
 
 ### Documentation on ACID's structure
@@ -40,4 +42,6 @@ _Our defect taxonomy for IaC consists of eight categories, including a category 
 ### DOI and Docker Image 
 
 DOI: _https://doi.org/10.6084/m9.figshare.8986634_
+
+
 Docker Image: _https://hub.docker.com/r/akondrahman/acid-puppet_
